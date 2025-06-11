@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Z-Corps initiative turn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+            crossorigin="anonymous"></script>
+</head>
+<body class="dark">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>Z-Corps initiative turn</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 offset-3">
+            <form id="form-add-initiative-turn" onsubmit="return false">
+                <div class="mb-3">
+                    <label for="input-name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="input-name" name="name">
+                </div>
+                <div class="mb-3">
+                    <label for="input-initiative" class="form-label">Initiative score</label>
+                    <input type="number" min="1" max="999" step="1" class="form-control" id="input-initiative"
+                           name="initiative">
+                </div>
+                <button type="submit" class="btn btn-primary" id="button-submit-form-add-initiative-turn">
+                    <i class="bi bi-person-add"></i> Add
+                </button>
+            </form>
+        </div>
+        <div class="col-3">
+            <div class="card" id="card-list-initiative-turn">
+                <ul class="list-group list-group-flush text-center" id="list-initiative-turn">
+                    <li class="list-group-item active"
+                        data-initiative="17"
+                        data-current-initiative="17"
+                        data-name="Eagle"
+                    >
+                        <span class="align-middle">Eagle (17)</span>
+                        <a class="float-end btn btn-outline-danger btn-delete-initiative-turn" href="#"
+                           onclick="return false">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item"
+                        data-initiative="16"
+                        data-current-initiative="16"
+                        data-name="Hostile"
+                    >
+                        <span class="align-middle">Hostiles (16)</span>
+                        <a class="float-end btn btn-outline-danger btn-delete-initiative-turn" href="#"
+                           onclick="return false">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item"
+                        data-initiative="17"
+                        data-current-initiative="7"
+                        data-name="Eagle"
+                    >
+                        <span class="align-middle">Eagle (7)</span>
+                        <a class="float-end btn btn-outline-danger btn-delete-initiative-turn" href="#"
+                           onclick="return false">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item"
+                        data-initiative="17"
+                        data-current-initiative="6"
+                        data-name="Hostiles"
+                    >
+                        <span class="align-middle">Hostiles (6)</span>
+                        <a class="float-end btn btn-outline-danger btn-delete-initiative-turn" href="#"
+                           onclick="return false">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 d-grid gap-2">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-primary" type="button" id="button-previous-initiative-turn">
+                                    <i class="bi bi-arrow-left"></i> Previous
+                                </button>
+                                <button class="btn btn-danger" type="button" id="button-reset-initiative-turn">
+                                    <i class="bi bi-eraser"></i> Reset
+                                </button>
+                                <button class="btn btn-primary" type="button" id="button-next-initiative-turn">
+                                    Next <i class="bi bi-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="application/javascript">
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttonNextInitiativeTurn = document.querySelector('#button-next-initiative-turn'),
+      buttonPreviousInitiativeTurn = document.querySelector('#button-previous-initiative-turn'),
+      buttonResetInitiativeTurn = document.querySelector('#button-reset-initiative-turn'),
+      listInitiativeTurn = document.querySelector('#list-initiative-turn'),
+      formAddInitiativeTurn = document.querySelector('#form-add-initiative-turn'),
+      buttonsDeleteInitiativeTurn = document.querySelectorAll('.btn-delete-initiative-turn');
+    buttonNextInitiativeTurn.addEventListener('click', () => rollerInitiativeTurn());
+    buttonPreviousInitiativeTurn.addEventListener('click', () => rollerInitiativeTurn(false));
+    buttonResetInitiativeTurn.addEventListener('click', () => removeList('', true));
+    formAddInitiativeTurn.addEventListener('submit', () => formAddInitiativeTurnSubmit());
+    buttonsDeleteInitiativeTurn.forEach(button => button.addEventListener('click', () => removeList(button)));
+
+    function rollerInitiativeTurn (next = true) {
+      const activeItem = listInitiativeTurn.querySelector('.active');
+      let nextItem, previousItem, firstItem, lastItem;
+      if (activeItem) {
+        nextItem = activeItem.nextElementSibling;
+        previousItem = activeItem.previousElementSibling;
+      }
+      firstItem = listInitiativeTurn.querySelector('li:first-child');
+      lastItem = listInitiativeTurn.querySelector('li:last-child');
+      removeActiveInitiativeTurn();
+      if (next) {
+        if (nextItem) {
+          nextItem.classList.add('active');
+        } else if (firstItem) {
+          firstItem.classList.add('active');
+        }
+      } else {
+        if (previousItem) {
+          previousItem.classList.add('active');
+        } else if (lastItem) {
+          lastItem.classList.add('active');
+        }
+      }
+    }
+
+    function removeActiveInitiativeTurn () {
+      const activeItem = listInitiativeTurn.querySelector('.active');
+      if (activeItem) {
+        activeItem.classList.remove('active');
+      }
+    }
+
+    function removeList (button = null, all = false) {
+      if (all) {
+        listInitiativeTurn.querySelectorAll('li').forEach(item => item.remove());
+        return;
+      }
+      if (button) {
+        const listItem = button.closest('li');
+        let isActive = listItem.classList.contains('active');
+        listItem.remove();
+        if (isActive) {
+          rollerInitiativeTurn();
+        }
+        return;
+      }
+    }
+
+    function formAddInitiativeTurnSubmit () {
+      const data = new FormData(formAddInitiativeTurn),
+        name = data.get('name').toString().trim().toLowerCase(),
+        initiative = parseInt(data.get('initiative'));
+      if (name !== '' && initiative > 0) {
+        const finalName = name.charAt(0).toUpperCase() + name.slice(1),
+          listNumber = Math.floor(initiative / 10);
+        for (let i = 0; i <= listNumber; i++) {
+          const currentInitiative = initiative - i * 10;
+          if (currentInitiative > 0) {
+            addNodeListItem(createListItem(finalName, initiative, currentInitiative));
+          }
+        }
+      }
+      removeActiveInitiativeTurn();
+      rollerInitiativeTurn(true);
+      formAddInitiativeTurn.reset();
+    }
+
+    function createListItem (finalName, initiative, currentInitiative) {
+      const newListItem = document.createElement('li');
+      newListItem.classList.add('list-group-item');
+      newListItem.dataset.initiative = initiative.toString();
+      newListItem.dataset.currentInitiative = currentInitiative.toString();
+      newListItem.dataset.name = finalName;
+      const newSpan = document.createElement('span');
+      newSpan.classList.add('align-middle');
+      newSpan.innerText = `${finalName} (${currentInitiative})`;
+      newListItem.appendChild(newSpan);
+      const newButton = document.createElement('a');
+      newButton.classList.add('float-end', 'btn', 'btn-outline-danger', 'btn-delete-initiative-turn');
+      newButton.href = '#';
+      newButton.addEventListener('click', () => removeList(newButton));
+      const newIcon = document.createElement('i');
+      newIcon.classList.add('bi', 'bi-trash');
+      newButton.appendChild(newIcon);
+      newListItem.appendChild(newButton);
+      return newListItem;
+    }
+
+    function addNodeListItem (node) {
+      const newNodeCurrentInitiative = parseInt(node.dataset.currentInitiative),
+        items = listInitiativeTurn.querySelectorAll('li.list-group-item'),
+        firstItem = listInitiativeTurn.querySelector('li:first-child'),
+        lastItem = listInitiativeTurn.querySelector('li:last-child');
+      if (items.length === 0) {
+        listInitiativeTurn.appendChild(node);
+        return;
+      }
+      if (newNodeCurrentInitiative >= parseInt(firstItem.dataset.currentInitiative)) {
+        listInitiativeTurn.insertBefore(node, firstItem);
+        return;
+      }
+      if (newNodeCurrentInitiative === parseInt(lastItem.dataset.currentInitiative)) {
+        listInitiativeTurn.insertBefore(node, lastItem);
+        return;
+      }
+      if (newNodeCurrentInitiative < parseInt(lastItem.dataset.currentInitiative)) {
+        listInitiativeTurn.appendChild(node);
+        return;
+      }
+      let isAdded = false;
+      items.forEach(item => {
+        if (isAdded) {
+          return;
+        } else if (newNodeCurrentInitiative >= parseInt(item.dataset.currentInitiative)) {
+          listInitiativeTurn.insertBefore(node, item);
+          isAdded = true;
+          return;
+        }
+      });
+    }
+  });
+</script>
+</html>
