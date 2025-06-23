@@ -731,15 +731,16 @@
       modalClass.resetModal()
       modalClass.setModalTitle(diceObject.getFullName())
       const pDice = document.createElement('p'),
-        inputDiceHidden = document.createElement('input')
-      pDice.innerText = diceObject.getFullDiceRoller()
-      inputDiceHidden.value = diceObject.getFullDiceRoller()
+        inputDiceHidden = document.createElement('input'),
+        diceRoll = diceObject.getFullDiceRoller();
+      pDice.innerText = diceRoll
+      inputDiceHidden.value = diceRoll
       inputDiceHidden.classList.add('d-none')
       modalClass.appendChildToBody(pDice)
       modalClass.appendChildToBody(inputDiceHidden)
       modalClass.show()
       inputDiceHidden.select()
-      copyToClipboard(inputDiceHidden.value)
+      copyToClipboard(diceRoll)
     }
   }
 
