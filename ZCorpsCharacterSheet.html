@@ -5,7 +5,7 @@
     <title>Z-Corps character sheet</title>
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
           integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.12.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <script crossorigin="anonymous"
             integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
@@ -46,25 +46,6 @@
     <!--CONTENT-->
     <div class="row" id="row-content"></div>
     <!--MODAL-->
-    <div aria-hidden="true" aria-labelledby="modal-find-skill-feature-label" class="modal fade"
-         id="modal-find-skill-feature" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal-find-skill-feature-label">Find skill/feature</h1>
-                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-                </div>
-                <div class="modal-body">
-                    <label class="form-label" for="select-find-skill-feature">Choice skill/feature</label>
-                    <select class="form-select" id="select-find-skill-feature">
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div aria-hidden="true" aria-labelledby="modal-global-label" class="modal fade" id="modal-global"
          tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -108,11 +89,9 @@
     ELEMENT_ID_MODAL_GLOBAL_LABEL: 'modal-global-label',
     INPUT_ID_CHARACTER_NAME: 'character-name',
     INPUT_ID_CHARACTER_DATA: 'character-data',
-    ELEMENT_ID_MODAL_FIND_SKILL_FEATURE: 'modal-find-skill-feature',
-    ELEMENT_ID_MODAL_FIND_SKILL_FEATURE_LABEL: 'modal-find-skill-feature-label',
     ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE: 'button-find-skill-feature',
-    INPUT_SELECT_FIND_SKILL_FEATURE: 'select-find-skill-feature'
-  };
+    INPUT_SELECT_FIND_SKILL_FEATURE: 'select-find-skill-feature',
+  }
   /**
    *
    * @type {null|CharacterSheet}
@@ -132,33 +111,33 @@
      *
      * @type {null|Modal}
      */
-    modalClass = null;
+    modalClass = null
   document.addEventListener('DOMContentLoaded', () => {
-    init();
-  });
+    init()
+  })
 
   function init () {
-    initClass();
-    initCards();
-    initButtons();
-    initFindInPage();
+    initClass()
+    initCards()
+    initButtons()
+    initFindInPage()
   }
 
   function initClass () {
-    currentCharacterSheet = new CharacterSheet();
+    currentCharacterSheet = new CharacterSheet()
     try {
-      toastClass = new Toast();
+      toastClass = new Toast()
     } catch (e) {
-      alert(e.message);
-      return;
+      alert(e.message)
+      return
     }
     try {
-      modalClass = new Modal();
+      modalClass = new Modal()
     } catch (e) {
-      toastClass.showError(e);
-      return;
+      toastClass.showError(e)
+      return
     }
-    initFeaturesAndSkillClass();
+    initFeaturesAndSkillClass()
   }
 
   function initFeaturesAndSkillClass () {
@@ -168,7 +147,7 @@
         ability = new Feature('ability', 'Adresse'),
         perception = new Feature('perception', 'Perception'),
         power = new Feature('power', 'Puissance'),
-        presence = new Feature('presence', 'Présence');
+        presence = new Feature('presence', 'Présence')
       agility.skills = [
         new Skill('acrobaties', 'Acrobaties'),
         new Skill('fight', 'Bagarre'),
@@ -178,8 +157,8 @@
         new Skill('dodge', 'Esquive'),
         new Skill('climbing', 'Grimper'),
         new Skill('scrum', 'Mêlée'),
-        new Skill('jump', 'Sauter')
-      ];
+        new Skill('jump', 'Sauter'),
+      ]
       knowledge.skills = [
         new Skill('business', 'Affaires'),
         new Skill('counterfeiting', 'Contrefaçon'),
@@ -191,8 +170,8 @@
         new Skill('medical', 'Médecine'),
         new Skill('shipping', 'Navigation'),
         new Skill('security', 'Sécurité'),
-        new Skill('occult-sciences', 'Sciences occultes')
-      ];
+        new Skill('occult-sciences', 'Sciences occultes'),
+      ]
       ability.skills = [
         new Skill('firearms', 'Armes à feu'),
         new Skill('throwing-weapons', 'Armes de jet'),
@@ -200,8 +179,8 @@
         new Skill('dexterity', 'Dextérité'),
         new Skill('throw', 'Lancer'),
         new Skill('control', 'Pilotage'),
-        new Skill('repair', 'Réparer')
-      ];
+        new Skill('repair', 'Réparer'),
+      ]
       perception.skills = [
         new Skill('artist', 'Artiste'),
         new Skill('camouflage', 'Camouflage'),
@@ -210,14 +189,14 @@
         new Skill('investigation', 'Investigation'),
         new Skill('games', 'Jeux'),
         new Skill('track', 'Pister'),
-        new Skill('survival', 'Survie')
-      ];
+        new Skill('survival', 'Survie'),
+      ]
       power.skills = [
         new Skill('run', 'Courir'),
         new Skill('stamina', 'Endurance'),
         new Skill('swim', 'Nager'),
-        new Skill('lift', 'Soulever')
-      ];
+        new Skill('lift', 'Soulever'),
+      ]
       presence.skills = [
         new Skill('charm', 'Charmer'),
         new Skill('order', 'Commander'),
@@ -227,20 +206,20 @@
         new Skill('scam', 'Escroquerie'),
         new Skill('bullying', 'Intimidation'),
         new Skill('persuasion', 'Persuasion'),
-        new Skill('willpower', 'Volonté')
-      ];
-      featureClasses = [agility, knowledge, ability, perception, power, presence];
+        new Skill('willpower', 'Volonté'),
+      ]
+      featureClasses = [agility, knowledge, ability, perception, power, presence]
     } catch (e) {
-      featureClasses = null;
-      toastClass.showError(e);
+      featureClasses = null
+      toastClass.showError(e)
     }
   }
 
   function initCards () {
     if (featureClasses === null) {
-      return;
+      return
     }
-    const rowContent = document.querySelector('#row-content');
+    const rowContent = document.querySelector('#row-content')
     featureClasses.forEach(featureClass => {
       const colCard = document.createElement('div'),
         card = document.createElement('div'),
@@ -249,48 +228,48 @@
         colFeature = document.createElement('div'),
         featureName = document.createElement('h3'),
         collapse = document.createElement('div'),
-        cardBody = document.createElement('div');
-      colCard.classList.add('col-6', 'p-2');
+        cardBody = document.createElement('div')
+      colCard.classList.add('col-6', 'p-2')
       colCard.addEventListener('contextmenu', (event) => {
-        onRightClickColumnCard(event);
-      });
-      card.classList.add('card', 'border-info');
-      card.dataset.superPrefixId = featureClass.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card';
-      cardHeader.classList.add('card-header');
-      rowFeature.classList.add('row');
-      rowFeature.dataset.prefixId = featureClass.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row';
-      colFeature.classList.add('col-7');
-      collapse.classList.add('collapse');
-      cardBody.classList.add('card-body');
-      featureName.innerText = featureClass.name;
-      colFeature.appendChild(featureName);
-      rowFeature.appendChild(colFeature);
-      createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowFeature, true);
-      cardHeader.appendChild(rowFeature);
-      card.appendChild(cardHeader);
+        onRightClickColumnCard(event)
+      })
+      card.classList.add('card', 'border-info')
+      card.dataset.superPrefixId = featureClass.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card'
+      cardHeader.classList.add('card-header')
+      rowFeature.classList.add('row')
+      rowFeature.dataset.prefixId = featureClass.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row'
+      colFeature.classList.add('col-7')
+      collapse.classList.add('collapse')
+      cardBody.classList.add('card-body')
+      featureName.innerText = featureClass.name
+      colFeature.appendChild(featureName)
+      rowFeature.appendChild(colFeature)
+      createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowFeature, true)
+      cardHeader.appendChild(rowFeature)
+      card.appendChild(cardHeader)
       featureClass.skills.forEach(skill => {
         const rowSkill = document.createElement('div'),
           colSkill = document.createElement('div'),
           skillName = document.createElement('h4'),
-          skillSeparator = document.createElement('div');
-        rowSkill.classList.add('row');
-        rowSkill.dataset.prefixId = skill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row';
-        colSkill.classList.add('col-7');
-        skillName.innerText = skill.name;
-        skillSeparator.classList.add('border', 'border-info-subtle', 'my-3', 'mx-5');
-        colSkill.appendChild(skillName);
-        rowSkill.appendChild(colSkill);
-        createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSkill);
-        cardBody.appendChild(rowSkill);
+          skillSeparator = document.createElement('div')
+        rowSkill.classList.add('row')
+        rowSkill.dataset.prefixId = skill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row'
+        colSkill.classList.add('col-7')
+        skillName.innerText = skill.name
+        skillSeparator.classList.add('border', 'border-info-subtle', 'my-3', 'mx-5')
+        colSkill.appendChild(skillName)
+        rowSkill.appendChild(colSkill)
+        createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSkill)
+        cardBody.appendChild(rowSkill)
         if (!featureClass.isLastSkill(skill)) {
-          cardBody.appendChild(skillSeparator);
+          cardBody.appendChild(skillSeparator)
         }
-      });
-      collapse.appendChild(cardBody);
-      card.appendChild(collapse);
-      colCard.appendChild(card);
-      rowContent.appendChild(colCard);
-    });
+      })
+      collapse.appendChild(cardBody)
+      card.appendChild(collapse)
+      colCard.appendChild(card)
+      rowContent.appendChild(colCard)
+    })
   }
 
   /**
@@ -298,13 +277,13 @@
    * @param {Event} event
    */
   function onRightClickColumnCard (event) {
-    event.preventDefault();
-    const collapsibleElement = event.currentTarget.querySelector('.collapse');
+    event.preventDefault()
+    const collapsibleElement = event.currentTarget.querySelector('.collapse')
     if (!collapsibleElement) {
-      return;
+      return
     }
-    const collapsible = new bootstrap.Collapse(collapsibleElement);
-    collapsible.show();
+    const collapsible = new bootstrap.Collapse(collapsibleElement)
+    collapsible.show()
   }
 
   /**
@@ -330,68 +309,68 @@
       labelPlusTwo = document.createElement('label'),
       buttonRollDice = document.createElement('button'),
       iconButtonRollDice = document.createElement('i'),
-      prefixId = `${superPrefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${element.dataset[GlobalVariables.DATA_KEY_PREFIX_ID]}`;
-    spanDiceCode.classList.add('input-group-text');
-    spanDiceCode.innerText = 'D';
-    spanDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}dice-code-span`;
-    inputDiceCode.classList.add('form-control');
-    inputDiceCode.type = 'number';
+      prefixId = `${superPrefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${element.dataset[GlobalVariables.DATA_KEY_PREFIX_ID]}`
+    spanDiceCode.classList.add('input-group-text')
+    spanDiceCode.innerText = 'D'
+    spanDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}dice-code-span`
+    inputDiceCode.classList.add('form-control')
+    inputDiceCode.type = 'number'
     if (isHeader) {
-      inputDiceCode.min = '1';
+      inputDiceCode.min = '1'
     } else {
-      inputDiceCode.min = '0';
+      inputDiceCode.min = '0'
     }
-    inputDiceCode.value = inputDiceCode.min;
-    inputDiceCode.max = '10';
-    inputDiceCode.step = '1';
-    inputDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX}`;
-    inputDiceCode.ariaDescribedBy = spanDiceCode.id;
-    inputDiceCode.ariaLabel = 'Code dés';
-    divDiceCode.classList.add('input-group', 'input-group-lg', 'h-100');
-    labelPlusTwo.classList.add('form-check-label');
-    labelPlusOne.classList.add('form-check-label');
-    labelPlusTwo.innerText = '+2';
-    labelPlusOne.innerText = '+1';
-    labelPlusTwo.for = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX}`;
-    labelPlusOne.for = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX}`;
-    inputPlusTwo.classList.add('form-check-input');
-    inputPlusOne.classList.add('form-check-input');
-    inputPlusTwo.type = 'checkbox';
-    inputPlusOne.type = 'checkbox';
-    inputPlusTwo.value = '2';
-    inputPlusOne.value = '1';
-    inputPlusTwo.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX}`;
-    inputPlusOne.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX}`;
-    inputPlusTwo.dataset.linkedInputId = inputPlusOne.id;
-    inputPlusOne.dataset.linkedInputId = inputPlusTwo.id;
-    inputPlusTwo.addEventListener('change', (event) => {onChangeInputCheckPlus(event);});
-    inputPlusOne.addEventListener('change', (event) => {onChangeInputCheckPlus(event);});
-    divPlusTwo.classList.add('form-check');
-    divPlusOne.classList.add('form-check');
-    iconButtonRollDice.classList.add('bi', 'bi-rocket-takeoff');
-    buttonRollDice.classList.add('btn', 'btn-outline-success', 'btn-lg');
-    buttonRollDice.addEventListener('click', (event) => {onClickButtonRollDice(event);});
-    divCol3.classList.add('col-3');
-    divCol1.classList.add('col-1', 'd-grid', 'gap-2');
-    divRow.classList.add('row');
-    divCol8.classList.add('col-8');
-    divCol4.classList.add('col-4');
-    divPlusTwo.appendChild(inputPlusTwo);
-    divPlusTwo.appendChild(labelPlusTwo);
-    divPlusOne.appendChild(inputPlusOne);
-    divPlusOne.appendChild(labelPlusOne);
-    divCol4.appendChild(divPlusOne);
-    divCol4.appendChild(divPlusTwo);
-    divDiceCode.appendChild(inputDiceCode);
-    divDiceCode.appendChild(spanDiceCode);
-    divCol8.appendChild(divDiceCode);
-    divRow.appendChild(divCol8);
-    divRow.appendChild(divCol4);
-    divCol3.appendChild(divRow);
-    buttonRollDice.appendChild(iconButtonRollDice);
-    divCol1.appendChild(buttonRollDice);
-    element.appendChild(divCol3);
-    element.appendChild(divCol1);
+    inputDiceCode.value = inputDiceCode.min
+    inputDiceCode.max = '10'
+    inputDiceCode.step = '1'
+    inputDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX}`
+    inputDiceCode.ariaDescribedBy = spanDiceCode.id
+    inputDiceCode.ariaLabel = 'Code dés'
+    divDiceCode.classList.add('input-group', 'input-group-lg', 'h-100')
+    labelPlusTwo.classList.add('form-check-label')
+    labelPlusOne.classList.add('form-check-label')
+    labelPlusTwo.innerText = '+2'
+    labelPlusOne.innerText = '+1'
+    labelPlusTwo.for = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX}`
+    labelPlusOne.for = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX}`
+    inputPlusTwo.classList.add('form-check-input')
+    inputPlusOne.classList.add('form-check-input')
+    inputPlusTwo.type = 'checkbox'
+    inputPlusOne.type = 'checkbox'
+    inputPlusTwo.value = '2'
+    inputPlusOne.value = '1'
+    inputPlusTwo.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX}`
+    inputPlusOne.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX}`
+    inputPlusTwo.dataset.linkedInputId = inputPlusOne.id
+    inputPlusOne.dataset.linkedInputId = inputPlusTwo.id
+    inputPlusTwo.addEventListener('change', (event) => {onChangeInputCheckPlus(event)})
+    inputPlusOne.addEventListener('change', (event) => {onChangeInputCheckPlus(event)})
+    divPlusTwo.classList.add('form-check')
+    divPlusOne.classList.add('form-check')
+    iconButtonRollDice.classList.add('bi', 'bi-rocket-takeoff')
+    buttonRollDice.classList.add('btn', 'btn-outline-success', 'btn-lg')
+    buttonRollDice.addEventListener('click', (event) => {onClickButtonRollDice(event)})
+    divCol3.classList.add('col-3')
+    divCol1.classList.add('col-1', 'd-grid', 'gap-2')
+    divRow.classList.add('row')
+    divCol8.classList.add('col-8')
+    divCol4.classList.add('col-4')
+    divPlusTwo.appendChild(inputPlusTwo)
+    divPlusTwo.appendChild(labelPlusTwo)
+    divPlusOne.appendChild(inputPlusOne)
+    divPlusOne.appendChild(labelPlusOne)
+    divCol4.appendChild(divPlusOne)
+    divCol4.appendChild(divPlusTwo)
+    divDiceCode.appendChild(inputDiceCode)
+    divDiceCode.appendChild(spanDiceCode)
+    divCol8.appendChild(divDiceCode)
+    divRow.appendChild(divCol8)
+    divRow.appendChild(divCol4)
+    divCol3.appendChild(divRow)
+    buttonRollDice.appendChild(iconButtonRollDice)
+    divCol1.appendChild(buttonRollDice)
+    element.appendChild(divCol3)
+    element.appendChild(divCol1)
     /*if (!isHeader) {
       element.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -407,121 +386,121 @@
       buttonSave = document.querySelector('#' + GlobalVariables.ELEMENT_ID_BUTTON_SAVE_DATA),
       buttonReset = document.querySelector('#' + GlobalVariables.ELEMENT_ID_BUTTON_RESET_DATA),
       buttonDelete = document.querySelector('#' + GlobalVariables.ELEMENT_ID_BUTTON_DELETE_DATA),
-      buttonFindSkillFeature = document.querySelector('#' + GlobalVariables.ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE);
+      buttonFindSkillFeature = document.querySelector('#' + GlobalVariables.ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE)
     if (buttonLoad) {
-      buttonLoad.addEventListener('click', () => {onClickButtonLoad();});
+      buttonLoad.addEventListener('click', () => {onClickButtonLoad()})
     }
     if (buttonSave) {
-      buttonSave.addEventListener('click', () => {onClickButtonSave();});
+      buttonSave.addEventListener('click', () => {onClickButtonSave()})
     }
     if (buttonReset) {
-      buttonReset.addEventListener('click', () => {onClickButtonReset();});
+      buttonReset.addEventListener('click', () => {onClickButtonReset()})
     }
     if (buttonDelete) {
-      buttonDelete.addEventListener('click', () => {onClickButtonDelete();});
+      buttonDelete.addEventListener('click', () => {onClickButtonDelete()})
     }
     if (buttonFindSkillFeature) {
-      buttonFindSkillFeature.addEventListener('click', () => {onClickButtonFindSkillFeature();});
+      buttonFindSkillFeature.addEventListener('click', () => {onClickButtonFindSkillFeature()})
     }
   }
 
   function onClickButtonSave () {
     try {
-      currentCharacterSheet.findAllValue();
-      showModalCharacterSheetData();
+      currentCharacterSheet.findAllValue()
+      showModalCharacterSheetData()
     } catch (e) {
-      toastClass.showError(e);
+      toastClass.showError(e)
     }
   }
 
   function onClickButtonLoad () {
-    showModalCharacterSheetData(false);
+    showModalCharacterSheetData(false)
   }
 
   function onClickButtonReset () {
     try {
-      currentCharacterSheet.reset();
+      currentCharacterSheet.reset()
     } catch (e) {
-      toastClass.showError(e);
+      toastClass.showError(e)
     }
   }
 
   function onClickButtonDelete () {
-    onClickButtonReset();
+    onClickButtonReset()
   }
 
   function onClickButtonCopyCharacterSheetData () {
     const elementInputCharacterData = document.querySelector('#' + GlobalVariables.INPUT_ID_CHARACTER_DATA),
-      elementInputCharacterName = document.querySelector('#' + GlobalVariables.INPUT_ID_CHARACTER_NAME);
+      elementInputCharacterName = document.querySelector('#' + GlobalVariables.INPUT_ID_CHARACTER_NAME)
     if (elementInputCharacterData.value === '' || elementInputCharacterData.value === '{}' ||
       elementInputCharacterName.value === '') {
       if (elementInputCharacterName.value === '') {
-        elementInputCharacterName.classList.add('is-invalid');
+        elementInputCharacterName.classList.add('is-invalid')
       }
       if (elementInputCharacterData.value === '' || elementInputCharacterData.value === '{}') {
-        elementInputCharacterData.classList.add('is-invalid');
+        elementInputCharacterData.classList.add('is-invalid')
       }
-      toastClass.showMessageWhitType('Please fill in all fields of the form', 'warning');
-      return;
+      toastClass.showMessageWhitType('Please fill in all fields of the form', 'warning')
+      return
     }
-    elementInputCharacterName.classList.remove('is-invalid');
-    elementInputCharacterData.classList.remove('is-invalid');
+    elementInputCharacterName.classList.remove('is-invalid')
+    elementInputCharacterData.classList.remove('is-invalid')
     try {
-      currentCharacterSheet.name = elementInputCharacterName.value;
-      currentCharacterSheet.statistics = JSON.parse(elementInputCharacterData.value);
-      copyToClipboard(currentCharacterSheet.toJson());
+      currentCharacterSheet.name = elementInputCharacterName.value
+      currentCharacterSheet.statistics = JSON.parse(elementInputCharacterData.value)
+      copyToClipboard(currentCharacterSheet.toJson())
     } catch (e) {
-      toastClass.showError(e);
+      toastClass.showError(e)
     }
-    modalClass.close();
+    modalClass.close()
   }
 
   function onClickButtonLoadCharacterSheetData () {
-    const elementInputCharacterData = document.querySelector('#' + GlobalVariables.INPUT_ID_CHARACTER_DATA);
+    const elementInputCharacterData = document.querySelector('#' + GlobalVariables.INPUT_ID_CHARACTER_DATA)
     if (elementInputCharacterData.value === '' || elementInputCharacterData.value === '{}') {
-      elementInputCharacterData.classList.add('is-invalid');
-      toastClass.showMessageWhitType('Please fill in all fields of the form', 'warning');
-      return;
+      elementInputCharacterData.classList.add('is-invalid')
+      toastClass.showMessageWhitType('Please fill in all fields of the form', 'warning')
+      return
     }
-    elementInputCharacterData.classList.remove('is-invalid');
+    elementInputCharacterData.classList.remove('is-invalid')
     try {
-      currentCharacterSheet.loadFromJson(elementInputCharacterData.value);
+      currentCharacterSheet.loadFromJson(elementInputCharacterData.value)
     } catch (e) {
-      toastClass.showError(e);
+      toastClass.showError(e)
     }
-    modalClass.close();
+    modalClass.close()
   }
 
   function onClickButtonFindSkillFeature () {
     document.body.dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'f', bubbles: true, cancelable: true, ctrlKey: true })
-    );
+      new KeyboardEvent('keydown', { key: 'f', bubbles: true, cancelable: true, ctrlKey: true }),
+    )
   }
 
   function showModalCharacterSheetData (isButtonSave = true) {
-    modalClass.resetModal();
+    modalClass.resetModal()
     if (isButtonSave) {
-      createFormSaveInModalBody();
-      modalClass.setModalTitle('Save character sheet');
-      const button = document.createElement('button');
-      button.classList.add('btn', 'btn-success');
-      button.innerText = 'Save data';
+      createFormSaveInModalBody()
+      modalClass.setModalTitle('Save character sheet')
+      const button = document.createElement('button')
+      button.classList.add('btn', 'btn-success')
+      button.innerText = 'Save data'
       button.addEventListener('click', () => {
-        onClickButtonCopyCharacterSheetData();
-      });
-      modalClass.addButtonFooter(button);
+        onClickButtonCopyCharacterSheetData()
+      })
+      modalClass.addButtonFooter(button)
     } else {
-      createFormLoadInModalBody();
-      modalClass.setModalTitle('Load character sheet');
-      const button = document.createElement('button');
-      button.classList.add('btn', 'btn-primary');
-      button.innerText = 'Load data';
+      createFormLoadInModalBody()
+      modalClass.setModalTitle('Load character sheet')
+      const button = document.createElement('button')
+      button.classList.add('btn', 'btn-primary')
+      button.innerText = 'Load data'
       button.addEventListener('click', () => {
-        onClickButtonLoadCharacterSheetData();
-      });
-      modalClass.addButtonFooter(button);
+        onClickButtonLoadCharacterSheetData()
+      })
+      modalClass.addButtonFooter(button)
     }
-    modalClass.show();
+    modalClass.show()
   }
 
   function createFormSaveInModalBody () {
@@ -532,98 +511,97 @@
       inputCharacterName = document.createElement('input'),
       divCharacterData = document.createElement('div'),
       labelCharacterData = document.createElement('label'),
-      inputCharacterData = document.createElement('textarea');
-    divCharacterName.classList.add('mb-3');
-    labelCharacterName.classList.add('col-form-label');
-    labelCharacterName.for = GlobalVariables.INPUT_ID_CHARACTER_NAME;
-    labelCharacterName.innerText = 'Character name';
-    inputCharacterName.classList.add('form-control');
-    inputCharacterName.type = 'text';
-    inputCharacterName.value = currentCharacterSheet.name;
-    inputCharacterName.id = GlobalVariables.INPUT_ID_CHARACTER_NAME;
-    divCharacterName.appendChild(labelCharacterName);
-    divCharacterName.appendChild(inputCharacterName);
-    form.appendChild(divCharacterName);
-    divCharacterData.classList.add('mb-3');
-    labelCharacterData.classList.add('col-form-label');
-    labelCharacterData.for = GlobalVariables.INPUT_ID_CHARACTER_DATA;
-    labelCharacterData.innerText = 'Character statistics';
-    inputCharacterData.classList.add('form-control');
-    inputCharacterData.value = currentCharacterSheet.statisticsToJson();
-    inputCharacterData.id = GlobalVariables.INPUT_ID_CHARACTER_DATA;
-    inputCharacterData.disabled = true;
-    divCharacterData.appendChild(labelCharacterData);
-    divCharacterData.appendChild(inputCharacterData);
-    form.appendChild(divCharacterData);
-    divInfo.classList.add('alert', 'alert-info');
-    divInfo.role = 'alert';
+      inputCharacterData = document.createElement('textarea')
+    divCharacterName.classList.add('mb-3')
+    labelCharacterName.classList.add('col-form-label')
+    labelCharacterName.for = GlobalVariables.INPUT_ID_CHARACTER_NAME
+    labelCharacterName.innerText = 'Character name'
+    inputCharacterName.classList.add('form-control')
+    inputCharacterName.type = 'text'
+    inputCharacterName.value = currentCharacterSheet.name
+    inputCharacterName.id = GlobalVariables.INPUT_ID_CHARACTER_NAME
+    divCharacterName.appendChild(labelCharacterName)
+    divCharacterName.appendChild(inputCharacterName)
+    form.appendChild(divCharacterName)
+    divCharacterData.classList.add('mb-3')
+    labelCharacterData.classList.add('col-form-label')
+    labelCharacterData.for = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    labelCharacterData.innerText = 'Character statistics'
+    inputCharacterData.classList.add('form-control')
+    inputCharacterData.value = currentCharacterSheet.statisticsToJson()
+    inputCharacterData.id = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    inputCharacterData.disabled = true
+    divCharacterData.appendChild(labelCharacterData)
+    divCharacterData.appendChild(inputCharacterData)
+    form.appendChild(divCharacterData)
+    divInfo.classList.add('alert', 'alert-info')
+    divInfo.role = 'alert'
     divInfo.innerHTML = 'Enter your character\'s name.<br/>' +
-      'Then click on the button and copy the contents of your clipboard to a text file for saving and reuse next time.';
-    modalClass.appendChildToBody(divInfo);
-    modalClass.appendChildToBody(form);
+      'Then click on the button and copy the contents of your clipboard to a text file for saving and reuse next time.'
+    modalClass.appendChildToBody(divInfo)
+    modalClass.appendChildToBody(form)
   }
 
   function createFormLoadInModalBody () {
     const form = document.createElement('form'),
       divCharacterData = document.createElement('div'),
       labelCharacterData = document.createElement('label'),
-      inputCharacterData = document.createElement('textarea');
-    divCharacterData.classList.add('mb-3');
-    labelCharacterData.classList.add('col-form-label');
-    labelCharacterData.for = GlobalVariables.INPUT_ID_CHARACTER_DATA;
-    labelCharacterData.innerText = 'Character statistics';
-    inputCharacterData.classList.add('form-control');
-    inputCharacterData.value = '';
-    inputCharacterData.id = GlobalVariables.INPUT_ID_CHARACTER_DATA;
-    divCharacterData.appendChild(labelCharacterData);
-    divCharacterData.appendChild(inputCharacterData);
-    form.appendChild(divCharacterData);
-    modalClass.appendChildToBody(form);
+      inputCharacterData = document.createElement('textarea')
+    divCharacterData.classList.add('mb-3')
+    labelCharacterData.classList.add('col-form-label')
+    labelCharacterData.for = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    labelCharacterData.innerText = 'Character statistics'
+    inputCharacterData.classList.add('form-control')
+    inputCharacterData.value = ''
+    inputCharacterData.id = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    divCharacterData.appendChild(labelCharacterData)
+    divCharacterData.appendChild(inputCharacterData)
+    form.appendChild(divCharacterData)
+    modalClass.appendChildToBody(form)
   }
 
   function initFindInPage () {
-    initSelectForFindInPage();
     document.addEventListener('keydown', (event) => {
-      onKeyDownDocument(event);
-    });
+      onKeyDownDocument(event)
+    })
   }
 
   function initSelectForFindInPage () {
     const allInputDice = document.querySelectorAll(
-      '[id$="' + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX + '"]');
-    let selectOption = [];
+      '[id$="' + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX + '"]')
+    let selectOption = []
     allInputDice.forEach(inputDice => {
       const rowElement = inputDice.closest('.row').parentElement.closest('.row'),
         titleH3 = rowElement.querySelector('h3'),
-        titleH4 = rowElement.querySelector('h4');
+        titleH4 = rowElement.querySelector('h4')
       if (!titleH3 && !titleH4) {
-        return;
+        return
       }
-      let text;
+      let text
       if (titleH4) {
-        text = titleH4.innerText;
+        text = titleH4.innerText
       } else {
-        text = titleH3.innerText;
+        text = titleH3.innerText
       }
       selectOption.push({
         value: inputDice.id,
-        text: text
-      });
-    });
-    const select = document.querySelector('#' + GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE);
-    selectOption.sort((a, b) => {return a.text.localeCompare(b.text);});
-    select.innerHTML = '';
-    const option = document.createElement('option');
-    option.value = '';
-    option.innerText = '';
-    select.appendChild(option);
+        text: text,
+      })
+    })
+    const select = document.querySelector('#' + GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE)
+    selectOption.sort((a, b) => {return a.text.localeCompare(b.text)})
+    select.innerHTML = ''
+    const option = document.createElement('option')
+    option.value = ''
+    option.innerText = ''
+    select.appendChild(option)
     selectOption.forEach(({ value, text }) => {
-      const option = document.createElement('option');
-      option.value = value;
-      option.innerText = text;
-      select.appendChild(option);
-    });
-    select.addEventListener('change', () => {onChangeSelectFindSkillFeature();});
+      const option = document.createElement('option')
+      option.value = value
+      option.innerText = text
+      select.appendChild(option)
+    })
+    select.addEventListener('change', () => {onChangeSelectFindSkillFeature()})
   }
 
   /**
@@ -635,35 +613,72 @@
      * @param {KeyboardEvent} event
      */
     if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
-      event.preventDefault();
-      const elementModal = document.querySelector('#' + GlobalVariables.ELEMENT_ID_MODAL_FIND_SKILL_FEATURE),
-        select = document.querySelector('#' + GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE),
-        modal = new bootstrap.Modal(elementModal);
-      select.value = '';
-      modal.show(elementModal);
+      event.preventDefault()
+      showModalFindSkillFeature()
     }
+  }
+
+  function showModalFindSkillFeature () {
+    modalClass.resetModal()
+    modalClass.setModalTitle('Find skill/feature')
+    const inputSelect = document.createElement('select'),
+      labelSelect = document.createElement('label')
+    labelSelect.classList.add('form-label')
+    labelSelect.innerText = 'Choice skill/feature'
+    labelSelect.for = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+    inputSelect.id = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+    inputSelect.addEventListener('change', onChangeSelectFindSkillFeature)
+    inputSelect.classList.add('form-select')
+    let selectOption = []
+    featureClasses.forEach(featureClass => {
+      selectOption.push({
+        value: featureClass.getInputDiceId(),
+        text: featureClass.name,
+      })
+      featureClass.skills.forEach(skillClass => {
+        selectOption.push({
+          value: skillClass.getInputDiceId(),
+          text: skillClass.name,
+        })
+      })
+    })
+    selectOption.sort((a, b) => {return a.text.localeCompare(b.text)})
+    inputSelect.innerHTML = ''
+    const option = document.createElement('option')
+    option.value = ''
+    option.innerText = ''
+    inputSelect.appendChild(option)
+    selectOption.forEach(({ value, text }) => {
+      const option = document.createElement('option')
+      option.value = value
+      option.innerText = text
+      inputSelect.appendChild(option)
+    })
+    modalClass.appendChildToBody(labelSelect)
+    modalClass.appendChildToBody(inputSelect)
+    modalClass.show()
   }
 
   function onChangeSelectFindSkillFeature () {
     const select = document.querySelector('#' + GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE),
-      option = select.value;
+      option = select.value
     if (option === '') {
-      return;
+      return
     }
-    const element = document.querySelector('#' + option);
+    const element = document.querySelector('#' + option)
     if (!element) {
-      return;
+      return
     }
-    let timeout = 100;
+    let timeout = 100
     if (!element.checkVisibility()) {
-      element.closest('.col-6.p-2').dispatchEvent(new Event('contextmenu'));
-      timeout = 250;
+      element.closest('.col-6.p-2').dispatchEvent(new Event('contextmenu'))
+      timeout = 250
     }
-    closeModal(GlobalVariables.ELEMENT_ID_MODAL_FIND_SKILL_FEATURE);
+    modalClass.close()
     setTimeout(() => {
-      element.focus();
-      element.scrollIntoView({ behavior: 'smooth' });
-    }, timeout);
+      element.focus()
+      element.scrollIntoView({ behavior: 'smooth' })
+    }, timeout)
   }
 
   /**
@@ -671,21 +686,21 @@
    * @param {Event} event
    */
   function onChangeInputCheckPlus (event) {
-    const element = event.target;
+    const element = event.target
     if (!element.checked) {
-      return;
+      return
     }
     if (!element.dataset.linkedInputId) {
-      return;
+      return
     }
-    const linkedElement = document.querySelector('#' + element.dataset.linkedInputId);
+    const linkedElement = document.querySelector('#' + element.dataset.linkedInputId)
     if (!linkedElement) {
-      return;
+      return
     }
     if (!linkedElement.checked) {
-      return;
+      return
     }
-    linkedElement.checked = false;
+    linkedElement.checked = false
   }
 
   /**
@@ -695,15 +710,15 @@
   function onClickButtonRollDice (event) {
     const elementButton = event.target,
       directRow = elementButton.closest('.row'),
-      cardBodyOrHeader = directRow.parentNode;
-    let diceObject;
+      cardBodyOrHeader = directRow.parentNode
+    let diceObject
     if (cardBodyOrHeader.classList.contains('card-body')) {
-      diceObject = buildRollDice(directRow, true);
+      diceObject = buildRollDice(directRow, true)
     } else {
-      diceObject = buildRollDice(directRow);
+      diceObject = buildRollDice(directRow)
     }
     if (diceObject) {
-      showModalRollDice(diceObject);
+      showModalRollDice(diceObject)
     }
   }
 
@@ -713,18 +728,19 @@
    */
   function showModalRollDice (diceObject) {
     if (diceObject) {
-      modalClass.resetModal();
-      modalClass.setModalTitle(diceObject.getFullName());
+      modalClass.resetModal()
+      modalClass.setModalTitle(diceObject.getFullName())
       const pDice = document.createElement('p'),
-        inputDiceHidden = document.createElement('input');
-      pDice.innerText = diceObject.getFullDiceRoller();
-      inputDiceHidden.value = diceObject.getFullDiceRoller();
-      inputDiceHidden.classList.add('d-none');
-      modalClass.appendChildToBody(pDice);
-      modalClass.appendChildToBody(inputDiceHidden);
-      modalClass.show();
-      inputDiceHidden.select();
-      copyToClipboard(inputDiceHidden.value);
+        inputDiceHidden = document.createElement('input'),
+        diceRoll = diceObject.getFullDiceRoller();
+      pDice.innerText = diceRoll
+      inputDiceHidden.value = diceRoll
+      inputDiceHidden.classList.add('d-none')
+      modalClass.appendChildToBody(pDice)
+      modalClass.appendChildToBody(inputDiceHidden)
+      modalClass.show()
+      inputDiceHidden.select()
+      copyToClipboard(diceRoll)
     }
   }
 
@@ -736,20 +752,20 @@
    */
   function buildRollDice (elementRow, isCardBody = false) {
     if (!elementRow) {
-      return null;
+      return null
     }
-    let diceObject = new Dice();
+    let diceObject = new Dice()
     if (isCardBody) {
-      const elementRowHeader = elementRow.closest('.card').querySelector('.card-header').querySelector('.row');
+      const elementRowHeader = elementRow.closest('.card').querySelector('.card-header').querySelector('.row')
       if (!elementRowHeader) {
-        return null;
+        return null
       }
-      buildDiceObjectFromRow(elementRowHeader, true, diceObject);
-      buildDiceObjectFromRow(elementRow, false, diceObject);
+      buildDiceObjectFromRow(elementRowHeader, true, diceObject)
+      buildDiceObjectFromRow(elementRow, false, diceObject)
     } else {
-      buildDiceObjectFromRow(elementRow, true, diceObject);
+      buildDiceObjectFromRow(elementRow, true, diceObject)
     }
-    return diceObject;
+    return diceObject
   }
 
   /**
@@ -761,34 +777,34 @@
    */
   function buildDiceObjectFromRow (elementRow, isFeatureRow = false, diceObject = null) {
     if (diceObject === null) {
-      diceObject = new Dice();
+      diceObject = new Dice()
     }
     const elementDiceCodeInput = elementRow.querySelector(
         '[id$="' + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX + '"]'),
       elementPlusOneInput = elementRow.querySelector('[id$="' + GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX + '"]'),
       elementPlusTwoInput = elementRow.querySelector('[id$="' + GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX + '"]'),
-      elementName = elementRow.querySelector('.col-7');
+      elementName = elementRow.querySelector('.col-7')
     if (isFeatureRow) {
-      diceObject.featureDice = elementDiceCodeInput.value;
+      diceObject.featureDice = elementDiceCodeInput.value
       if (elementPlusOneInput.checked) {
-        diceObject.featureBonus = elementPlusOneInput.value;
+        diceObject.featureBonus = elementPlusOneInput.value
       }
       if (elementPlusTwoInput.checked) {
-        diceObject.featureBonus = elementPlusTwoInput.value;
+        diceObject.featureBonus = elementPlusTwoInput.value
       }
-      diceObject.featureName = elementName.innerText;
+      diceObject.featureName = elementName.innerText
     } else {
-      diceObject.skillDice = elementDiceCodeInput.value;
+      diceObject.skillDice = elementDiceCodeInput.value
       if (elementPlusOneInput.checked) {
-        diceObject.skillBonus = elementPlusOneInput.value;
+        diceObject.skillBonus = elementPlusOneInput.value
       }
       if (elementPlusTwoInput.checked) {
-        diceObject.skillBonus = elementPlusTwoInput.value;
+        diceObject.skillBonus = elementPlusTwoInput.value
       }
-      diceObject.isSkillDice = true;
-      diceObject.skillName = elementName.innerText;
+      diceObject.isSkillDice = true
+      diceObject.skillName = elementName.innerText
     }
-    return diceObject;
+    return diceObject
   }
 
   /**
@@ -796,136 +812,136 @@
    * @param {string} text
    */
   function copyToClipboard (text) {
-    navigator.clipboard.writeText(text.toString());
-    toastClass.showMessageWhitType('Copy to clipboard');
+    navigator.clipboard.writeText(text.toString())
+    toastClass.showMessageWhitType('Copy to clipboard')
   }
 
   function closeModal (modalId) {
     const elementModal = document.querySelector('#' + modalId),
-      modal = bootstrap.Modal.getInstance(elementModal);
-    modal.hide();
+      modal = bootstrap.Modal.getInstance(elementModal)
+    modal.hide()
   }
 
   class Dice {
     constructor () {}
 
-    _featureName = '';
+    _featureName = ''
 
     get featureName () {
-      return this._featureName;
+      return this._featureName
     }
 
     set featureName (value) {
-      this._featureName = value;
+      this._featureName = value
     }
 
-    _skillName = '';
+    _skillName = ''
 
     get skillName () {
-      return this._skillName;
+      return this._skillName
     }
 
     set skillName (value) {
-      this._skillName = value;
+      this._skillName = value
     }
 
-    _featureDice = 1;
+    _featureDice = 1
 
     get featureDice () {
-      return this._featureDice;
+      return this._featureDice
     }
 
     set featureDice (value) {
-      this._featureDice = parseInt(value) <= 1 ? 1 : parseInt(value);
+      this._featureDice = parseInt(value) <= 1 ? 1 : parseInt(value)
     }
 
-    _featureBonus = 0;
+    _featureBonus = 0
 
     get featureBonus () {
-      return this._featureBonus;
+      return this._featureBonus
     }
 
     set featureBonus (value) {
-      this._featureBonus = parseInt(value) <= 0 ? 0 : parseInt(value);
+      this._featureBonus = parseInt(value) <= 0 ? 0 : parseInt(value)
     }
 
-    _skillDice = 0;
+    _skillDice = 0
 
     get skillDice () {
-      return this._skillDice;
+      return this._skillDice
     }
 
     set skillDice (value) {
-      this._skillDice = parseInt(value) <= 0 ? 0 : parseInt(value);
+      this._skillDice = parseInt(value) <= 0 ? 0 : parseInt(value)
     }
 
-    _skillBonus = 0;
+    _skillBonus = 0
 
     get skillBonus () {
-      return this._skillBonus;
+      return this._skillBonus
     }
 
     set skillBonus (value) {
-      this._skillBonus = parseInt(value) <= 0 ? 0 : parseInt(value);
+      this._skillBonus = parseInt(value) <= 0 ? 0 : parseInt(value)
     }
 
-    _isSkillDice = false;
+    _isSkillDice = false
 
     get isSkillDice () {
-      return this._isSkillDice;
+      return this._isSkillDice
     }
 
     set isSkillDice (value) {
-      this._isSkillDice = Boolean(value);
+      this._isSkillDice = Boolean(value)
     }
 
     getFullDiceRoller () {
       if (this.isSkillDice) {
-        return '/r ' + this.getSkillDiceRoller();
+        return '/r ' + this.getSkillDiceRoller()
       } else {
-        return '/r ' + this.getFeatureDiceRoller();
+        return '/r ' + this.getFeatureDiceRoller()
       }
     }
 
     getSkillDiceRoller () {
-      const diceCode = 'd6';
-      let string = this.getFeatureDiceRoller();
+      const diceCode = 'd6'
+      let string = this.getFeatureDiceRoller()
       if (this.skillDice === 0 && this.skillBonus === 0) {
-        this.featureDice = this.featureDice - 1;
-        return this.getFeatureDiceRoller();
+        this.featureDice = this.featureDice - 1
+        return this.getFeatureDiceRoller()
       }
       if (this.skillBonus + this.featureBonus >= 3) {
-        this.skillDice += 1;
-        let toSubtract = 3 - this.featureBonus;
-        this.featureBonus = 0;
-        this.skillBonus -= toSubtract;
-        string = this.getFeatureDiceRoller();
+        this.skillDice += 1
+        let toSubtract = 3 - this.featureBonus
+        this.featureBonus = 0
+        this.skillBonus -= toSubtract
+        string = this.getFeatureDiceRoller()
       }
       if (this.skillDice > 0) {
-        string += '+' + this.skillDice + diceCode;
+        string += '+' + this.skillDice + diceCode
       }
       if (this.skillBonus > 0) {
-        string += '+' + this.skillBonus;
+        string += '+' + this.skillBonus
       }
 
-      return string;
+      return string
     }
 
     getFeatureDiceRoller () {
-      const diceCode = 'd6';
-      let string = '';
-      string += this.featureDice + diceCode;
+      const diceCode = 'd6'
+      let string = ''
+      string += this.featureDice + diceCode
       if (this.featureBonus > 0) {
-        string += '+' + this.featureBonus;
+        string += '+' + this.featureBonus
       }
-      return string;
+      return string
     }
 
     getFullName () {
       if (this.isSkillDice) {
-        return this.skillName + ' (dans ' + this.featureName + ')';
+        return this.skillName + ' (dans ' + this.featureName + ')'
       } else {
-        return this.featureName;
+        return this.featureName
       }
     }
   }
@@ -933,32 +949,32 @@
   class CharacterSheet {
     constructor () {}
 
-    _name = '';
+    _name = ''
 
     get name () {
-      return this._name;
+      return this._name
     }
 
     set name (value) {
       if (typeof value !== 'string') {
-        throw new Error('Character name must be a string');
+        throw new Error('Character name must be a string')
       }
-      this._name = value.trim();
-      this.fillNameValue();
+      this._name = value.trim()
+      this.fillNameValue()
     }
 
-    _statistics = {};
+    _statistics = {}
 
     get statistics () {
-      return this._statistics;
+      return this._statistics
     }
 
     set statistics (value) {
       if (!value || typeof value !== 'object') {
-        throw new Error('Character statistics must be an object');
+        throw new Error('Character statistics must be an object')
       }
-      this._statistics = value;
-      this.fillStatisticsValues();
+      this._statistics = value
+      this.fillStatisticsValues()
     }
 
     /**
@@ -968,164 +984,164 @@
      */
     addStatistic (key, value) {
       if (!key || typeof key !== 'string') {
-        throw new Error('Character statistics key must be a string');
+        throw new Error('Character statistics key must be a string')
       }
       if (typeof value !== 'string' && typeof value !== 'boolean') {
-        throw new Error('Character statistics value must be a string or a boolean');
+        throw new Error('Character statistics value must be a string or a boolean')
       }
-      this._statistics[key] = value;
-      this.fillStatisticsValues(key);
+      this._statistics[key] = value
+      this.fillStatisticsValues(key)
     }
 
     reset () {
-      this.name = '';
-      this.statistics = {};
+      this.name = ''
+      this.statistics = {}
       document.querySelectorAll('.card').forEach(card => {
         if (card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID]) {
           document.querySelectorAll('[id^="' + card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID] + '"]').
             forEach(element => {
               if (element.tagName !== 'INPUT') {
-                return;
+                return
               }
               if (element.type === 'checkbox') {
-                element.checked = false;
+                element.checked = false
               } else {
-                element.value = element.min;
+                element.value = element.min
               }
-            });
+            })
         }
-      });
+      })
     }
 
     statisticsToJson () {
-      return JSON.stringify(this.statistics);
+      return JSON.stringify(this.statistics)
     }
 
     toJson () {
-      return JSON.stringify({ name: this.name, statistics: this.statistics });
+      return JSON.stringify({ name: this.name, statistics: this.statistics })
     }
 
     findStatisticsValues () {
-      this.statistics = {};
+      this.statistics = {}
       document.querySelectorAll('.card').forEach(card => {
         if (card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID]) {
           document.querySelectorAll('[id^="' + card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID] + '"]').
             forEach(element => {
               if (element.tagName !== 'INPUT') {
-                return;
+                return
               }
               if (element.value === '' || element.value === null) {
-                return;
+                return
               }
               if (element.type === 'checkbox' && element.checked === false) {
-                return;
+                return
               }
               if (element.value === element.min) {
-                return;
+                return
               }
               if (element.type === 'checkbox') {
-                this.addStatistic(element.id, element.checked);
+                this.addStatistic(element.id, element.checked)
               } else {
-                this.addStatistic(element.id, element.value);
+                this.addStatistic(element.id, element.value)
               }
-            });
+            })
         }
-      });
+      })
     }
 
     fillStatisticsValues (specificKey = '') {
       if (specificKey !== '') {
-        this.fillStatisticsValuesByElementId(specificKey);
-        return;
+        this.fillStatisticsValuesByElementId(specificKey)
+        return
       }
       Object.keys(this.statistics).forEach(elementId => {
-        this.fillStatisticsValuesByElementId(elementId);
-      });
+        this.fillStatisticsValuesByElementId(elementId)
+      })
     }
 
     fillStatisticsValuesByElementId (elementId) {
-      const element = document.querySelector('#' + elementId);
+      const element = document.querySelector('#' + elementId)
       if (!element) {
-        return;
+        return
       }
       if (element.tagName !== 'INPUT') {
-        return;
+        return
       }
       if (element.type === 'checkbox') {
-        element.checked = this.statistics[elementId];
+        element.checked = this.statistics[elementId]
       } else {
-        element.value = this.statistics[elementId];
+        element.value = this.statistics[elementId]
       }
     }
 
     fillNameValue () {
       const elementSmallCharacterSheetName = document.querySelector(
-        '#' + GlobalVariables.ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME);
+        '#' + GlobalVariables.ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME)
       if (this.name === null || this.name === '') {
-        elementSmallCharacterSheetName.innerHTML = '';
-        elementSmallCharacterSheetName.classList.add('d-none');
-        document.title = 'Z-Corps character sheet';
+        elementSmallCharacterSheetName.innerHTML = ''
+        elementSmallCharacterSheetName.classList.add('d-none')
+        document.title = 'Z-Corps character sheet'
       } else {
-        elementSmallCharacterSheetName.innerHTML = '<br/>' + this.name;
-        elementSmallCharacterSheetName.classList.remove('d-none');
-        document.title = this.name;
+        elementSmallCharacterSheetName.innerHTML = '<br/>' + this.name
+        elementSmallCharacterSheetName.classList.remove('d-none')
+        document.title = this.name
       }
     }
 
     findNameValue () {
-      const element = document.querySelector('#' + GlobalVariables.ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME);
+      const element = document.querySelector('#' + GlobalVariables.ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME)
       if (!element) {
-        return null;
+        return null
       }
-      this.name = element.innerText;
+      this.name = element.innerText
     }
 
     findAllValue () {
-      this.findNameValue();
-      this.findStatisticsValues();
+      this.findNameValue()
+      this.findStatisticsValues()
     }
 
     loadFromJson (jsonData) {
       if (!jsonData && typeof jsonData !== 'string') {
-        throw new Error('Character data must be a non-empty string');
+        throw new Error('Character data must be a non-empty string')
       }
-      let jsonObject;
+      let jsonObject
       try {
-        jsonObject = JSON.parse(jsonData);
+        jsonObject = JSON.parse(jsonData)
       } catch (e) {
-        throw new Error('Character data cannot be read correctly');
+        throw new Error('Character data cannot be read correctly')
       }
       if (!jsonObject || jsonObject.name === undefined || jsonObject.statistics === undefined) {
-        throw new Error('Character data does not conform to expected format');
+        throw new Error('Character data does not conform to expected format')
       }
-      this.name = jsonObject.name;
-      this.statistics = jsonObject.statistics;
-      toastClass.showMessageWhitType(`Character ${this.name} has been successfully loaded`);
+      this.name = jsonObject.name
+      this.statistics = jsonObject.statistics
+      toastClass.showMessageWhitType(`Character ${this.name} has been successfully loaded`)
     }
   }
 
   class Toast {
-    allowedTypes = ['success', 'danger', 'warning', 'info'];
-    elementToast;
-    elementToastBody;
-    toastBootstrap;
+    allowedTypes = ['success', 'danger', 'warning', 'info']
+    elementToast
+    elementToastBody
+    toastBootstrap
 
     constructor () {
-      this.elementToast = document.querySelector('#' + GlobalVariables.ELEMENT_ID_TOAST);
+      this.elementToast = document.querySelector('#' + GlobalVariables.ELEMENT_ID_TOAST)
       if (!this.elementToast) {
-        throw new Error('Toast element not found');
+        throw new Error('Toast element not found')
       }
-      this.toastBootstrap = bootstrap.Toast.getOrCreateInstance(this.elementToast);
-      this.elementToastBody = this.elementToast.querySelector('.toast-body');
+      this.toastBootstrap = bootstrap.Toast.getOrCreateInstance(this.elementToast)
+      this.elementToastBody = this.elementToast.querySelector('.toast-body')
       if (!this.elementToastBody) {
-        throw new Error('Toast body element not found');
+        throw new Error('Toast body element not found')
       }
     }
 
-    _type = '';
+    _type = ''
 
     get type () {
-      return this._type;
+      return this._type
     }
 
     /**
@@ -1134,41 +1150,41 @@
      */
     set type (value) {
       if (!value || typeof value !== 'string') {
-        throw new Error('Toast type must be a string');
+        throw new Error('Toast type must be a string')
       }
-      value = value.trim();
+      value = value.trim()
       if (!this.allowedTypes.includes(value)) {
-        throw new Error('Toast type must be one of ' + this.allowedTypes.join(', '));
+        throw new Error('Toast type must be one of ' + this.allowedTypes.join(', '))
       }
       if (this.type !== value) {
-        this._type = value;
+        this._type = value
         this.allowedTypes.forEach(allowedType => {
           if (!this.elementToast.classList.contains('text-bg-' + allowedType)) {
-            return;
+            return
           }
-          this.elementToast.classList.remove('text-bg-' + allowedType);
-        });
-        this.elementToast.classList.add('text-bg-' + this.type);
+          this.elementToast.classList.remove('text-bg-' + allowedType)
+        })
+        this.elementToast.classList.add('text-bg-' + this.type)
       }
     }
 
-    _message = '';
+    _message = ''
 
     get message () {
-      return this._message;
+      return this._message
     }
 
     set message (value) {
       if (!value || typeof value !== 'string') {
-        throw new Error('Toast message must be a string');
+        throw new Error('Toast message must be a string')
       }
-      this._message = value;
-      this.elementToastBody.innerHTML = '';
-      this.elementToastBody.innerText = this.message;
+      this._message = value
+      this.elementToastBody.innerHTML = ''
+      this.elementToastBody.innerText = this.message
     }
 
     show () {
-      this.toastBootstrap.show();
+      this.toastBootstrap.show()
     }
 
     /**
@@ -1177,11 +1193,11 @@
      */
     showError (error) {
       if (!error && typeof error !== 'object' && error instanceof Error) {
-        throw new Error('Toast error must be an instance of Error');
+        throw new Error('Toast error must be an instance of Error')
       }
-      this.type = 'danger';
-      this.message = 'Internal error : ' + error.message;
-      this.show();
+      this.type = 'danger'
+      this.message = 'Internal error : ' + error.message
+      this.show()
     }
 
     /**
@@ -1190,78 +1206,78 @@
      * @param {'success'|'danger'|'warning'|'info'} type
      */
     showMessageWhitType (message, type = 'success') {
-      this.type = type;
-      this.message = message;
-      this.show();
+      this.type = type
+      this.message = message
+      this.show()
     }
   }
 
   class Modal {
-    elementModal;
-    elementModalTitle;
-    elementModalBody;
-    elementModalFooter;
-    modalBootstrap;
+    elementModal
+    elementModalTitle
+    elementModalBody
+    elementModalFooter
+    modalBootstrap
 
     constructor () {
-      this.elementModal = document.querySelector('#' + GlobalVariables.ELEMENT_ID_MODAL_GLOBAL);
+      this.elementModal = document.querySelector('#' + GlobalVariables.ELEMENT_ID_MODAL_GLOBAL)
       if (!this.elementModal) {
-        throw new Error('Modal element not found');
+        throw new Error('Modal element not found')
       }
-      this.elementModalBody = this.elementModal.querySelector('.modal-body');
-      this.elementModalFooter = this.elementModal.querySelector('.modal-footer');
-      this.elementModalTitle = document.querySelector('#' + GlobalVariables.ELEMENT_ID_MODAL_GLOBAL_LABEL);
+      this.elementModalBody = this.elementModal.querySelector('.modal-body')
+      this.elementModalFooter = this.elementModal.querySelector('.modal-footer')
+      this.elementModalTitle = document.querySelector('#' + GlobalVariables.ELEMENT_ID_MODAL_GLOBAL_LABEL)
       if (!this.elementModalBody || !this.elementModalFooter || !this.elementModalTitle) {
-        throw new Error('Modal elements not found');
+        throw new Error('Modal elements not found')
       }
-      this.resetModal();
-      this.modalBootstrap = bootstrap.Modal.getOrCreateInstance(this.elementModal);
+      this.resetModal()
+      this.modalBootstrap = bootstrap.Modal.getOrCreateInstance(this.elementModal)
     }
 
     resetModal () {
-      this.elementModalTitle.innerText = '';
-      this.elementModalBody.innerHTML = '';
-      this.resetModalFooter();
+      this.elementModalTitle.innerText = ''
+      this.elementModalBody.innerHTML = ''
+      this.resetModalFooter()
     }
 
     appendChildToBody (element) {
       if (!element || typeof element !== 'object' || !(element instanceof HTMLElement)) {
-        throw new Error('Element to append must be an instance of HTMLElement');
+        throw new Error('Element to append must be an instance of HTMLElement')
       }
-      this.elementModalBody.appendChild(element);
+      this.elementModalBody.appendChild(element)
     }
 
     setModalTitle (title) {
       if (!title || typeof title !== 'string') {
-        throw new Error('Title must be a string');
+        throw new Error('Title must be a string')
       }
-      this.elementModalTitle.innerText = title;
+      this.elementModalTitle.innerText = title
     }
 
     addButtonFooter (button) {
       if (!button || typeof button !== 'object' || !(button instanceof HTMLButtonElement)) {
-        throw new Error('Button must be an instance of HTMLButtonElement');
+        throw new Error('Button must be an instance of HTMLButtonElement')
       }
-      this.elementModalFooter.appendChild(button);
+      this.elementModalFooter.appendChild(button)
     }
 
     resetModalFooter () {
-      this.elementModalFooter.innerHTML = '';
-      const buttonClose = document.createElement('button');
-      buttonClose.type = 'button';
-      buttonClose.classList.add('btn', 'btn-secondary');
-      buttonClose.dataset.bsDismiss = 'modal';
-      buttonClose.innerText = 'Close';
-      this.elementModalFooter.appendChild(buttonClose);
+      this.elementModalFooter.innerHTML = ''
+      const buttonClose = document.createElement('button')
+      buttonClose.type = 'button'
+      buttonClose.classList.add('btn', 'btn-secondary')
+      buttonClose.dataset.bsDismiss = 'modal'
+      buttonClose.innerText = 'Close'
+      this.elementModalFooter.appendChild(buttonClose)
     }
 
     show () {
-      this.modalBootstrap.show(this.elementModal);
+      this.modalBootstrap.show(this.elementModal)
     }
 
     close () {
-      this.resetModal();
-      this.modalBootstrap.hide();
+      this.resetModal()
+      this.modalBootstrap.hide()
     }
   }
 
@@ -1272,22 +1288,22 @@
      * @param {string} name
      */
     constructor (id, name) {
-      this.id = id;
-      this.name = name;
+      this.id = id
+      this.name = name
     }
 
     /**
      * @type {string}
      * @private
      */
-    _id;
+    _id
 
     /**
      *
      * @returns {string}
      */
     get id () {
-      return this._id;
+      return this._id
     }
 
     /**
@@ -1296,9 +1312,9 @@
      */
     set id (value) {
       if (!value || typeof value !== 'string') {
-        throw new Error('Feature id must be a string');
+        throw new Error('Feature id must be a string')
       }
-      this._id = value;
+      this._id = value
     }
 
     /**
@@ -1306,14 +1322,14 @@
      * @type {string}
      * @private
      */
-    _name;
+    _name
 
     /**
      *
      * @returns {string}
      */
     get name () {
-      return this._name;
+      return this._name
     }
 
     /**
@@ -1322,9 +1338,9 @@
      */
     set name (value) {
       if (!value || typeof value !== 'string') {
-        throw new Error('Feature name must be a string');
+        throw new Error('Feature name must be a string')
       }
-      this._name = value;
+      this._name = value
     }
 
     /**
@@ -1332,14 +1348,14 @@
      * @type {Skill[]}
      * @private
      */
-    _skills = [];
+    _skills = []
 
     /**
      *
      * @returns {Skill[]}
      */
     get skills () {
-      return this._skills;
+      return this._skills
     }
 
     /**
@@ -1348,12 +1364,12 @@
      */
     set skills (value) {
       if (!value || !Array.isArray(value)) {
-        throw new Error('Feature skills must be an array');
+        throw new Error('Feature skills must be an array')
       }
-      this._skills = [];
+      this._skills = []
       value.forEach(skill => {
-        this.addSkill(skill);
-      });
+        this.addSkill(skill)
+      })
     }
 
     /**
@@ -1362,13 +1378,13 @@
      */
     addSkill (skill) {
       if (!skill || typeof skill !== 'object' || !(skill instanceof Skill)) {
-        throw new Error('Feature skill must be an instance of Skill');
+        throw new Error('Feature skill must be an instance of Skill')
       }
       if (!skill.feature || skill.feature.id !== this.id) {
-        skill.feature = this;
+        skill.feature = this
       }
       if (!this.hasSkill(skill)) {
-        this.skills.push(skill);
+        this.skills.push(skill)
       }
     }
 
@@ -1378,11 +1394,11 @@
      */
     removeSkill (skill) {
       if (!skill || typeof skill !== 'object' || !(skill instanceof Skill)) {
-        throw new Error('Feature skill must be an instance of Skill');
+        throw new Error('Feature skill must be an instance of Skill')
       }
       this.skills = this.skills.filter(element => {
-        return element.id !== skill.id;
-      });
+        return element.id !== skill.id
+      })
     }
 
     /**
@@ -1392,9 +1408,9 @@
      */
     hasSkill (skill) {
       if (!skill || typeof skill !== 'object' || !(skill instanceof Skill)) {
-        throw new Error('Feature skill must be an instance of Skill');
+        throw new Error('Feature skill must be an instance of Skill')
       }
-      return this.skills.includes(skill);
+      return this.skills.includes(skill)
     }
 
     /**
@@ -1404,11 +1420,11 @@
      */
     hasSkillById (skillId) {
       if (!skillId || typeof skillId !== 'string') {
-        throw new Error('Skill id must be a string');
+        throw new Error('Skill id must be a string')
       }
       return this.skills.some(skill => {
-        return skill.id === skillId;
-      });
+        return skill.id === skillId
+      })
     }
 
     /**
@@ -1418,14 +1434,14 @@
      */
     findSkillById (skillId) {
       if (!skillId || typeof skillId !== 'string') {
-        throw new Error('Skill id must be a string');
+        throw new Error('Skill id must be a string')
       }
       if (!this.hasSkillById(skillId)) {
-        return null;
+        return null
       }
       return this.skills.find(skill => {
-        return skill.id === skillId;
-      });
+        return skill.id === skillId
+      })
     }
 
     /**
@@ -1435,12 +1451,12 @@
      */
     isLastSkill (skill) {
       if (!skill || typeof skill !== 'object' || !(skill instanceof Skill)) {
-        throw new Error('Feature skill must be an instance of Skill');
+        throw new Error('Feature skill must be an instance of Skill')
       }
       if (this.skills.length === 0) {
-        throw new Error('Feature has no skills');
+        throw new Error('Feature has no skills')
       }
-      return this.skills[this.skills.length - 1].id === skill.id;
+      return this.skills[this.skills.length - 1].id === skill.id
     }
 
     /**
@@ -1450,12 +1466,18 @@
      */
     isFirstSkill (skill) {
       if (!skill || typeof skill !== 'object' || !(skill instanceof Skill)) {
-        throw new Error('Feature skill must be an instance of Skill');
+        throw new Error('Feature skill must be an instance of Skill')
       }
       if (this.skills.length === 0) {
-        throw new Error('Feature has no skills');
+        throw new Error('Feature has no skills')
       }
-      return this.skills[0].id === skill.id;
+      return this.skills[0].id === skill.id
+    }
+
+    getInputDiceId () {
+      return this.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card' + GlobalVariables.DEFAULT_SEPARATOR_ID + this.id +
+        GlobalVariables.DEFAULT_SEPARATOR_ID + 'row' + GlobalVariables.DEFAULT_SEPARATOR_ID +
+        GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX
     }
   }
 
@@ -1467,10 +1489,10 @@
      * @param {Feature} feature
      */
     constructor (id, name, feature = null) {
-      this.id = id;
-      this.name = name;
+      this.id = id
+      this.name = name
       if (feature) {
-        this.feature = feature;
+        this.feature = feature
       }
     }
 
@@ -1478,14 +1500,14 @@
      * @type {string}
      * @private
      */
-    _id;
+    _id
 
     /**
      *
      * @returns {string}
      */
     get id () {
-      return this._id;
+      return this._id
     }
 
     /**
@@ -1494,23 +1516,23 @@
      */
     set id (value) {
       if (!value || typeof value !== 'string') {
-        throw new Error('Skill id must be a string');
+        throw new Error('Skill id must be a string')
       }
-      this._id = value;
+      this._id = value
     }
 
     /**
      * @type {string}
      * @private
      */
-    _name;
+    _name
 
     /**
      *
      * @returns {string}
      */
     get name () {
-      return this._name;
+      return this._name
     }
 
     /**
@@ -1519,23 +1541,23 @@
      */
     set name (value) {
       if (!value || typeof value !== 'string') {
-        throw new Error('Skill name must be a string');
+        throw new Error('Skill name must be a string')
       }
-      this._name = value;
+      this._name = value
     }
 
     /**
      * @type {Feature}
      * @private
      */
-    _feature;
+    _feature
 
     /**
      *
      * @returns {Feature}
      */
     get feature () {
-      return this._feature;
+      return this._feature
     }
 
     /**
@@ -1544,11 +1566,11 @@
      */
     set feature (value) {
       if (!value || typeof value !== 'object' || !(value instanceof Feature)) {
-        throw new Error('Skill feature must be an instance of Feature');
+        throw new Error('Skill feature must be an instance of Feature')
       }
-      this._feature = value;
+      this._feature = value
       if (!this.feature.hasSkill(this)) {
-        this.feature.addSkill(this);
+        this.feature.addSkill(this)
       }
     }
 
@@ -1556,14 +1578,14 @@
      * @type {boolean}
      * @private
      */
-    _isVisible = true;
+    _isVisible = true
 
     /**
      *
      * @returns {boolean}
      */
     get isVisible () {
-      return this._isVisible;
+      return this._isVisible
     }
 
     /**
@@ -1572,23 +1594,23 @@
      */
     set isVisible (value) {
       if (typeof value !== 'boolean') {
-        throw new Error('Skill isVisible must be a boolean');
+        throw new Error('Skill isVisible must be a boolean')
       }
-      this._isVisible = value;
+      this._isVisible = value
     }
 
     /**
      * @type {boolean}
      * @private
      */
-    _isAllowedSubSkills = false;
+    _isAllowedSubSkills = false
 
     /**
      *
      * @returns {boolean}
      */
     get isAllowedSubSkills () {
-      return this._isAllowedSubSkills;
+      return this._isAllowedSubSkills
     }
 
     /**
@@ -1597,23 +1619,23 @@
      */
     set isAllowedSubSkills (value) {
       if (typeof value !== 'boolean') {
-        throw new Error('Skill isAllowedSubSkills must be a boolean');
+        throw new Error('Skill isAllowedSubSkills must be a boolean')
       }
-      this._isAllowedSubSkills = value;
+      this._isAllowedSubSkills = value
     }
 
     /**
      * @type {SubSkill[]|null}
      * @private
      */
-    _subSkills = null;
+    _subSkills = null
 
     /**
      *
      * @returns {SubSkill[]|null}
      */
     get subSkills () {
-      return this._subSkills;
+      return this._subSkills
     }
 
     /**
@@ -1622,20 +1644,20 @@
      */
     set subSkills (value) {
       if (!this.isAllowedSubSkills) {
-        return;
+        return
       }
       if (value === null) {
-        this._subSkills = value;
-        return;
+        this._subSkills = value
+        return
       }
       if (!value || !Array.isArray(value)) {
-        throw new Error('Skill subSkills must be an array');
+        throw new Error('Skill subSkills must be an array')
       }
-      this._subSkills = [];
+      this._subSkills = []
       value.forEach(subSkill => {
-        this.addSubSkill(subSkill);
-      });
-      this.orderSubSkillByPosition();
+        this.addSubSkill(subSkill)
+      })
+      this.orderSubSkillByPosition()
     }
 
     /**
@@ -1644,16 +1666,16 @@
      */
     addSubSkill (subSkill) {
       if (!this.isAllowedSubSkills) {
-        return;
+        return
       }
       if (!subSkill || typeof subSkill !== 'object' || !(subSkill instanceof SubSkill)) {
-        throw new Error('Skill subSkill must be an instance of SubSkill');
+        throw new Error('Skill subSkill must be an instance of SubSkill')
       }
       if (this.subSkills === null) {
-        this.subSkills = [];
+        this.subSkills = []
       }
-      this.subSkills.push(subSkill);
-      this.orderSubSkillByPosition();
+      this.subSkills.push(subSkill)
+      this.orderSubSkillByPosition()
     }
 
     /**
@@ -1662,71 +1684,78 @@
      */
     removeSubSkill (subSkill) {
       if (!this.isAllowedSubSkills) {
-        return;
+        return
       }
       if (!subSkill || typeof subSkill !== 'object' || !(subSkill instanceof SubSkill)) {
-        throw new Error('Skill subSkill must be an instance of SubSkill');
+        throw new Error('Skill subSkill must be an instance of SubSkill')
       }
       if (this.subSkills === null) {
-        return;
+        return
       }
       this.subSkills = this.subSkills.filter(element => {
-        return element.id !== subSkill.id;
-      });
+        return element.id !== subSkill.id
+      })
       if (this.subSkills.length === 0) {
-        this.subSkills = null;
+        this.subSkills = null
       }
     }
 
     orderSubSkillByPosition () {
       if (!this.subSkills) {
-        return;
+        return
       }
       this.subSkills.sort((a, b) => {
-        return a.position - b.position;
-      });
+        return a.position - b.position
+      })
+    }
+
+    getInputDiceId () {
+      return this.feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card' + GlobalVariables.DEFAULT_SEPARATOR_ID +
+        this.id +
+        GlobalVariables.DEFAULT_SEPARATOR_ID + 'row' + GlobalVariables.DEFAULT_SEPARATOR_ID +
+        GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX
     }
   }
 
   class SubSkill {
-    _id;
+    _id
 
     get id () {
-      return this._id;
+      return this._id
     }
 
     set id (value) {
-      this._id = value;
+      this._id = value
     }
 
-    _name;
+    _name
 
     get name () {
-      return this._name;
+      return this._name
     }
 
     set name (value) {
-      this._name = value;
+      this._name = value
     }
 
-    _skill;
+    _skill
 
     get skill () {
-      return this._skill;
+      return this._skill
     }
 
     set skill (value) {
-      this._skill = value;
+      this._skill = value
     }
 
-    _position;
+    _position
 
     get position () {
-      return this._position;
+      return this._position
     }
 
     set position (value) {
-      this._position = value;
+      this._position = value
     }
   }
 </script>
