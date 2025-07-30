@@ -271,7 +271,7 @@
         skillSeparator.classList.add('border', 'border-info-subtle', 'my-3', 'mx-5')
         colSkill.appendChild(skillName)
         rowSkill.appendChild(colSkill)
-        if (skill.isAllowedSubSkills && skill.subSkills !== null && skill.subSkills.length > 0) {
+        if (skill.hasFunctionalitySubSkillsReallyActivated()) {
           colSkill.classList.remove('col-7')
           colSkill.classList.add('col-12')
           skill.subSkills.forEach((subSkill) => {
@@ -293,6 +293,13 @@
         } else {
           createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSkill)
         }
+        rowSkill.addEventListener('dblclick', (event) => {
+          try {
+            onDblClickRowSkill(event)
+          } catch (e) {
+            toastClass.showError(e)
+          }
+        })
         cardBody.appendChild(rowSkill)
         if (!featureClass.isLastSkill(skill)) {
           cardBody.appendChild(skillSeparator)
@@ -317,6 +324,47 @@
     }
     const collapsible = new bootstrap.Collapse(collapsibleElement)
     collapsible.show()
+  }
+
+  /**
+   *
+   * @param {Event} event
+   */
+  function onDblClickRowSkill (event) {
+    event.preventDefault()
+    const rowSkill = event.currentTarget
+    if (rowSkill.dataset[GlobalVariables.DATA_KEY_PREFIX_ID] !== null && featureClasses !== null) {
+      const skillId = rowSkill.dataset[GlobalVariables.DATA_KEY_PREFIX_ID].replace('-row', '')
+      /**
+       *
+       * @type {null|Skill}
+       */
+      let skillClass = null
+      featureClasses.forEach(featureClass => {
+        if (featureClass.hasSkillById(skillId)) {
+          skillClass = featureClass.findSkillById(skillId)
+        }
+      })
+      if (skillClass === null) {
+        throw new Error('Unable to find the skill class with ID ' + skillId)
+      }
+      if (skillClass.hasFunctionalitySubSkillsReallyActivated()) {
+        showModalSubSkillManagement(skillClass)
+      }
+    }
+  }
+
+  /**
+   *
+   * @param {Skill} skill
+   */
+  function showModalSubSkillManagement (skill) {
+    if (!skill || typeof skill !== 'object' || !(skill instanceof Skill)) {
+      throw new Error('To display sub-skill management, the skill parameter must be an instance of Skill.')
+    }
+    modalClass.resetModal()
+    modalClass.setModalTitle('Sub-skill management : ' + skill.name)
+    modalClass.show()
   }
 
   /**
@@ -408,14 +456,6 @@
     divCol1.appendChild(buttonRollDice)
     element.appendChild(divCol3)
     element.appendChild(divCol1)
-    // if (!isHeader) {
-    //   element.addEventListener('contextmenu', (e) => {
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    //     alert(563)
-    //     console.log(e)
-    //   })
-    // }
   }
 
   function initButtons () {
@@ -674,7 +714,7 @@
           text: featureClass.name,
         })
         featureClass.skills.forEach(skillClass => {
-          if (skillClass.isAllowedSubSkills && skillClass.subSkills !== null && skillClass.subSkills.length > 0) {
+          if (skillClass.hasFunctionalitySubSkillsReallyActivated()) {
             skillClass.subSkills.forEach(subSkill => {
               selectOption.push({
                 value: subSkill.getInputDiceId(),
@@ -1676,14 +1716,14 @@
     }
 
     /**
-     * @type {SubSkill[]|null}
+     * @type {SubSkill[]}
      * @private
      */
-    _subSkills = null
+    _subSkills = []
 
     /**
      *
-     * @returns {SubSkill[]|null}
+     * @returns {SubSkill[]}
      */
     get subSkills () {
       return this._subSkills
@@ -1698,7 +1738,7 @@
         return
       }
       if (value === null) {
-        this._subSkills = value
+        this._subSkills = []
         return
       }
       if (!value || !Array.isArray(value)) {
@@ -1820,11 +1860,23 @@
       })
     }
 
+    /**
+     *
+     * @returns {string}
+     */
     getInputDiceId () {
       return this.feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card' + GlobalVariables.DEFAULT_SEPARATOR_ID +
         this.id +
         GlobalVariables.DEFAULT_SEPARATOR_ID + 'row' + GlobalVariables.DEFAULT_SEPARATOR_ID +
         GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    hasFunctionalitySubSkillsReallyActivated () {
+      return this.isAllowedSubSkills && this.subSkills !== null && this.subSkills.length > 0
     }
   }
 
