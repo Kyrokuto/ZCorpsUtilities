@@ -278,15 +278,16 @@
             const rowSubSkill = document.createElement('div'),
               colSubSkill = document.createElement('div'),
               subSkillName = document.createElement('h5')
-            rowSubSkill.classList.add('row', 'align-items-center')
+            rowSubSkill.classList.add('row', 'align-items-center', 'mx-0', 'px-0')
             rowSubSkill.dataset.prefixId = subSkill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'subskill'
             rowSubSkill.dataset.position = subSkill.position
-            colSubSkill.classList.add('col-7')
+            colSubSkill.classList.add('col-7', 'pe-1')
             subSkillName.innerText = subSkill.name
             subSkillName.classList.add('ms-5')
             colSubSkill.appendChild(subSkillName)
             rowSubSkill.appendChild(colSubSkill)
-            createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSubSkill, false, true)
+            createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSubSkill, false,
+              rowSkill.dataset[GlobalVariables.DATA_KEY_PREFIX_ID])
             rowSkill.appendChild(rowSubSkill)
           })
         } else {
@@ -323,9 +324,9 @@
    * @param {string} superPrefixId
    * @param {HTMLElement} element
    * @param {boolean} isHeader
-   * @param {boolean} isSubSkill
+   * @param {string|null} skillPrefixId
    */
-  function createAllInputs (superPrefixId, element, isHeader = false, isSubSkill = false) {
+  function createAllInputs (superPrefixId, element, isHeader = false, skillPrefixId = null) {
     const divCol3 = document.createElement('div'),
       divCol1 = document.createElement('div'),
       divRow = document.createElement('div'),
@@ -341,8 +342,11 @@
       inputPlusTwo = document.createElement('input'),
       labelPlusTwo = document.createElement('label'),
       buttonRollDice = document.createElement('button'),
-      iconButtonRollDice = document.createElement('i'),
-      prefixId = `${superPrefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${element.dataset[GlobalVariables.DATA_KEY_PREFIX_ID]}`
+      iconButtonRollDice = document.createElement('i')
+    let prefixId = `${superPrefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${element.dataset[GlobalVariables.DATA_KEY_PREFIX_ID]}`
+    if (skillPrefixId !== null && element.dataset.prefixId.includes('subskill')) {
+      prefixId = `${superPrefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${skillPrefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${element.dataset[GlobalVariables.DATA_KEY_PREFIX_ID]}`
+    }
     spanDiceCode.classList.add('input-group-text')
     spanDiceCode.innerText = 'D'
     spanDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}dice-code-span`
@@ -652,44 +656,56 @@
   }
 
   function showModalFindSkillFeature () {
-    modalClass.resetModal()
-    modalClass.setModalTitle('Find skill/feature')
-    const inputSelect = document.createElement('select'),
-      labelSelect = document.createElement('label')
-    labelSelect.classList.add('form-label')
-    labelSelect.innerText = 'Choice skill/feature'
-    labelSelect.for = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
-    inputSelect.id = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
-    inputSelect.addEventListener('change', onChangeSelectFindSkillFeature)
-    inputSelect.classList.add('form-select')
-    let selectOption = []
-    featureClasses.forEach(featureClass => {
-      selectOption.push({
-        value: featureClass.getInputDiceId(),
-        text: featureClass.name,
-      })
-      featureClass.skills.forEach(skillClass => {
+    if (featureClasses !== null) {
+      modalClass.resetModal()
+      modalClass.setModalTitle('Find skill/feature')
+      const inputSelect = document.createElement('select'),
+        labelSelect = document.createElement('label')
+      labelSelect.classList.add('form-label')
+      labelSelect.innerText = 'Choice skill/feature'
+      labelSelect.for = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+      inputSelect.id = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+      inputSelect.addEventListener('change', onChangeSelectFindSkillFeature)
+      inputSelect.classList.add('form-select')
+      let selectOption = []
+      featureClasses.forEach(featureClass => {
         selectOption.push({
-          value: skillClass.getInputDiceId(),
-          text: skillClass.name,
+          value: featureClass.getInputDiceId(),
+          text: featureClass.name,
         })
+        featureClass.skills.forEach(skillClass => {
+          if (skillClass.isAllowedSubSkills && skillClass.subSkills !== null && skillClass.subSkills.length > 0) {
+            skillClass.subSkills.forEach(subSkill => {
+              selectOption.push({
+                value: subSkill.getInputDiceId(),
+                text: skillClass.name + ' - ' + subSkill.name,
+              })
+            })
+          } else {
+            selectOption.push({
+              value: skillClass.getInputDiceId(),
+              text: skillClass.name,
+            })
+          }
+        })
+
       })
-    })
-    selectOption.sort((a, b) => {return a.text.localeCompare(b.text)})
-    inputSelect.innerHTML = ''
-    const option = document.createElement('option')
-    option.value = ''
-    option.innerText = ''
-    inputSelect.appendChild(option)
-    selectOption.forEach(({ value, text }) => {
+      selectOption.sort((a, b) => {return a.text.localeCompare(b.text)})
+      inputSelect.innerHTML = ''
       const option = document.createElement('option')
-      option.value = value
-      option.innerText = text
+      option.value = ''
+      option.innerText = ''
       inputSelect.appendChild(option)
-    })
-    modalClass.appendChildToBody(labelSelect)
-    modalClass.appendChildToBody(inputSelect)
-    modalClass.show()
+      selectOption.forEach(({ value, text }) => {
+        const option = document.createElement('option')
+        option.value = value
+        option.innerText = text
+        inputSelect.appendChild(option)
+      })
+      modalClass.appendChildToBody(labelSelect)
+      modalClass.appendChildToBody(inputSelect)
+      modalClass.show()
+    }
   }
 
   function onChangeSelectFindSkillFeature () {
@@ -1920,6 +1936,13 @@
      */
     set position (value) {
       this._position = value
+    }
+
+    getInputDiceId () {
+      return this.skill.feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card' +
+        GlobalVariables.DEFAULT_SEPARATOR_ID + this.skill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row' +
+        GlobalVariables.DEFAULT_SEPARATOR_ID + this.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'subskill' +
+        GlobalVariables.DEFAULT_SEPARATOR_ID + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX
     }
   }
 </script>
