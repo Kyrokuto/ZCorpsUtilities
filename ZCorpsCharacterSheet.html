@@ -147,7 +147,19 @@
         ability = new Feature('ability', 'Adresse'),
         perception = new Feature('perception', 'Perception'),
         power = new Feature('power', 'Puissance'),
-        presence = new Feature('presence', 'Présence')
+        presence = new Feature('presence', 'Présence'),
+        languages = new Skill('languages', 'Langues', null, true),
+        control = new Skill('control', 'Pilotage', null, true),
+        repair = new Skill('repair', 'Réparer', null, true)
+      languages.subSkills = [
+        new SubSkill('en-us', 'Anglais (USA)'),
+      ]
+      control.subSkills = [
+        new SubSkill('global', 'Globale'),
+      ]
+      repair.subSkills = [
+        new SubSkill('global', 'Globale'),
+      ]
       agility.skills = [
         new Skill('acrobaties', 'Acrobaties'),
         new Skill('fight', 'Bagarre'),
@@ -166,7 +178,7 @@
         new Skill('electronic', 'Électronique'),
         new Skill('erudition', 'Érudition'),
         new Skill('computing', 'Informatique'),
-        new Skill('languages', 'Langues'),
+        languages,
         new Skill('medical', 'Médecine'),
         new Skill('shipping', 'Navigation'),
         new Skill('security', 'Sécurité'),
@@ -178,8 +190,8 @@
         new Skill('hook', 'Crochetage'),
         new Skill('dexterity', 'Dextérité'),
         new Skill('throw', 'Lancer'),
-        new Skill('control', 'Pilotage'),
-        new Skill('repair', 'Réparer'),
+        control,
+        repair,
       ]
       perception.skills = [
         new Skill('artist', 'Artiste'),
@@ -252,14 +264,34 @@
           colSkill = document.createElement('div'),
           skillName = document.createElement('h4'),
           skillSeparator = document.createElement('div')
-        rowSkill.classList.add('row')
+        rowSkill.classList.add('row', 'align-items-center')
         rowSkill.dataset.prefixId = skill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row'
         colSkill.classList.add('col-7')
         skillName.innerText = skill.name
         skillSeparator.classList.add('border', 'border-info-subtle', 'my-3', 'mx-5')
         colSkill.appendChild(skillName)
         rowSkill.appendChild(colSkill)
-        createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSkill)
+        if (skill.isAllowedSubSkills && skill.subSkills !== null && skill.subSkills.length > 0) {
+          colSkill.classList.remove('col-7')
+          colSkill.classList.add('col-12')
+          skill.subSkills.forEach((subSkill) => {
+            const rowSubSkill = document.createElement('div'),
+              colSubSkill = document.createElement('div'),
+              subSkillName = document.createElement('h5')
+            rowSubSkill.classList.add('row', 'align-items-center')
+            rowSubSkill.dataset.prefixId = subSkill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'subskill'
+            rowSubSkill.dataset.position = subSkill.position
+            colSubSkill.classList.add('col-7')
+            subSkillName.innerText = subSkill.name
+            subSkillName.classList.add('ms-5')
+            colSubSkill.appendChild(subSkillName)
+            rowSubSkill.appendChild(colSubSkill)
+            createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSubSkill, false, true)
+            rowSkill.appendChild(rowSubSkill)
+          })
+        } else {
+          createAllInputs(card.dataset[GlobalVariables.DATA_KEY_SUPER_PREFIX_ID], rowSkill)
+        }
         cardBody.appendChild(rowSkill)
         if (!featureClass.isLastSkill(skill)) {
           cardBody.appendChild(skillSeparator)
@@ -291,8 +323,9 @@
    * @param {string} superPrefixId
    * @param {HTMLElement} element
    * @param {boolean} isHeader
+   * @param {boolean} isSubSkill
    */
-  function createAllInputs (superPrefixId, element, isHeader = false) {
+  function createAllInputs (superPrefixId, element, isHeader = false, isSubSkill = false) {
     const divCol3 = document.createElement('div'),
       divCol1 = document.createElement('div'),
       divRow = document.createElement('div'),
@@ -371,14 +404,14 @@
     divCol1.appendChild(buttonRollDice)
     element.appendChild(divCol3)
     element.appendChild(divCol1)
-    /*if (!isHeader) {
-      element.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        alert(563);
-        console.log(e);
-      });
-    }*/
+    // if (!isHeader) {
+    //   element.addEventListener('contextmenu', (e) => {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    //     alert(563)
+    //     console.log(e)
+    //   })
+    // }
   }
 
   function initButtons () {
@@ -710,9 +743,9 @@
   function onClickButtonRollDice (event) {
     const elementButton = event.target,
       directRow = elementButton.closest('.row'),
-      cardBodyOrHeader = directRow.parentNode
+      cardBody = directRow.closest('.card-body')
     let diceObject
-    if (cardBodyOrHeader.classList.contains('card-body')) {
+    if (cardBody !== null) {
       diceObject = buildRollDice(directRow, true)
     } else {
       diceObject = buildRollDice(directRow)
@@ -732,7 +765,7 @@
       modalClass.setModalTitle(diceObject.getFullName())
       const pDice = document.createElement('p'),
         inputDiceHidden = document.createElement('input'),
-        diceRoll = diceObject.getFullDiceRoller();
+        diceRoll = diceObject.getFullDiceRoller()
       pDice.innerText = diceRoll
       inputDiceHidden.value = diceRoll
       inputDiceHidden.classList.add('d-none')
@@ -1487,13 +1520,15 @@
      * @param {string} id
      * @param {string} name
      * @param {Feature} feature
+     * @param {boolean} isAllowedSubSkills
      */
-    constructor (id, name, feature = null) {
+    constructor (id, name, feature = null, isAllowedSubSkills = false) {
       this.id = id
       this.name = name
       if (feature) {
         this.feature = feature
       }
+      this.isAllowedSubSkills = isAllowedSubSkills
     }
 
     /**
@@ -1674,8 +1709,68 @@
       if (this.subSkills === null) {
         this.subSkills = []
       }
-      this.subSkills.push(subSkill)
+      if (subSkill.position === null) {
+        subSkill.position = this.subSkills.length
+      }
+      if (!subSkill.skill || subSkill.skill.id !== this.id) {
+        subSkill.skill = this
+      }
+      if (!this.hasSubSkill(subSkill)) {
+        this.subSkills.push(subSkill)
+      }
       this.orderSubSkillByPosition()
+    }
+
+    /**
+     *
+     * @param {SubSkill} subSkill
+     * @returns {boolean}
+     */
+    hasSubSkill (subSkill) {
+      if (!this.isAllowedSubSkills) {
+        return false
+      }
+      if (!subSkill || typeof subSkill !== 'object' || !(subSkill instanceof SubSkill)) {
+        throw new Error('Skill subSkill must be an instance of SubSkill')
+      }
+      return this.subSkills.includes(subSkill)
+    }
+
+    /**
+     *
+     * @param {string} subSkillId
+     * @returns {boolean}
+     */
+    hasSubSkillById (subSkillId) {
+      if (!this.isAllowedSubSkills) {
+        return false
+      }
+      if (!subSkillId || typeof subSkillId !== 'string') {
+        throw new Error('SubSkill id must be a string')
+      }
+      return this.subSkills.some(subSkill => {
+        return subSkill.id === subSkillId
+      })
+    }
+
+    /**
+     *
+     * @param {string} subSkillId
+     * @returns {null|SubSkill}
+     */
+    findSubSkillById (subSkillId) {
+      if (!this.isAllowedSubSkills) {
+        return null
+      }
+      if (!subSkillId || typeof subSkillId !== 'string') {
+        throw new Error('SubSkill id must be a string')
+      }
+      if (!this.hasSubSkillById(subSkillId)) {
+        return null
+      }
+      return this.subSkills.find(subSkill => {
+        return subSkill.id === subSkillId
+      })
     }
 
     /**
@@ -1718,42 +1813,111 @@
   }
 
   class SubSkill {
+
+    /**
+     *
+     * @param {string} id
+     * @param {string} name
+     * @param {Skill|null} skill
+     */
+    constructor (id, name, skill = null) {
+      this.id = id
+      this.name = name
+      if (skill !== null) {
+        this.skill = skill
+      }
+    }
+
+    /**
+     * @type {string}
+     * @private
+     */
     _id
 
+    /**
+     *
+     * @returns {string}
+     */
     get id () {
       return this._id
     }
 
+    /**
+     *
+     * @param {string} value
+     */
     set id (value) {
+      if (!value || typeof value !== 'string') {
+        throw new Error('Sub skill id must be a string')
+      }
       this._id = value
     }
 
+    /**
+     * @type {string}
+     * @private
+     */
     _name
 
+    /**
+     *
+     * @returns {string}
+     */
     get name () {
       return this._name
     }
 
+    /**
+     *
+     * @param {string} value
+     */
     set name (value) {
+      if (!value || typeof value !== 'string') {
+        throw new Error('Sub skill name must be a string')
+      }
       this._name = value
     }
 
+    /**
+     * @type {Skill}
+     * @private
+     */
     _skill
 
+    /**
+     *
+     * @returns {Skill}
+     */
     get skill () {
       return this._skill
     }
 
+    /**
+     *
+     * @param {Skill} value
+     */
     set skill (value) {
       this._skill = value
     }
 
-    _position
+    /**
+     * @type {number|null}
+     * @private
+     */
+    _position = null
 
+    /**
+     *
+     * @returns {number|null}
+     */
     get position () {
       return this._position
     }
 
+    /**
+     *
+     * @param {number} value
+     */
     set position (value) {
       this._position = value
     }
