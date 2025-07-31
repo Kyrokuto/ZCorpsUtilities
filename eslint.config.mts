@@ -10,5 +10,7 @@ export default defineConfig([
         extends: ["js/recommended"],
         languageOptions: {globals: globals.browser}
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     tseslint.configs.recommended,
 ]);
