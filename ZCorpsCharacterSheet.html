@@ -76,6 +76,9 @@
     DEFAULT_SEPARATOR_ID: '-',
     DATA_KEY_SUPER_PREFIX_ID: 'superPrefixId',
     DATA_KEY_PREFIX_ID: 'prefixId',
+    DATA_KEY_CLASS_ID: 'classId',
+    DATA_KEY_CLASS_NAME: 'className',
+    DATA_KEY_CLASS_POSITION: 'classPosition',
     INPUT_NUMBER_DICE_CODE_SUFFIX: 'dice-code-input',
     INPUT_CHECK_ID_PLUS_ONE_SUFFIX: 'plus-one-input',
     INPUT_CHECK_ID_PLUS_TWO_SUFFIX: 'plus-two-input',
@@ -89,6 +92,7 @@
     ELEMENT_ID_MODAL_GLOBAL_LABEL: 'modal-global-label',
     INPUT_ID_CHARACTER_NAME: 'character-name',
     INPUT_ID_CHARACTER_DATA: 'character-data',
+    INPUT_ID_CHARACTER_SUB_SKILLS_DATA: 'character-sub-skills-data',
     ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE: 'button-find-skill-feature',
     INPUT_SELECT_FIND_SKILL_FEATURE: 'select-find-skill-feature',
   }
@@ -152,7 +156,7 @@
         control = new Skill('control', 'Pilotage', null, true),
         repair = new Skill('repair', 'Réparer', null, true)
       languages.subSkills = [
-        new SubSkill('en-us', 'Anglais (USA)'),
+        new SubSkill('en_us', 'Anglais (USA)'),
       ]
       control.subSkills = [
         new SubSkill('global', 'Globale'),
@@ -250,6 +254,8 @@
       cardHeader.classList.add('card-header')
       rowFeature.classList.add('row')
       rowFeature.dataset.prefixId = featureClass.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row'
+      rowFeature.dataset.classId = featureClass.id
+      rowFeature.dataset.className = featureClass.name
       colFeature.classList.add('col-7')
       collapse.classList.add('collapse')
       cardBody.classList.add('card-body')
@@ -266,6 +272,8 @@
           skillSeparator = document.createElement('div')
         rowSkill.classList.add('row', 'align-items-center')
         rowSkill.dataset.prefixId = skill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row'
+        rowSkill.dataset.classId = skill.id
+        rowSkill.dataset.className = skill.name
         colSkill.classList.add('col-7')
         skillName.innerText = skill.name
         skillSeparator.classList.add('border', 'border-info-subtle', 'my-3', 'mx-5')
@@ -280,7 +288,9 @@
               subSkillName = document.createElement('h5')
             rowSubSkill.classList.add('row', 'align-items-center', 'mx-0', 'px-0')
             rowSubSkill.dataset.prefixId = subSkill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'subskill'
-            rowSubSkill.dataset.position = subSkill.position
+            rowSubSkill.dataset.classId = subSkill.id
+            rowSubSkill.dataset.className = subSkill.name
+            rowSubSkill.dataset.classPosition = subSkill.position
             colSubSkill.classList.add('col-7', 'pe-1')
             subSkillName.innerText = subSkill.name
             subSkillName.classList.add('ms-5')
@@ -333,18 +343,9 @@
   function onDblClickRowSkill (event) {
     event.preventDefault()
     const rowSkill = event.currentTarget
-    if (rowSkill.dataset[GlobalVariables.DATA_KEY_PREFIX_ID] !== null && featureClasses !== null) {
-      const skillId = rowSkill.dataset[GlobalVariables.DATA_KEY_PREFIX_ID].replace('-row', '')
-      /**
-       *
-       * @type {null|Skill}
-       */
-      let skillClass = null
-      featureClasses.forEach(featureClass => {
-        if (featureClass.hasSkillById(skillId)) {
-          skillClass = featureClass.findSkillById(skillId)
-        }
-      })
+    if (rowSkill.dataset[GlobalVariables.DATA_KEY_CLASS_ID] !== null && featureClasses !== null) {
+      const skillId = rowSkill.dataset[GlobalVariables.DATA_KEY_CLASS_ID]
+      let skillClass = Feature.staticFindSkillById(skillId)
       if (skillClass === null) {
         throw new Error('Unable to find the skill class with ID ' + skillId)
       }
@@ -588,7 +589,10 @@
       inputCharacterName = document.createElement('input'),
       divCharacterData = document.createElement('div'),
       labelCharacterData = document.createElement('label'),
-      inputCharacterData = document.createElement('textarea')
+      inputCharacterData = document.createElement('textarea'),
+      divCharacterSubSkillData = document.createElement('div'),
+      labelCharacterSubSkillData = document.createElement('label'),
+      inputCharacterSubSkillData = document.createElement('textarea')
     divCharacterName.classList.add('mb-3')
     labelCharacterName.classList.add('col-form-label')
     labelCharacterName.for = GlobalVariables.INPUT_ID_CHARACTER_NAME
@@ -611,6 +615,17 @@
     divCharacterData.appendChild(labelCharacterData)
     divCharacterData.appendChild(inputCharacterData)
     form.appendChild(divCharacterData)
+    divCharacterSubSkillData.classList.add('mb-3')
+    labelCharacterSubSkillData.classList.add('col-form-label')
+    labelCharacterSubSkillData.for = GlobalVariables.INPUT_ID_CHARACTER_SUB_SKILLS_DATA
+    labelCharacterSubSkillData.innerText = 'Character subskills data'
+    inputCharacterSubSkillData.classList.add('form-control')
+    inputCharacterSubSkillData.value = currentCharacterSheet.subSkillsDataToJson()
+    inputCharacterSubSkillData.id = GlobalVariables.INPUT_ID_CHARACTER_SUB_SKILLS_DATA
+    inputCharacterSubSkillData.disabled = true
+    divCharacterSubSkillData.appendChild(labelCharacterSubSkillData)
+    divCharacterSubSkillData.appendChild(inputCharacterSubSkillData)
+    form.appendChild(divCharacterSubSkillData)
     divInfo.classList.add('alert', 'alert-info')
     divInfo.role = 'alert'
     divInfo.innerHTML = 'Enter your character\'s name.<br/>' +
@@ -696,56 +711,56 @@
   }
 
   function showModalFindSkillFeature () {
-    if (featureClasses !== null) {
-      modalClass.resetModal()
-      modalClass.setModalTitle('Find skill/feature')
-      const inputSelect = document.createElement('select'),
-        labelSelect = document.createElement('label')
-      labelSelect.classList.add('form-label')
-      labelSelect.innerText = 'Choice skill/feature'
-      labelSelect.for = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
-      inputSelect.id = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
-      inputSelect.addEventListener('change', onChangeSelectFindSkillFeature)
-      inputSelect.classList.add('form-select')
-      let selectOption = []
-      featureClasses.forEach(featureClass => {
-        selectOption.push({
-          value: featureClass.getInputDiceId(),
-          text: featureClass.name,
-        })
-        featureClass.skills.forEach(skillClass => {
-          if (skillClass.hasFunctionalitySubSkillsReallyActivated()) {
-            skillClass.subSkills.forEach(subSkill => {
-              selectOption.push({
-                value: subSkill.getInputDiceId(),
-                text: skillClass.name + ' - ' + subSkill.name,
-              })
-            })
-          } else {
-            selectOption.push({
-              value: skillClass.getInputDiceId(),
-              text: skillClass.name,
-            })
-          }
-        })
-
-      })
-      selectOption.sort((a, b) => {return a.text.localeCompare(b.text)})
-      inputSelect.innerHTML = ''
-      const option = document.createElement('option')
-      option.value = ''
-      option.innerText = ''
-      inputSelect.appendChild(option)
-      selectOption.forEach(({ value, text }) => {
-        const option = document.createElement('option')
-        option.value = value
-        option.innerText = text
-        inputSelect.appendChild(option)
-      })
-      modalClass.appendChildToBody(labelSelect)
-      modalClass.appendChildToBody(inputSelect)
-      modalClass.show()
+    if (featureClasses === null) {
+      return
     }
+    modalClass.resetModal()
+    modalClass.setModalTitle('Find skill/feature')
+    const inputSelect = document.createElement('select'),
+      labelSelect = document.createElement('label')
+    labelSelect.classList.add('form-label')
+    labelSelect.innerText = 'Choice skill/feature'
+    labelSelect.for = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+    inputSelect.id = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+    inputSelect.addEventListener('change', onChangeSelectFindSkillFeature)
+    inputSelect.classList.add('form-select')
+    let selectOption = []
+    featureClasses.forEach(featureClass => {
+      selectOption.push({
+        value: featureClass.getInputDiceId(),
+        text: featureClass.name,
+      })
+      featureClass.skills.forEach(skillClass => {
+        if (skillClass.hasFunctionalitySubSkillsReallyActivated()) {
+          skillClass.subSkills.forEach(subSkill => {
+            selectOption.push({
+              value: subSkill.getInputDiceId(),
+              text: skillClass.name + ' - ' + subSkill.name,
+            })
+          })
+        } else {
+          selectOption.push({
+            value: skillClass.getInputDiceId(),
+            text: skillClass.name,
+          })
+        }
+      })
+    })
+    selectOption.sort((a, b) => {return a.text.localeCompare(b.text)})
+    inputSelect.innerHTML = ''
+    const option = document.createElement('option')
+    option.value = ''
+    option.innerText = ''
+    inputSelect.appendChild(option)
+    selectOption.forEach(({ value, text }) => {
+      const option = document.createElement('option')
+      option.value = value
+      option.innerText = text
+      inputSelect.appendChild(option)
+    })
+    modalClass.appendChildToBody(labelSelect)
+    modalClass.appendChildToBody(inputSelect)
+    modalClass.show()
   }
 
   function onChangeSelectFindSkillFeature () {
@@ -1066,6 +1081,31 @@
       this.fillStatisticsValues()
     }
 
+    _subSkillsData = {}
+
+    get subSkillsData () {
+      return this._subSkillsData
+    }
+
+    set subSkillsData (value) {
+      if (!value || typeof value !== 'object') {
+        throw new Error('Character subskills data must be an object')
+      }
+      this._subSkillsData = value
+      this.fillSubSkillsData()
+    }
+
+    addSubSkillData (key, value) {
+      if (!key || typeof key !== 'string') {
+        throw new Error('Character subskills key must be a string')
+      }
+      if (typeof value !== 'object') {
+        throw new Error('Character subskills value must be an object')
+      }
+      this._subSkillsData[key] = value
+      this.fillSubSkillsData(key)
+    }
+
     /**
      *
      * @param {string} key
@@ -1106,8 +1146,12 @@
       return JSON.stringify(this.statistics)
     }
 
+    subSkillsDataToJson () {
+      return JSON.stringify(this.subSkillsData)
+    }
+
     toJson () {
-      return JSON.stringify({ name: this.name, statistics: this.statistics })
+      return JSON.stringify({ name: this.name, statistics: this.statistics, subskillsdata: this.subSkillsData })
     }
 
     findStatisticsValues () {
@@ -1138,6 +1182,44 @@
       })
     }
 
+    findSubSkillsData () {
+      if (featureClasses === null) {
+        return
+      }
+      this.subSkillsData = {}
+      document.querySelectorAll('.row[data-prefix-id$=\'subskill\']').forEach(subSkillRow => {
+        const subSkillId = subSkillRow.dataset[GlobalVariables.DATA_KEY_CLASS_ID],
+          subSkillName = subSkillRow.dataset[GlobalVariables.DATA_KEY_CLASS_NAME],
+          subSkillPosition = subSkillRow.dataset[GlobalVariables.DATA_KEY_CLASS_POSITION],
+          skillRow = subSkillRow.parentElement.closest('.row')
+        if (!skillRow) {
+          return
+        }
+        if (!skillRow.dataset[GlobalVariables.DATA_KEY_CLASS_ID]) {
+          return
+        }
+        const skillId = skillRow.dataset[GlobalVariables.DATA_KEY_CLASS_ID]
+        const skill = Feature.staticFindSkillById(skillId)
+        if (skill === null) {
+          return
+        }
+        if (!skill.hasFunctionalitySubSkillsReallyActivated() || !skill.hasSubSkillById(subSkillId)) {
+          return
+        }
+        const subSkill = skill.findSubSkillById(subSkillId),
+          keyData = skill.id + GlobalVariables.DEFAULT_SEPARATOR_ID + subSkill.id,
+          valueData = {
+            id: subSkillId,
+            name: subSkillName + 'TOTOTOO',
+            position: subSkillPosition,
+            skillId: skillId,
+          }
+        subSkill.position = valueData.position
+        subSkill.name = valueData.name
+        this.addSubSkillData(keyData, valueData)
+      })
+    }
+
     fillStatisticsValues (specificKey = '') {
       if (specificKey !== '') {
         this.fillStatisticsValuesByElementId(specificKey)
@@ -1146,6 +1228,13 @@
       Object.keys(this.statistics).forEach(elementId => {
         this.fillStatisticsValuesByElementId(elementId)
       })
+    }
+
+    fillSubSkillsData (specificKey = '') {
+      if (specificKey !== '') {
+        const ids = specificKey.split(GlobalVariables.DEFAULT_SEPARATOR_ID)
+
+      }
     }
 
     fillStatisticsValuesByElementId (elementId) {
@@ -1188,6 +1277,7 @@
     findAllValue () {
       this.findNameValue()
       this.findStatisticsValues()
+      this.findSubSkillsData()
     }
 
     loadFromJson (jsonData) {
@@ -1200,10 +1290,12 @@
       } catch (e) {
         throw new Error('Character data cannot be read correctly')
       }
-      if (!jsonObject || jsonObject.name === undefined || jsonObject.statistics === undefined) {
+      if (!jsonObject || jsonObject.name === undefined || jsonObject.statistics === undefined ||
+        jsonObject.subskillsdata === undefined) {
         throw new Error('Character data does not conform to expected format')
       }
       this.name = jsonObject.name
+      this.subSkillsData = jsonObject.subskillsdata
       this.statistics = jsonObject.statistics
       toastClass.showMessageWhitType(`Character ${this.name} has been successfully loaded`)
     }
@@ -1518,19 +1610,24 @@
 
     /**
      *
-     * @param skillId
+     * @param {string} skillId
      * @returns {null|Skill}
      */
-    findSkillById (skillId) {
-      if (!skillId || typeof skillId !== 'string') {
-        throw new Error('Skill id must be a string')
-      }
-      if (!this.hasSkillById(skillId)) {
+    static staticFindSkillById (skillId) {
+      if (featureClasses === null) {
         return null
       }
-      return this.skills.find(skill => {
-        return skill.id === skillId
+      let featureClass = null
+      featureClasses.forEach(feature => {
+        if (!feature.hasSkillById(skillId)) {
+          return
+        }
+        featureClass = feature
       })
+      if (featureClass === null) {
+        return null
+      }
+      return featureClass.findSkillById(skillId)
     }
 
     /**
@@ -1563,6 +1660,27 @@
       return this.skills[0].id === skill.id
     }
 
+    /**
+     *
+     * @param {string} skillId
+     * @returns {null|Skill}
+     */
+    findSkillById (skillId) {
+      if (!skillId || typeof skillId !== 'string') {
+        throw new Error('Skill id must be a string')
+      }
+      if (!this.hasSkillById(skillId)) {
+        return null
+      }
+      return this.skills.find(skill => {
+        return skill.id === skillId
+      })
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
     getInputDiceId () {
       return this.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card' + GlobalVariables.DEFAULT_SEPARATOR_ID + this.id +
         GlobalVariables.DEFAULT_SEPARATOR_ID + 'row' + GlobalVariables.DEFAULT_SEPARATOR_ID +
