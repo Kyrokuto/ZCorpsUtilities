@@ -2,10 +2,8 @@
 const path = require('path')
 // eslint-disable-next-line no-undef
 module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
   entry: {
-    main: './src/app.ts',
+    main: './src/character-sheet/app.ts',
   },
   output: {
     // eslint-disable-next-line no-undef
