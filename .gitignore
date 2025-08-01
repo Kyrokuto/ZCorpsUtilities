@@ -5,3 +5,7 @@
 ###> Node ###
 /node_modules
 ###< Node ###
+
+###> WebPack ###
+/dist
+###< WebPack ###
