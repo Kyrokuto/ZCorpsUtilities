@@ -22,8 +22,10 @@
     "globals": "^16.3.0",
     "html-bundler-webpack-plugin": "^4.21.1",
     "jiti": "^2.5.1",
+    "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
-    "webpack": "^5.101.0"
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1"
   }
 }
