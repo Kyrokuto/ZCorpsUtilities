@@ -1,4 +1,10 @@
-import {Character} from "./class/Character";
+import {App} from "./class/App";
 
-const character = new Character();
-console.log(character);
+let myApplication: App | null = null;
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+});
+
+function init() {
+    myApplication = new App();
+}
