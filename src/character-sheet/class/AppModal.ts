@@ -1,4 +1,4 @@
-import bootstrap, {Modal} from "bootstrap";
+import {Modal} from "bootstrap";
 import {GlobalVariables} from "../config/GlobalVariables";
 
 export class AppModal {
@@ -24,7 +24,7 @@ export class AppModal {
         this.elementModalFooter = elementModalFooter
         this.elementModalTitle = elementModalTitle
         this.resetModal()
-        this.modalBootstrap = bootstrap.Modal.getOrCreateInstance(this.elementModal)
+        this.modalBootstrap = Modal.getOrCreateInstance(this.elementModal)
     }
 
     public resetModal() {

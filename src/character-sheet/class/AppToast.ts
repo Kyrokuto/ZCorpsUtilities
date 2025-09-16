@@ -1,4 +1,4 @@
-import bootstrap, {Toast} from "bootstrap";
+import {Toast} from "bootstrap";
 import {GlobalVariables} from "../config/GlobalVariables"
 
 export class AppToast {
@@ -13,7 +13,7 @@ export class AppToast {
             throw new Error('Toast element not found')
         }
         this.elementToast = element
-        this.toastBootstrap = bootstrap.Toast.getOrCreateInstance(this.elementToast)
+        this.toastBootstrap = Toast.getOrCreateInstance(this.elementToast)
         element = this.elementToast.querySelector('.toast-body')
         if (element === null) {
             throw new Error('Toast body element not found')

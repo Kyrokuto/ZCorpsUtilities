@@ -1,4 +1,4 @@
-interface GlobalVariablesObject {
+export interface GlobalVariablesObject {
     DEFAULT_SEPARATOR_ID: string;
     DATA_KEY_SUPER_PREFIX_ID: string;
     DATA_KEY_PREFIX_ID: string;
