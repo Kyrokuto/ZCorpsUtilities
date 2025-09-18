@@ -1,13 +1,25 @@
 import {App} from "./class/App";
 
-let myApplication: App | null = null;
+let myApplication: App
 document.addEventListener('DOMContentLoaded', () => {
     init();
 });
 
 function init() {
-    myApplication = new App();
-    initCards();
+    App.loadApp().then((app) => {
+        myApplication = app;
+        try {
+            initCards()
+        } catch (e) {
+            if (e instanceof Error) {
+                myApplication.toast.showError(e)
+            } else {
+                console.error(e);
+            }
+        }
+    }).catch((err) => {
+        console.error(err);
+    })
 }
 
 function initCards() {
@@ -15,7 +27,7 @@ function initCards() {
     if (rowContent === null) {
         return;
     }
-    myApplication?.currentCharacter.features.forEach(featureClass => {
+    myApplication.currentCharacter.features.forEach(featureClass => {
         const colCard = document.createElement('div'),
             card = document.createElement('div'),
             cardHeader = document.createElement('div'),
@@ -34,7 +46,7 @@ function initCards() {
         rowFeature.classList.add('row')
         rowFeature.dataset.prefixId = featureClass.id + myApplication?.appConstante.DEFAULT_SEPARATOR_ID + 'row'
         colFeature.classList.add('col-7')
-        collapse.classList.add('collapse')
+        // collapse.classList.add('collapse')
         cardBody.classList.add('card-body')
         featureName.innerText = featureClass.name
         colFeature.appendChild(featureName)
@@ -58,6 +70,7 @@ function initCards() {
             cardBody.appendChild(rowSkill)
             if (!featureClass.isLastSkill(skill)) {
                 cardBody.appendChild(skillSeparator)
+
             }
         })
         collapse.appendChild(cardBody)

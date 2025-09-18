@@ -6,7 +6,7 @@ export class Character {
 
     public constructor() {
         this._name = null;
-        this._features = defaultFeatures;
+        this._features = [...defaultFeatures];
     }
 
     private _name: string | null;

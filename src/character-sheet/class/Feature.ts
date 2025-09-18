@@ -59,11 +59,11 @@ export class Feature {
     }
 
     public hasSkill(skill: Skill): boolean {
-        return this.skills.includes(skill);
+        return this.hasSkillById(skill.id);
     }
 
     public hasSkillById(skillId: string): boolean {
-        return this.skills.some(skill => skill.id === skillId);
+        return this.skills.some(skill => skill.id === skillId)
     }
 
     public findSkillById(skillId: string): Skill | null {
@@ -80,22 +80,21 @@ export class Feature {
     }
 
     public isLastSkill(skill: Skill): boolean {
-        if (this.skills.length === 0) {
-            throw new Error('Feature has no skills')
-        }
-        if (this.hasSkill(skill)) {
-            throw new Error('The feature does not have the ' + skill.name + ' skill.')
-        }
+        this.checkSkillOrFail(skill);
         return this.skills[this.skills.length - 1].id === skill.id
     }
 
     public isFirstSkill(skill: Skill): boolean {
-        if (this.skills.length === 0) {
-            throw new Error('Feature has no skills')
-        }
-        if (this.hasSkill(skill)) {
-            throw new Error('The feature does not have the ' + skill.name + ' skill.')
-        }
+        this.checkSkillOrFail(skill)
         return this.skills[0].id === skill.id
+    }
+
+    private checkSkillOrFail(skill: Skill): void {
+        if (this.skills.length === 0) {
+            throw new Error('Feature ' + this.name + ' has no skills')
+        }
+        if (!this.hasSkill(skill)) {
+            throw new Error('The feature ' + this.name + ' does not have the ' + skill.name + ' skill.')
+        }
     }
 }

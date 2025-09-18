@@ -10,10 +10,10 @@ export class App {
     private readonly _appConstante: GlobalVariablesObject;
 
     constructor() {
+        this._appConstante = GlobalVariables;
+        this._toast = new AppToast();
         this._currentCharacter = new Character();
         this._modal = new AppModal();
-        this._toast = new AppToast();
-        this._appConstante = GlobalVariables;
     }
 
     get currentCharacter(): Character {
@@ -24,13 +24,21 @@ export class App {
         return this._modal;
     }
 
-
     get toast(): AppToast {
         return this._toast;
     }
 
-
     get appConstante(): GlobalVariablesObject {
         return this._appConstante;
+    }
+
+    public static loadApp(): Promise<App> {
+        return new Promise((resolve, reject) => {
+            try {
+                resolve(new App());
+            } catch (e) {
+                reject(e);
+            }
+        })
     }
 }
