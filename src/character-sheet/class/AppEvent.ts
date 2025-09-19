@@ -39,7 +39,6 @@ export class AppEvent {
     }
 
     public onClickButtonRollDice(object: Feature | Skill): void {
-        const dice = this.app.buildRollDice(object);
-        console.log(dice);
+        this.app.showModalRollDice(object);
     }
 }

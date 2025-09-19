@@ -7,7 +7,7 @@ import {AppEvent} from "./AppEvent";
 import {EventBuilder} from "./EventBuilder";
 import {Feature} from "./Feature";
 import {Skill} from "./Skill";
-import {Dice} from "./Dice";
+import {DiceRoller} from "./DiceRoller";
 
 export class App {
     private readonly _currentCharacter: Character;
@@ -62,31 +62,26 @@ export class App {
         eventBuilder.addEventsOnSkills();
     }
 
-    public buildRollDice(object: Feature | Skill): Dice {
-        const dice = new Dice();
-        if (object instanceof Feature) {
-            this.buildRollDiceForFeature(object, dice);
-            return dice;
-        }
-        if (!object.feature) {
-            throw Error('Unable to build the dice for skill ' + object.name + ' because it has no features.');
-        }
-        this.buildRollDiceForFeature(object.feature, dice);
-        this.buildRollDiceForSkill(object, dice);
-        return dice;
+    public showModalRollDice(object: Feature | Skill) {
+        const diceRoller = new DiceRoller(object)
+        this.modal.resetModal()
+        this.modal.setModalTitle(diceRoller.getFullName())
+        const pDice = document.createElement('p'),
+            inputDiceHidden = document.createElement('input'),
+            diceRoll = diceRoller.getDiceRollerCommand();
+        pDice.innerText = diceRoll
+        inputDiceHidden.value = diceRoll
+        inputDiceHidden.classList.add('d-none')
+        this.modal.appendChildToBody(pDice)
+        this.modal.appendChildToBody(inputDiceHidden)
+        this.modal.show()
+        inputDiceHidden.select()
+        this.copyToClipboard(diceRoll)
     }
 
-    private buildRollDiceForFeature(feature: Feature, currentDice: Dice): void {
-        currentDice.numberOf = feature.dice.numberOf
-        currentDice.bonus = feature.dice.bonus
-    }
-
-    private buildRollDiceForSkill(skill: Skill, currentDice: Dice): void {
-        if (skill.dice.numberOf === 0 && skill.dice.bonus === 0) {
-            currentDice.numberOf -= 1;
-            return;
-        }
-        currentDice.numberOf += skill.dice.numberOf;
-        currentDice.bonus += skill.dice.bonus;
+    private copyToClipboard(text: string): void {
+        navigator.clipboard.writeText(text.toString()).then(() => {
+            this.toast.showMessageWhitType('Copy to clipboard')
+        })
     }
 }

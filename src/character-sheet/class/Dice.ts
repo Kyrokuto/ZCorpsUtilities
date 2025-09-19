@@ -1,7 +1,4 @@
 export class Dice {
-    private static readonly DICE_CODE: string = 'd6';
-    private static readonly DICE_ROLLER_PREFIX: string = '/r';
-    private static readonly DICE_BONUS_PREFIX: string = '+';
     private static readonly DICE_MAX_BONUS: number = 3;
     private static readonly DICE_MIN_BONUS: number = 0;
     private static readonly DICE_MIN_NUMBER: number = 0;
