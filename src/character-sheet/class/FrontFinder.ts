@@ -122,7 +122,7 @@ export class FrontFinder {
     const element = document.querySelector(
       '#' + GlobalVariables.INPUT_ID_CHARACTER_DATA)
     if (!element) {
-      throw new Error('Unable to find the character data input field')
+      throw new Error('Unable to find the character data input field.')
     }
     return element as HTMLInputElement
   }
@@ -131,8 +131,18 @@ export class FrontFinder {
     const element = document.querySelector(
       '#' + GlobalVariables.INPUT_ID_CHARACTER_NAME)
     if (!element) {
-      throw new Error('Unable to find the character name input field')
+      throw new Error('Unable to find the character name input field.')
     }
     return element as HTMLInputElement
+  }
+
+  public static findCharacterSheetName (): HTMLElement | never {
+    const element = document.querySelector(
+      '#' + GlobalVariables.ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME)
+    if (!element) {
+      throw new Error(
+        'Unable to find the element to display the character\'s name.')
+    }
+    return element as HTMLElement
   }
 }

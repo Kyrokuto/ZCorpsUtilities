@@ -25,7 +25,10 @@ export class Character {
   }
 
   public set name (value: string | null) {
-    this._name = value
+    if (this._name !== value) {
+      this._name = value
+      this.app.event.updateCharacterName()
+    }
   }
 
   get app (): App {

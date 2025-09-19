@@ -18,6 +18,7 @@ export interface GlobalVariablesObject {
   INPUT_ID_CHARACTER_DATA: string;
   ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE: string;
   INPUT_SELECT_FIND_SKILL_FEATURE: string;
+  DEFAULT_DOCUMENT_TITLE: string;
 }
 
 export const GlobalVariables: GlobalVariablesObject = {
@@ -40,4 +41,5 @@ export const GlobalVariables: GlobalVariablesObject = {
   INPUT_ID_CHARACTER_DATA: 'character-data',
   ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE: 'button-find-skill-feature',
   INPUT_SELECT_FIND_SKILL_FEATURE: 'select-find-skill-feature',
+  DEFAULT_DOCUMENT_TITLE: 'Z-Corps character sheet',
 }

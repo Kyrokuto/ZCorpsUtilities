@@ -4,6 +4,7 @@ import { Feature } from './Feature'
 import { FrontFinder } from './FrontFinder'
 import { Skill } from './Skill'
 import { ToastType } from '../enum/ToastType'
+import { GlobalVariables } from '../config/GlobalVariables'
 
 export class AppEvent {
   private readonly _app: App
@@ -104,5 +105,22 @@ export class AppEvent {
     navigator.clipboard.writeText(text.toString()).then(() => {
       this.app.toast.showMessageWhitType('Copy to clipboard')
     })
+  }
+
+  public updateCharacterName (): void {
+    try {
+      const element = FrontFinder.findCharacterSheetName()
+      if (this.app.currentCharacter.name) {
+        element.innerHTML = '<br/>' + this.app.currentCharacter.name
+        document.title = this.app.currentCharacter.name
+        element.classList.remove('d-none')
+      } else {
+        element.innerHTML = ''
+        document.title = GlobalVariables.DEFAULT_DOCUMENT_TITLE
+        element.classList.add('d-none')
+      }
+    } catch (e) {
+      this.app.toast.showError(e as Error)
+    }
   }
 }
