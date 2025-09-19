@@ -41,4 +41,19 @@ export class AppEvent {
     public onClickButtonRollDice(object: Feature | Skill): void {
         this.app.showModalRollDice(object);
     }
+
+    public onClickButtonLoadData(): void {
+
+    }
+
+    public onClickButtonSaveData(): void {
+
+    }
+
+    public onClickButtonResetData(): void {
+    }
+
+    public onClickButtonFindSkillFeature(): void {
+
+    }
 }

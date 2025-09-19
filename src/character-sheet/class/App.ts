@@ -60,6 +60,7 @@ export class App {
         const eventBuilder = new EventBuilder(this);
         eventBuilder.addEventsOnFeatures();
         eventBuilder.addEventsOnSkills();
+        eventBuilder.addEventsOnButtons();
     }
 
     public showModalRollDice(object: Feature | Skill) {

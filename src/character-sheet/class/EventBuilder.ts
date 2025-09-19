@@ -31,6 +31,13 @@ export class EventBuilder {
         })
     }
 
+    addEventsOnButtons(): void {
+        this.addClickButtonLoadData();
+        this.addClickButtonSaveData();
+        this.addClickButtonResetData();
+        this.addClickButtonFindSkillFeature();
+    }
+
     private addContextMenuOnFeature(feature: Feature): void {
         FrontFinder.findFeatureCard(feature).addEventListener('contextmenu', (event: MouseEvent) => {
             event.preventDefault();
@@ -56,6 +63,30 @@ export class EventBuilder {
     private addClickButtonRollDice(object: Feature | Skill): void {
         FrontFinder.findSkillOrFeatureRollDiceButton(object).addEventListener('click', () => {
             this.app.event.onClickButtonRollDice(object);
+        })
+    }
+
+    private addClickButtonLoadData(): void {
+        FrontFinder.findLoadDataButton().addEventListener("click", () => {
+            this.app.event.onClickButtonLoadData();
+        })
+    }
+
+    private addClickButtonSaveData(): void {
+        FrontFinder.findSaveDataButton().addEventListener("click", () => {
+            this.app.event.onClickButtonSaveData();
+        })
+    }
+
+    private addClickButtonResetData(): void {
+        FrontFinder.findResetDataButton().addEventListener("click", () => {
+            this.app.event.onClickButtonResetData();
+        })
+    }
+
+    private addClickButtonFindSkillFeature(): void {
+        FrontFinder.findFindSkillFeatureButton().addEventListener("click", () => {
+            this.app.event.onClickButtonFindSkillFeature();
         })
     }
 }

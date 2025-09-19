@@ -11,7 +11,6 @@ export interface GlobalVariablesObject {
     ELEMENT_ID_BUTTON_LOAD_DATA: string;
     ELEMENT_ID_BUTTON_SAVE_DATA: string;
     ELEMENT_ID_BUTTON_RESET_DATA: string;
-    ELEMENT_ID_BUTTON_DELETE_DATA: string;
     ELEMENT_ID_TOAST: string;
     ELEMENT_ID_MODAL_GLOBAL: string;
     ELEMENT_ID_MODAL_GLOBAL_LABEL: string;
@@ -34,7 +33,6 @@ export const GlobalVariables: GlobalVariablesObject = {
     ELEMENT_ID_BUTTON_LOAD_DATA: 'button-load-data',
     ELEMENT_ID_BUTTON_SAVE_DATA: 'button-save-data',
     ELEMENT_ID_BUTTON_RESET_DATA: 'button-reset-data',
-    ELEMENT_ID_BUTTON_DELETE_DATA: 'button-delete-data',
     ELEMENT_ID_TOAST: 'toast-message',
     ELEMENT_ID_MODAL_GLOBAL: 'modal-global',
     ELEMENT_ID_MODAL_GLOBAL_LABEL: 'modal-global-label',

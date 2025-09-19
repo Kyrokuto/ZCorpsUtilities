@@ -5,12 +5,21 @@ import {Skill} from "./Skill";
 
 export class Character {
     private readonly _app: App;
-    private readonly _features: Feature[];
 
     public constructor(app: App) {
         this._name = null;
         this._features = [...defaultFeatures];
         this._app = app;
+    }
+
+    private _features: Feature[];
+
+    public get features(): Feature[] {
+        return this._features;
+    }
+
+    set features(value: Feature[]) {
+        this._features = value;
     }
 
     private _name: string | null;
@@ -23,10 +32,6 @@ export class Character {
         this._name = value;
     }
 
-    public get features(): Feature[] {
-        return this._features;
-    }
-
     get app(): App {
         return this._app;
     }
@@ -37,5 +42,9 @@ export class Character {
             skills = skills.concat(feature.skills);
         })
         return skills;
+    }
+
+    reset(): void {
+        this.features = [...defaultFeatures];
     }
 }
