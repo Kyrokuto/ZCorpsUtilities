@@ -2,6 +2,7 @@ import {App} from "./App";
 import {Collapse} from "bootstrap";
 import {Feature} from "./Feature";
 import {FrontFinder} from "./FrontFinder";
+import {Skill} from "./Skill";
 
 export class AppEvent {
     private readonly _app: App;
@@ -19,53 +20,26 @@ export class AppEvent {
         collapsible.show()
     }
 
-    public onChangeInputCheckPlus(event: Event): void {
-        const eventTarget = event.currentTarget
-        let element: HTMLInputElement | null = null;
-        if (eventTarget instanceof HTMLInputElement) {
-            element = eventTarget;
-        }
-        if (element === null) {
-            return;
-        }
-        if (!element.dataset.linkedInputId) {
-            return
-        }
-        let linkedElement: HTMLInputElement | null = null
-        if (document.querySelector('#' + element.dataset.linkedInputId) instanceof HTMLInputElement) {
-            linkedElement = document.querySelector('#' + element.dataset.linkedInputId);
-        }
-        if (!linkedElement) {
-            return
-        }
-        if (!linkedElement.checked) {
-            return
-        }
-        linkedElement.checked = false
+    public onChangeInputDiceCode(object: Feature | Skill): void {
+        object.dice.numberOf = parseInt(FrontFinder.findSkillOrFeatureDiceCodeInput(object).value)
     }
 
-    public onClickButtonRollDice(event: MouseEvent): void {
-        const eventTarget = event.currentTarget;
-        let elementButton: HTMLButtonElement | null = null;
-        if (eventTarget instanceof HTMLButtonElement) {
-            elementButton = eventTarget;
-        }
-        if (elementButton === null) {
+    public onChangeInputCheckPlus(object: Feature | Skill, isOne: boolean = true): void {
+        const currentInput = isOne ? FrontFinder.findSkillOrFeaturePlusOneInput(object) : FrontFinder.findSkillOrFeaturePlusTwoInput(object),
+            linkedInput = isOne ? FrontFinder.findSkillOrFeaturePlusTwoInput(object) : FrontFinder.findSkillOrFeaturePlusOneInput(object)
+        if (!currentInput.checked) {
+            object.dice.bonus = 0;
             return;
         }
-        const directRow = elementButton.closest('.row'),
-            cardBodyOrHeader = directRow?.parentNode
-        if (cardBodyOrHeader === null || cardBodyOrHeader === undefined || !(cardBodyOrHeader instanceof HTMLElement)) {
+        object.dice.bonus = isOne ? 1 : 2;
+        if (!linkedInput.checked) {
             return;
         }
-        // let diceObject
-        // if (cardBodyOrHeader.classList.contains('card-body')) {
-        //     diceObject = buildRollDice(directRow, true)
-        // } else {
-        //     diceObject = buildRollDice(directRow)
-        // }
-        // if (diceObject) {
-        //     showModalRollDice(diceObject)
-        // }
+        linkedInput.checked = false;
+    }
+
+    public onClickButtonRollDice(object: Feature | Skill): void {
+        const dice = this.app.buildRollDice(object);
+        console.log(dice);
     }
 }

@@ -42,6 +42,11 @@ export class FrontBuilder {
             + GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX;
     }
 
+    public static buildIdButtonRollDice(object: Feature | Skill): string {
+        return FrontBuilder.buildFullPrefixId(object)
+            + GlobalVariables.BUTTON_ROLL_DICE_ID_SUFFIX;
+    }
+
     public static initCards(features: Feature[]) {
         const rowContent = document.querySelector('#row-content')
         if (rowContent === null) {
@@ -57,7 +62,6 @@ export class FrontBuilder {
                 collapse = document.createElement('div'),
                 cardBody = document.createElement('div')
             colCard.classList.add('col-6', 'p-2')
-            // EventBuilder.addContextMenuCard(colCard);
             card.classList.add('card', 'border-info')
             card.id = this.buildCardFeatureId(featureClass);
             cardHeader.classList.add('card-header')
@@ -155,13 +159,11 @@ export class FrontBuilder {
         inputPlusOne.id = FrontBuilder.buildInputPlusOneId(skill ? skill : feature)
         inputPlusTwo.dataset.linkedInputId = inputPlusOne.id
         inputPlusOne.dataset.linkedInputId = inputPlusTwo.id
-        // EventBuilder.addChangeInputCheckPlus(inputPlusTwo)
-        // EventBuilder.addChangeInputCheckPlus(inputPlusOne)
         divPlusTwo.classList.add('form-check')
         divPlusOne.classList.add('form-check')
         iconButtonRollDice.classList.add('bi', 'bi-rocket-takeoff')
         buttonRollDice.classList.add('btn', 'btn-outline-success', 'btn-lg')
-        // EventBuilder.addClickButtonRollDice(buttonRollDice)
+        buttonRollDice.id = FrontBuilder.buildIdButtonRollDice(skill ? skill : feature)
         divCol3.classList.add('col-3')
         divCol1.classList.add('col-1', 'd-grid', 'gap-2')
         divRow.classList.add('row')
@@ -183,13 +185,5 @@ export class FrontBuilder {
         divCol1.appendChild(buttonRollDice)
         element.appendChild(divCol3)
         element.appendChild(divCol1)
-        /*if (!isHeader) {
-          element.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            alert(563);
-            console.log(e);
-          });
-        }*/
     }
 }

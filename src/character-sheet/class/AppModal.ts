@@ -30,6 +30,10 @@ export class AppModal {
         this._app = app;
     }
 
+    get app(): App {
+        return this._app;
+    }
+
     public resetModal() {
         this.elementModalTitle.innerText = ''
         this.elementModalBody.innerHTML = ''
@@ -65,9 +69,5 @@ export class AppModal {
     public close() {
         this.resetModal()
         this.modalBootstrap.hide()
-    }
-
-    get app(): App {
-        return this._app;
     }
 }

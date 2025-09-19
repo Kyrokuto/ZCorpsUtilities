@@ -5,6 +5,9 @@ import {GlobalVariables, GlobalVariablesObject} from "../config/GlobalVariables"
 import {FrontBuilder} from "./FrontBuilder";
 import {AppEvent} from "./AppEvent";
 import {EventBuilder} from "./EventBuilder";
+import {Feature} from "./Feature";
+import {Skill} from "./Skill";
+import {Dice} from "./Dice";
 
 export class App {
     private readonly _currentCharacter: Character;
@@ -53,8 +56,37 @@ export class App {
         })
     }
 
-    addEvents(): void {
+    public addEvents(): void {
         const eventBuilder = new EventBuilder(this);
         eventBuilder.addEventsOnFeatures();
+        eventBuilder.addEventsOnSkills();
+    }
+
+    public buildRollDice(object: Feature | Skill): Dice {
+        const dice = new Dice();
+        if (object instanceof Feature) {
+            this.buildRollDiceForFeature(object, dice);
+            return dice;
+        }
+        if (!object.feature) {
+            throw Error('Unable to build the dice for skill ' + object.name + ' because it has no features.');
+        }
+        this.buildRollDiceForFeature(object.feature, dice);
+        this.buildRollDiceForSkill(object, dice);
+        return dice;
+    }
+
+    private buildRollDiceForFeature(feature: Feature, currentDice: Dice): void {
+        currentDice.numberOf = feature.dice.numberOf
+        currentDice.bonus = feature.dice.bonus
+    }
+
+    private buildRollDiceForSkill(skill: Skill, currentDice: Dice): void {
+        if (skill.dice.numberOf === 0 && skill.dice.bonus === 0) {
+            currentDice.numberOf -= 1;
+            return;
+        }
+        currentDice.numberOf += skill.dice.numberOf;
+        currentDice.bonus += skill.dice.bonus;
     }
 }

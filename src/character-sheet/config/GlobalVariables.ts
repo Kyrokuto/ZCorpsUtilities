@@ -6,6 +6,7 @@ export interface GlobalVariablesObject {
     SPAN_NUMBER_DICE_CODE_SUFFIX: string;
     INPUT_CHECK_ID_PLUS_ONE_SUFFIX: string;
     INPUT_CHECK_ID_PLUS_TWO_SUFFIX: string;
+    BUTTON_ROLL_DICE_ID_SUFFIX: string;
     ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME: string;
     ELEMENT_ID_BUTTON_LOAD_DATA: string;
     ELEMENT_ID_BUTTON_SAVE_DATA: string;
@@ -28,6 +29,7 @@ export const GlobalVariables: GlobalVariablesObject = {
     SPAN_NUMBER_DICE_CODE_SUFFIX: 'dice-code-span',
     INPUT_CHECK_ID_PLUS_ONE_SUFFIX: 'plus-one-input',
     INPUT_CHECK_ID_PLUS_TWO_SUFFIX: 'plus-two-input',
+    BUTTON_ROLL_DICE_ID_SUFFIX: 'button-roll-dice',
     ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME: 'small-character-sheet-name',
     ELEMENT_ID_BUTTON_LOAD_DATA: 'button-load-data',
     ELEMENT_ID_BUTTON_SAVE_DATA: 'button-save-data',

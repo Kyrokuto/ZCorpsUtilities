@@ -3,8 +3,8 @@ import {GlobalVariables} from "../config/GlobalVariables"
 import {App} from "./App";
 
 export class AppToast {
-    private readonly _app: App;
     private static readonly allowedTypes: string[] = ['success', 'danger', 'warning', 'info']
+    private readonly _app: App;
     private readonly elementToast: HTMLElement;
     private readonly elementToastBody: HTMLElement;
     private readonly toastBootstrap: Toast;
@@ -59,6 +59,10 @@ export class AppToast {
         this.elementToastBody.innerText = this.message
     }
 
+    get app(): App {
+        return this._app;
+    }
+
     public show() {
         this.toastBootstrap.show()
     }
@@ -73,9 +77,5 @@ export class AppToast {
         this.type = type
         this.message = message
         this.show()
-    }
-
-    get app(): App {
-        return this._app;
     }
 }
