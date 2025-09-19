@@ -18,10 +18,6 @@ export class Character {
         return this._features;
     }
 
-    set features(value: Feature[]) {
-        this._features = value;
-    }
-
     private _name: string | null;
 
     public get name(): string | null {
@@ -45,6 +41,6 @@ export class Character {
     }
 
     reset(): void {
-        this.features = [...defaultFeatures];
+        this._features = [...defaultFeatures];
     }
 }
