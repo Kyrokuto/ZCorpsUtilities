@@ -1,14 +1,16 @@
 import {Modal} from "bootstrap";
 import {GlobalVariables} from "../config/GlobalVariables";
+import {App} from "./App";
 
 export class AppModal {
+    private readonly _app: App;
     private readonly elementModal: HTMLElement;
     private readonly elementModalTitle: HTMLElement;
     private readonly elementModalBody: HTMLElement;
     private readonly elementModalFooter: HTMLElement;
     private readonly modalBootstrap: Modal;
 
-    public constructor() {
+    public constructor(app: App) {
         const element: HTMLElement | null = document.querySelector('#' + GlobalVariables.ELEMENT_ID_MODAL_GLOBAL)
         if (element === null) {
             throw new Error('Modal element not found')
@@ -25,6 +27,7 @@ export class AppModal {
         this.elementModalTitle = elementModalTitle
         this.resetModal()
         this.modalBootstrap = Modal.getOrCreateInstance(this.elementModal)
+        this._app = app;
     }
 
     public resetModal() {
@@ -64,4 +67,7 @@ export class AppModal {
         this.modalBootstrap.hide()
     }
 
+    get app(): App {
+        return this._app;
+    }
 }

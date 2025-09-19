@@ -1,12 +1,15 @@
 import {Feature} from "./Feature";
 import {defaultFeatures} from "../config/DefaultFeatures";
+import {App} from "./App";
 
 export class Character {
+    private readonly _app: App;
     private readonly _features: Feature[];
 
-    public constructor() {
+    public constructor(app: App) {
         this._name = null;
         this._features = [...defaultFeatures];
+        this._app = app;
     }
 
     private _name: string | null;
@@ -21,5 +24,9 @@ export class Character {
 
     public get features(): Feature[] {
         return this._features;
+    }
+
+    get app(): App {
+        return this._app;
     }
 }

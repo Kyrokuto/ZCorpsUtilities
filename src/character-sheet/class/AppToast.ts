@@ -1,13 +1,15 @@
 import {Toast} from "bootstrap";
 import {GlobalVariables} from "../config/GlobalVariables"
+import {App} from "./App";
 
 export class AppToast {
+    private readonly _app: App;
     private static readonly allowedTypes: string[] = ['success', 'danger', 'warning', 'info']
     private readonly elementToast: HTMLElement;
     private readonly elementToastBody: HTMLElement;
     private readonly toastBootstrap: Toast;
 
-    public constructor() {
+    public constructor(app: App) {
         let element: HTMLElement | null = document.querySelector('#' + GlobalVariables.ELEMENT_ID_TOAST)
         if (element === null) {
             throw new Error('Toast element not found')
@@ -19,6 +21,7 @@ export class AppToast {
             throw new Error('Toast body element not found')
         }
         this.elementToastBody = element;
+        this._app = app;
     }
 
     private _type: string = '';
@@ -70,5 +73,9 @@ export class AppToast {
         this.type = type
         this.message = message
         this.show()
+    }
+
+    get app(): App {
+        return this._app;
     }
 }

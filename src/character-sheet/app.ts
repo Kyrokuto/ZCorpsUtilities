@@ -1,5 +1,4 @@
 import {App} from "./class/App";
-import {FrontBuilder} from "./class/FrontBuilder";
 
 let myApplication: App
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,7 +9,7 @@ function init() {
     App.loadApp().then((app) => {
         myApplication = app;
         try {
-            FrontBuilder.initCards(myApplication.currentCharacter.features)
+            myApplication.addEvents();
         } catch (e) {
             if (e instanceof Error) {
                 myApplication.toast.showError(e)

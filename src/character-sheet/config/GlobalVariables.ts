@@ -3,6 +3,7 @@ export interface GlobalVariablesObject {
     DATA_KEY_SUPER_PREFIX_ID: string;
     DATA_KEY_PREFIX_ID: string;
     INPUT_NUMBER_DICE_CODE_SUFFIX: string;
+    SPAN_NUMBER_DICE_CODE_SUFFIX: string;
     INPUT_CHECK_ID_PLUS_ONE_SUFFIX: string;
     INPUT_CHECK_ID_PLUS_TWO_SUFFIX: string;
     ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME: string;
@@ -24,6 +25,7 @@ export const GlobalVariables: GlobalVariablesObject = {
     DATA_KEY_SUPER_PREFIX_ID: 'superPrefixId',
     DATA_KEY_PREFIX_ID: 'prefixId',
     INPUT_NUMBER_DICE_CODE_SUFFIX: 'dice-code-input',
+    SPAN_NUMBER_DICE_CODE_SUFFIX: 'dice-code-span',
     INPUT_CHECK_ID_PLUS_ONE_SUFFIX: 'plus-one-input',
     INPUT_CHECK_ID_PLUS_TWO_SUFFIX: 'plus-two-input',
     ELEMENT_ID_SMALL_CHARACTER_SHEET_NAME: 'small-character-sheet-name',

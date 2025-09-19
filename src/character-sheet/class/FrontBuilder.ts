@@ -1,15 +1,45 @@
 import {Feature} from "./Feature";
 import {GlobalVariables} from "../config/GlobalVariables";
 import {Skill} from "./Skill";
+import {Utilities} from "./Utilities";
 
 export class FrontBuilder {
+    public static readonly rowStringId = 'row';
+    public static readonly cardStringId = 'card';
 
-    public static rowPrefixId(object: Feature | Skill): string {
-        return object.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'row';
+    public static buildRowId(object: Feature | Skill): string {
+        return object.id + GlobalVariables.DEFAULT_SEPARATOR_ID + FrontBuilder.rowStringId;
     }
 
-    public static cardPrefixId(feature: Feature): string {
-        return feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID + 'card'
+    public static buildCardFeatureId(feature: Feature): string {
+        return feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID + FrontBuilder.cardStringId;
+    }
+
+    public static buildInputDiceCodeId(object: Feature | Skill): string {
+        return FrontBuilder.buildFullPrefixId(object)
+            + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX;
+    }
+
+    public static buildSpanDiceCodeId(object: Feature | Skill): string {
+        return FrontBuilder.buildFullPrefixId(object)
+            + GlobalVariables.SPAN_NUMBER_DICE_CODE_SUFFIX;
+    }
+
+    public static buildFullPrefixId(object: Feature | Skill): string {
+        return FrontBuilder.buildCardFeatureId(Utilities.findFeatureWhitObject(object))
+            + GlobalVariables.DEFAULT_SEPARATOR_ID
+            + FrontBuilder.buildRowId(object)
+            + GlobalVariables.DEFAULT_SEPARATOR_ID
+    }
+
+    public static buildInputPlusTwoId(object: Feature | Skill): string {
+        return FrontBuilder.buildFullPrefixId(object)
+            + GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX;
+    }
+
+    public static buildInputPlusOneId(object: Feature | Skill): string {
+        return FrontBuilder.buildFullPrefixId(object)
+            + GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX;
     }
 
     public static initCards(features: Feature[]) {
@@ -27,16 +57,14 @@ export class FrontBuilder {
                 collapse = document.createElement('div'),
                 cardBody = document.createElement('div')
             colCard.classList.add('col-6', 'p-2')
-            // colCard.addEventListener('contextmenu', (event) => {
-            //     onRightClickColumnCard(event)
-            // })
+            // EventBuilder.addContextMenuCard(colCard);
             card.classList.add('card', 'border-info')
-            card.dataset.superPrefixId = this.cardPrefixId(featureClass)
+            card.id = this.buildCardFeatureId(featureClass);
             cardHeader.classList.add('card-header')
             rowFeature.classList.add('row')
-            rowFeature.dataset.prefixId = this.rowPrefixId(featureClass)
+            rowFeature.id = this.buildRowId(featureClass)
             colFeature.classList.add('col-7')
-            // collapse.classList.add('collapse')
+            collapse.classList.add('collapse')
             cardBody.classList.add('card-body')
             featureName.innerText = featureClass.name
             colFeature.appendChild(featureName)
@@ -50,7 +78,7 @@ export class FrontBuilder {
                     skillName = document.createElement('h4'),
                     skillSeparator = document.createElement('div')
                 rowSkill.classList.add('row')
-                rowSkill.dataset.prefixId = this.rowPrefixId(skill)
+                rowSkill.id = this.buildRowId(skill)
                 colSkill.classList.add('col-7')
                 skillName.innerText = skill.name
                 skillSeparator.classList.add('border', 'border-info-subtle', 'my-3', 'mx-5')
@@ -71,7 +99,7 @@ export class FrontBuilder {
     }
 
     public static createAllInputs(feature: Feature, skill: Skill | null, element: HTMLElement) {
-        const isHeader = skill === null,
+        const isHeader = !skill,
             divCol3 = document.createElement('div'),
             divCol1 = document.createElement('div'),
             divRow = document.createElement('div'),
@@ -87,11 +115,10 @@ export class FrontBuilder {
             inputPlusTwo = document.createElement('input'),
             labelPlusTwo = document.createElement('label'),
             buttonRollDice = document.createElement('button'),
-            iconButtonRollDice = document.createElement('i'),
-            prefixId = `${this.cardPrefixId(feature)}${GlobalVariables.DEFAULT_SEPARATOR_ID}${element.dataset[GlobalVariables.DATA_KEY_PREFIX_ID]}`
+            iconButtonRollDice = document.createElement('i');
         spanDiceCode.classList.add('input-group-text')
         spanDiceCode.innerText = 'D'
-        spanDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}dice-code-span`
+        spanDiceCode.id = FrontBuilder.buildSpanDiceCodeId(skill ? skill : feature)
         inputDiceCode.classList.add('form-control')
         inputDiceCode.type = 'number'
         if (isHeader) {
@@ -102,7 +129,7 @@ export class FrontBuilder {
         inputDiceCode.value = inputDiceCode.min
         inputDiceCode.max = '10'
         inputDiceCode.step = '1'
-        inputDiceCode.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX}`
+        inputDiceCode.id = FrontBuilder.buildInputDiceCodeId(skill ? skill : feature)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         inputDiceCode.ariaDescribedBy = spanDiceCode.id
@@ -114,33 +141,27 @@ export class FrontBuilder {
         labelPlusOne.innerText = '+1'
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        labelPlusTwo.for = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX}`
+        labelPlusTwo.for = FrontBuilder.buildInputPlusTwoId(skill ? skill : feature)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        labelPlusOne.for = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX}`
+        labelPlusOne.for = FrontBuilder.buildInputPlusOneId(skill ? skill : feature)
         inputPlusTwo.classList.add('form-check-input')
         inputPlusOne.classList.add('form-check-input')
         inputPlusTwo.type = 'checkbox'
         inputPlusOne.type = 'checkbox'
         inputPlusTwo.value = '2'
         inputPlusOne.value = '1'
-        inputPlusTwo.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX}`
-        inputPlusOne.id = `${prefixId}${GlobalVariables.DEFAULT_SEPARATOR_ID}${GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX}`
+        inputPlusTwo.id = FrontBuilder.buildInputPlusTwoId(skill ? skill : feature)
+        inputPlusOne.id = FrontBuilder.buildInputPlusOneId(skill ? skill : feature)
         inputPlusTwo.dataset.linkedInputId = inputPlusOne.id
         inputPlusOne.dataset.linkedInputId = inputPlusTwo.id
-        // inputPlusTwo.addEventListener('change', (event) => {
-        //     onChangeInputCheckPlus(event)
-        // })
-        // inputPlusOne.addEventListener('change', (event) => {
-        //     onChangeInputCheckPlus(event)
-        // })
+        // EventBuilder.addChangeInputCheckPlus(inputPlusTwo)
+        // EventBuilder.addChangeInputCheckPlus(inputPlusOne)
         divPlusTwo.classList.add('form-check')
         divPlusOne.classList.add('form-check')
         iconButtonRollDice.classList.add('bi', 'bi-rocket-takeoff')
         buttonRollDice.classList.add('btn', 'btn-outline-success', 'btn-lg')
-        // buttonRollDice.addEventListener('click', (event) => {
-        //     onClickButtonRollDice(event)
-        // })
+        // EventBuilder.addClickButtonRollDice(buttonRollDice)
         divCol3.classList.add('col-3')
         divCol1.classList.add('col-1', 'd-grid', 'gap-2')
         divRow.classList.add('row')
