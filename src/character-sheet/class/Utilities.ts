@@ -16,7 +16,7 @@ export class Utilities {
     return object instanceof Skill
   }
 
-  public static findFeatureWhitObject (object: Feature | Skill): Feature {
+  public static findFeatureWhitObject (object: Feature | Skill): Feature | never {
     if (Utilities.isFeatureClass(object)) {
       return object as Feature
     }

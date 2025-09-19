@@ -1,13 +1,9 @@
 import { Toast } from 'bootstrap'
 import { GlobalVariables } from '../config/GlobalVariables'
 import { App } from './App'
+import { ToastType } from '../enum/ToastType'
 
 export class AppToast {
-  private static readonly allowedTypes: string[] = [
-    'success',
-    'danger',
-    'warning',
-    'info']
   private readonly _app: App
   private readonly elementToast: HTMLElement
   private readonly elementToastBody: HTMLElement
@@ -29,27 +25,18 @@ export class AppToast {
     this._app = app
   }
 
-  private _type: string = ''
+  private _type: ToastType = ToastType.info
 
-  public get type (): string {
+  get type (): ToastType {
     return this._type
   }
 
-  public set type (value: string) {
-    value = value.trim()
-    if (!AppToast.allowedTypes.includes(value)) {
-      throw new Error(
-        'Toast type must be one of ' + AppToast.allowedTypes.join(', '))
-    }
+  set type (value: ToastType) {
     if (this.type !== value) {
+      const oldValue = this.type
       this._type = value
-      AppToast.allowedTypes.forEach(allowedType => {
-        if (!this.elementToast.classList.contains('text-bg-' + allowedType)) {
-          return
-        }
-        this.elementToast.classList.remove('text-bg-' + allowedType)
-      })
-      this.elementToast.classList.add('text-bg-' + this.type)
+      this.elementToast.classList.remove('text-bg-' + oldValue)
+      this.elementToast.classList.add('text-bg-' + value)
     }
   }
 
@@ -74,12 +61,13 @@ export class AppToast {
   }
 
   public showError (error: Error) {
-    this.type = 'danger'
+    this.type = ToastType.danger
     this.message = 'Internal error : ' + error.message
     this.show()
   }
 
-  public showMessageWhitType (message: string, type: string = 'success') {
+  public showMessageWhitType (
+    message: string, type: ToastType = ToastType.success) {
     this.type = type
     this.message = message
     this.show()

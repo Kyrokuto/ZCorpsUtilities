@@ -1,10 +1,6 @@
 import { Character } from './Character'
 import { AppModal } from './AppModal'
 import { AppToast } from './AppToast'
-import {
-  GlobalVariables,
-  GlobalVariablesObject,
-} from '../config/GlobalVariables'
 import { FrontBuilder } from './FrontBuilder'
 import { AppEvent } from './AppEvent'
 import { EventBuilder } from './EventBuilder'
@@ -16,11 +12,9 @@ export class App {
   private readonly _currentCharacter: Character
   private readonly _modal: AppModal
   private readonly _toast: AppToast
-  private readonly _appConstante: GlobalVariablesObject
   private readonly _event: AppEvent
 
   constructor () {
-    this._appConstante = GlobalVariables
     this._toast = new AppToast(this)
     this._currentCharacter = new Character(this)
     this._modal = new AppModal(this)
@@ -37,10 +31,6 @@ export class App {
 
   get toast (): AppToast {
     return this._toast
-  }
-
-  get appConstante (): GlobalVariablesObject {
-    return this._appConstante
   }
 
   get event (): AppEvent {
@@ -60,32 +50,69 @@ export class App {
   }
 
   public addEvents (): void {
-    const eventBuilder = new EventBuilder(this)
-    eventBuilder.addEventsOnFeatures()
-    eventBuilder.addEventsOnSkills()
-    eventBuilder.addEventsOnButtons()
+    try {
+      const eventBuilder = new EventBuilder(this)
+      eventBuilder.addEventsOnFeatures()
+      eventBuilder.addEventsOnSkills()
+      eventBuilder.addEventsOnButtons()
+    } catch (e) {
+      this.toast.showError(e as Error)
+    }
   }
 
   public showModalRollDice (object: Feature | Skill) {
-    const diceRoller = new DiceRoller(object)
-    this.modal.resetModal()
-    this.modal.setModalTitle(diceRoller.getFullName())
-    const pDice = document.createElement('p'),
-      inputDiceHidden = document.createElement('input'),
-      diceRoll = diceRoller.getDiceRollerCommand()
-    pDice.innerText = diceRoll
-    inputDiceHidden.value = diceRoll
-    inputDiceHidden.classList.add('d-none')
-    this.modal.appendChildToBody(pDice)
-    this.modal.appendChildToBody(inputDiceHidden)
-    this.modal.show()
-    inputDiceHidden.select()
-    this.copyToClipboard(diceRoll)
+    try {
+      const diceRoller = new DiceRoller(object)
+      this.modal.resetModal()
+      this.modal.setModalTitle(diceRoller.getFullName())
+      const pDice = document.createElement('p'),
+        inputDiceHidden = document.createElement('input'),
+        diceRoll = diceRoller.getDiceRollerCommand()
+      pDice.innerText = diceRoll
+      inputDiceHidden.value = diceRoll
+      inputDiceHidden.classList.add('d-none')
+      this.modal.appendChildToBody(pDice)
+      this.modal.appendChildToBody(inputDiceHidden)
+      this.modal.show()
+      inputDiceHidden.select()
+      this.event.copyToClipboard(diceRoll)
+    } catch (e) {
+      this.toast.showError(e as Error)
+    }
   }
 
-  private copyToClipboard (text: string): void {
-    navigator.clipboard.writeText(text.toString()).then(() => {
-      this.toast.showMessageWhitType('Copy to clipboard')
-    })
+  public showModalSaveData (): void {
+    try {
+
+      this.modal.resetModal()
+      FrontBuilder.createFormSaveInModalBody(this)
+      this.modal.setModalTitle('Save character sheet')
+      const button = document.createElement('button')
+      button.classList.add('btn', 'btn-success')
+      button.innerText = 'Save data'
+      EventBuilder.addClickButtonCopyCharacterSheetData(button, this)
+      this.modal.addButtonFooter(button)
+      this.modal.show()
+    } catch (e) {
+      this.toast.showError(e as Error)
+    }
+  }
+
+  public showModalLoadData (): void {
+    try {
+      this.modal.resetModal()
+      FrontBuilder.createFormLoadInModalBody()
+      this.modal.setModalTitle('Load character sheet')
+      const button = document.createElement('button')
+      button.classList.add('btn', 'btn-primary')
+      button.innerText = 'Load data'
+      // button.addEventListener('click', () => {
+      //   onClickButtonLoadCharacterSheetData()
+      // })
+      this.modal.addButtonFooter(button)
+      this.modal.show()
+    } catch (e) {
+      this.toast.showError(e as Error)
+    }
   }
 }

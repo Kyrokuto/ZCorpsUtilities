@@ -79,17 +79,30 @@ export class Feature {
     return skill
   }
 
-  public isLastSkill (skill: Skill): boolean {
+  public isLastSkill (skill: Skill): boolean | never {
     this.checkSkillOrFail(skill)
     return this.skills[this.skills.length - 1].id === skill.id
   }
 
-  public isFirstSkill (skill: Skill): boolean {
+  public isFirstSkill (skill: Skill): boolean | never {
     this.checkSkillOrFail(skill)
     return this.skills[0].id === skill.id
   }
 
-  private checkSkillOrFail (skill: Skill): void {
+  public toJSON (): object {
+    let jsonObject = {
+      id: this._id,
+      name: this.name,
+      dice: this.dice.toJSON(),
+      skills: [{}],
+    }
+    this.skills.forEach(skill => {
+      jsonObject.skills.push(skill.toJSON())
+    })
+    return jsonObject
+  }
+
+  private checkSkillOrFail (skill: Skill): void | never {
     if (this.skills.length === 0) {
       throw new Error('Feature ' + this.name + ' has no skills')
     }

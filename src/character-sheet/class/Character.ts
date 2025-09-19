@@ -43,4 +43,15 @@ export class Character {
   reset (): void {
     this._features = [...defaultFeatures]
   }
+
+  toJSON (): object {
+    let jsonObject = {
+      name: this.name ?? '',
+      features: [{}],
+    }
+    this.features.forEach((feature: Feature) => {
+      jsonObject.features.push(feature.toJSON())
+    })
+    return jsonObject
+  }
 }

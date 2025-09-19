@@ -5,7 +5,11 @@ import { Utilities } from './Utilities'
 import { GlobalVariables } from '../config/GlobalVariables'
 
 export class FrontFinder {
-  public static findFeatureCard (feature: Feature): HTMLElement {
+  /**
+   * @throw Error
+   * @param feature
+   */
+  public static findFeatureCard (feature: Feature): HTMLElement | never {
     const element = document.querySelector(
       '#' + FrontBuilder.buildCardFeatureId(feature))
     if (!element) {
@@ -15,7 +19,7 @@ export class FrontFinder {
     return element as HTMLElement
   }
 
-  public static findFeatureCollapse (feature: Feature): HTMLElement {
+  public static findFeatureCollapse (feature: Feature): HTMLElement | never {
     const card = FrontFinder.findFeatureCard(feature),
       element = card.querySelector('.collapse')
     if (!element) {
@@ -26,7 +30,7 @@ export class FrontFinder {
     return element as HTMLElement
   }
 
-  public static findSkillOrFeatureDiceCodeInput (object: Feature | Skill): HTMLInputElement {
+  public static findSkillOrFeatureDiceCodeInput (object: Feature | Skill): HTMLInputElement | never {
     const element = document.querySelector(
       '#' + FrontBuilder.buildInputDiceCodeId(object))
     if (!element) {
@@ -41,7 +45,7 @@ export class FrontFinder {
     return element as HTMLInputElement
   }
 
-  public static findSkillOrFeaturePlusOneInput (object: Feature | Skill): HTMLInputElement {
+  public static findSkillOrFeaturePlusOneInput (object: Feature | Skill): HTMLInputElement | never {
     const element = document.querySelector(
       '#' + FrontBuilder.buildInputPlusOneId(object))
     if (!element) {
@@ -56,7 +60,7 @@ export class FrontFinder {
     return element as HTMLInputElement
   }
 
-  public static findSkillOrFeaturePlusTwoInput (object: Feature | Skill): HTMLInputElement {
+  public static findSkillOrFeaturePlusTwoInput (object: Feature | Skill): HTMLInputElement | never {
     const element = document.querySelector(
       '#' + FrontBuilder.buildInputPlusTwoId(object))
     if (!element) {
@@ -71,7 +75,7 @@ export class FrontFinder {
     return element as HTMLInputElement
   }
 
-  public static findSkillOrFeatureRollDiceButton (object: Feature | Skill): HTMLButtonElement {
+  public static findSkillOrFeatureRollDiceButton (object: Feature | Skill): HTMLButtonElement | never {
     const element = document.querySelector(
       '#' + FrontBuilder.buildIdButtonRollDice(object))
     if (!element) {
@@ -86,31 +90,49 @@ export class FrontFinder {
     return element as HTMLButtonElement
   }
 
-  public static findLoadDataButton (): HTMLButtonElement {
+  public static findLoadDataButton (): HTMLButtonElement | never {
     return FrontFinder.findButtonWhitId(
       GlobalVariables.ELEMENT_ID_BUTTON_LOAD_DATA)
   }
 
-  public static findSaveDataButton (): HTMLButtonElement {
+  public static findSaveDataButton (): HTMLButtonElement | never {
     return FrontFinder.findButtonWhitId(
       GlobalVariables.ELEMENT_ID_BUTTON_SAVE_DATA)
   }
 
-  public static findResetDataButton (): HTMLButtonElement {
+  public static findResetDataButton (): HTMLButtonElement | never {
     return FrontFinder.findButtonWhitId(
       GlobalVariables.ELEMENT_ID_BUTTON_RESET_DATA)
   }
 
-  public static findFindSkillFeatureButton (): HTMLButtonElement {
+  public static findFindSkillFeatureButton (): HTMLButtonElement | never {
     return FrontFinder.findButtonWhitId(
       GlobalVariables.ELEMENT_ID_BUTTON_FIND_SKILL_FEATURE)
   }
 
-  public static findButtonWhitId (id: string): HTMLButtonElement {
+  public static findButtonWhitId (id: string): HTMLButtonElement | never {
     const element = document.querySelector('#' + id)
     if (!element) {
       throw new Error('Unable to find the button with ID ' + id + '.')
     }
     return element as HTMLButtonElement
+  }
+
+  public static findCharacterDataInput (): HTMLInputElement | never {
+    const element = document.querySelector(
+      '#' + GlobalVariables.INPUT_ID_CHARACTER_DATA)
+    if (!element) {
+      throw new Error('Unable to find the character data input field')
+    }
+    return element as HTMLInputElement
+  }
+
+  public static findCharacterNameInput (): HTMLInputElement | never {
+    const element = document.querySelector(
+      '#' + GlobalVariables.INPUT_ID_CHARACTER_NAME)
+    if (!element) {
+      throw new Error('Unable to find the character name input field')
+    }
+    return element as HTMLInputElement
   }
 }

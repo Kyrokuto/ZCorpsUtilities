@@ -2,6 +2,7 @@ import { Feature } from './Feature'
 import { GlobalVariables } from '../config/GlobalVariables'
 import { Skill } from './Skill'
 import { Utilities } from './Utilities'
+import { App } from './App'
 
 export class FrontBuilder {
   public static readonly rowStringId = 'row'
@@ -192,5 +193,52 @@ export class FrontBuilder {
     divCol1.appendChild(buttonRollDice)
     element.appendChild(divCol3)
     element.appendChild(divCol1)
+  }
+
+  public static createFormSaveInModalBody (app: App): void {
+    const divInfo = document.createElement('div'),
+      form = document.createElement('form'),
+      divCharacterName = document.createElement('div'),
+      labelCharacterName = document.createElement('label'),
+      inputCharacterName = document.createElement('input'),
+      divCharacterData = document.createElement('div'),
+      labelCharacterData = document.createElement('label'),
+      inputCharacterData = document.createElement('textarea')
+    divCharacterName.classList.add('mb-3')
+    labelCharacterName.classList.add('col-form-label')
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    labelCharacterName.for = GlobalVariables.INPUT_ID_CHARACTER_NAME
+    labelCharacterName.innerText = 'Character name'
+    inputCharacterName.classList.add('form-control')
+    inputCharacterName.type = 'text'
+    inputCharacterName.value = app.currentCharacter.name ?? ''
+    inputCharacterName.id = GlobalVariables.INPUT_ID_CHARACTER_NAME
+    divCharacterName.appendChild(labelCharacterName)
+    divCharacterName.appendChild(inputCharacterName)
+    form.appendChild(divCharacterName)
+    divCharacterData.classList.add('mb-3')
+    labelCharacterData.classList.add('col-form-label')
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    labelCharacterData.for = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    labelCharacterData.innerText = 'Character statistics'
+    inputCharacterData.classList.add('form-control')
+    inputCharacterData.value = JSON.stringify(app.currentCharacter)
+    inputCharacterData.id = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    inputCharacterData.disabled = true
+    divCharacterData.appendChild(labelCharacterData)
+    divCharacterData.appendChild(inputCharacterData)
+    form.appendChild(divCharacterData)
+    divInfo.classList.add('alert', 'alert-info')
+    divInfo.role = 'alert'
+    divInfo.innerHTML = 'Enter your character\'s name.<br/>' +
+      'Then click on the button and copy the contents of your clipboard to a text file for saving and reuse next time.'
+    app.modal.appendChildToBody(divInfo)
+    app.modal.appendChildToBody(form)
+  }
+
+  public static createFormLoadInModalBody (): void {
+
   }
 }

@@ -34,7 +34,14 @@ export class Dice {
     this.postValidateBonus()
   }
 
-  private validateNumberOf (value: number) {
+  public toJSON () {
+    return {
+      numberOf: this.numberOf,
+      bonus: this.bonus,
+    }
+  }
+
+  private validateNumberOf (value: number): void | never {
     if (!Number.isInteger(value)) {
       throw new Error('Dice number must be an integer')
     }
@@ -43,7 +50,7 @@ export class Dice {
     }
   }
 
-  private validateBonus (value: number) {
+  private validateBonus (value: number): void | never {
     if (!Number.isInteger(value)) {
       throw new Error('Dice bonus must be an integer')
     }

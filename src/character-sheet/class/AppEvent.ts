@@ -3,6 +3,7 @@ import { Collapse } from 'bootstrap'
 import { Feature } from './Feature'
 import { FrontFinder } from './FrontFinder'
 import { Skill } from './Skill'
+import { ToastType } from '../enum/ToastType'
 
 export class AppEvent {
   private readonly _app: App
@@ -16,31 +17,43 @@ export class AppEvent {
   }
 
   public onRightClickFeatureCard (feature: Feature): void {
-    const collapsible = new Collapse(FrontFinder.findFeatureCollapse(feature))
-    collapsible.show()
+    try {
+      const collapsible = new Collapse(FrontFinder.findFeatureCollapse(feature))
+      collapsible.show()
+    } catch (e) {
+      this.app.toast.showError(e as Error)
+    }
   }
 
   public onChangeInputDiceCode (object: Feature | Skill): void {
-    object.dice.numberOf = parseInt(
-      FrontFinder.findSkillOrFeatureDiceCodeInput(object).value)
+    try {
+      object.dice.numberOf = parseInt(
+        FrontFinder.findSkillOrFeatureDiceCodeInput(object).value)
+    } catch (e) {
+      this.app.toast.showError(e as Error)
+    }
   }
 
   public onChangeInputCheckPlus (
     object: Feature | Skill, isOne: boolean = true): void {
-    const currentInput = isOne ? FrontFinder.findSkillOrFeaturePlusOneInput(
-        object) : FrontFinder.findSkillOrFeaturePlusTwoInput(object),
-      linkedInput = isOne
-        ? FrontFinder.findSkillOrFeaturePlusTwoInput(object)
-        : FrontFinder.findSkillOrFeaturePlusOneInput(object)
-    if (!currentInput.checked) {
-      object.dice.bonus = 0
-      return
+    try {
+      const currentInput = isOne ? FrontFinder.findSkillOrFeaturePlusOneInput(
+          object) : FrontFinder.findSkillOrFeaturePlusTwoInput(object),
+        linkedInput = isOne
+          ? FrontFinder.findSkillOrFeaturePlusTwoInput(object)
+          : FrontFinder.findSkillOrFeaturePlusOneInput(object)
+      if (!currentInput.checked) {
+        object.dice.bonus = 0
+        return
+      }
+      object.dice.bonus = isOne ? 1 : 2
+      if (!linkedInput.checked) {
+        return
+      }
+      linkedInput.checked = false
+    } catch (e) {
+      this.app.toast.showError(e as Error)
     }
-    object.dice.bonus = isOne ? 1 : 2
-    if (!linkedInput.checked) {
-      return
-    }
-    linkedInput.checked = false
   }
 
   public onClickButtonRollDice (object: Feature | Skill): void {
@@ -48,11 +61,11 @@ export class AppEvent {
   }
 
   public onClickButtonLoadData (): void {
-
+    this.app.showModalLoadData()
   }
 
   public onClickButtonSaveData (): void {
-
+    this.app.showModalSaveData()
   }
 
   public onClickButtonResetData (): void {
@@ -60,5 +73,36 @@ export class AppEvent {
 
   public onClickButtonFindSkillFeature (): void {
 
+  }
+
+  public onClickButtonCopyCharacterSheetData (): void {
+    try {
+      const elementData = FrontFinder.findCharacterDataInput(),
+        elementName = FrontFinder.findCharacterNameInput()
+      if (!elementName.value || !elementData.value) {
+        if (!elementData.value) {
+          elementData.classList.add('is-invalid')
+        }
+        if (!elementName.value) {
+          elementName.classList.add('is-invalid')
+        }
+        this.app.toast.showMessageWhitType(
+          'Please fill in all fields of the form', ToastType.warning)
+        return
+      }
+      elementData.classList.remove('is-invalid')
+      elementName.classList.remove('is-invalid')
+      this.app.currentCharacter.name = elementName.value
+      this.copyToClipboard(JSON.stringify(this.app.currentCharacter))
+      this.app.modal.close()
+    } catch (e) {
+      this.app.toast.showError(e as Error)
+    }
+  }
+
+  public copyToClipboard (text: string): void {
+    navigator.clipboard.writeText(text.toString()).then(() => {
+      this.app.toast.showMessageWhitType('Copy to clipboard')
+    })
   }
 }

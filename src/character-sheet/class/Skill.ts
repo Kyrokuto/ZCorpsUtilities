@@ -55,4 +55,12 @@ export class Skill {
   public get id (): string {
     return this._id
   }
+
+  public toJSON () {
+    return {
+      id: this._id,
+      name: this.name,
+      dice: this.dice.toJSON(),
+    }
+  }
 }
