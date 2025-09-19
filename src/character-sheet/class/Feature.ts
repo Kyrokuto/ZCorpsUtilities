@@ -1,5 +1,6 @@
 import { Skill } from './Skill'
 import { Dice } from './Dice'
+import { FeatureJsonDataInterface } from '../interface/FeatureJsonDataInterface'
 
 export class Feature {
   private readonly _id: string
@@ -89,12 +90,12 @@ export class Feature {
     return this.skills[0].id === skill.id
   }
 
-  public toJSON (): object {
-    let jsonObject = {
+  public toJSON (): FeatureJsonDataInterface {
+    let jsonObject: FeatureJsonDataInterface = {
       id: this._id,
       name: this.name,
       dice: this.dice.toJSON(),
-      skills: [{}],
+      skills: [],
     }
     this.skills.forEach(skill => {
       jsonObject.skills.push(skill.toJSON())

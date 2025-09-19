@@ -21,6 +21,13 @@ export class EventBuilder {
     })
   }
 
+  public static addClickButtonLoadCharacterSheetData (
+    button: HTMLButtonElement, app: App): void {
+    button.addEventListener('click', () => {
+      app.event.onClickButtonLoadCharacterSheetData()
+    })
+  }
+
   addEventsOnFeatures (): void {
     this.app.currentCharacter.features.forEach((feature: Feature) => {
       this.addContextMenuOnFeature(feature)

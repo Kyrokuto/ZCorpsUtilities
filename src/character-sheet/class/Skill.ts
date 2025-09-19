@@ -1,5 +1,6 @@
 import { Feature } from './Feature'
 import { Dice } from './Dice'
+import { SkillJsonDataInterface } from '../interface/SkillJsonDataInterface'
 
 export class Skill {
   private readonly _id: string
@@ -56,10 +57,11 @@ export class Skill {
     return this._id
   }
 
-  public toJSON () {
+  public toJSON (): SkillJsonDataInterface {
     return {
       id: this._id,
       name: this.name,
+      is_visible: this.isVisible,
       dice: this.dice.toJSON(),
     }
   }

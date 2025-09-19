@@ -238,7 +238,23 @@ export class FrontBuilder {
     app.modal.appendChildToBody(form)
   }
 
-  public static createFormLoadInModalBody (): void {
-
+  public static createFormLoadInModalBody (app: App): void {
+    const form = document.createElement('form'),
+      divCharacterData = document.createElement('div'),
+      labelCharacterData = document.createElement('label'),
+      inputCharacterData = document.createElement('textarea')
+    divCharacterData.classList.add('mb-3')
+    labelCharacterData.classList.add('col-form-label')
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    labelCharacterData.for = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    labelCharacterData.innerText = 'Character data'
+    inputCharacterData.classList.add('form-control')
+    inputCharacterData.value = ''
+    inputCharacterData.id = GlobalVariables.INPUT_ID_CHARACTER_DATA
+    divCharacterData.appendChild(labelCharacterData)
+    divCharacterData.appendChild(inputCharacterData)
+    form.appendChild(divCharacterData)
+    app.modal.appendChildToBody(form)
   }
 }

@@ -60,7 +60,7 @@ export class App {
     }
   }
 
-  public showModalRollDice (object: Feature | Skill) {
+  public showModalRollDice (object: Feature | Skill): void {
     try {
       const diceRoller = new DiceRoller(object)
       this.modal.resetModal()
@@ -83,7 +83,6 @@ export class App {
 
   public showModalSaveData (): void {
     try {
-
       this.modal.resetModal()
       FrontBuilder.createFormSaveInModalBody(this)
       this.modal.setModalTitle('Save character sheet')
@@ -101,18 +100,20 @@ export class App {
   public showModalLoadData (): void {
     try {
       this.modal.resetModal()
-      FrontBuilder.createFormLoadInModalBody()
+      FrontBuilder.createFormLoadInModalBody(this)
       this.modal.setModalTitle('Load character sheet')
       const button = document.createElement('button')
       button.classList.add('btn', 'btn-primary')
       button.innerText = 'Load data'
-      // button.addEventListener('click', () => {
-      //   onClickButtonLoadCharacterSheetData()
-      // })
+      EventBuilder.addClickButtonLoadCharacterSheetData(button, this)
       this.modal.addButtonFooter(button)
       this.modal.show()
     } catch (e) {
       this.toast.showError(e as Error)
     }
+  }
+
+  public loadFromJson (json: any): void {
+
   }
 }

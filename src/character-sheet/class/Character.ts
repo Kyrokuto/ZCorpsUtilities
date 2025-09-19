@@ -2,6 +2,9 @@ import { Feature } from './Feature'
 import { defaultFeatures } from '../config/DefaultFeatures'
 import { App } from './App'
 import { Skill } from './Skill'
+import {
+  CharacterJsonDataInterface,
+} from '../interface/CharacterJsonDataInterface'
 
 export class Character {
   private readonly _app: App
@@ -43,18 +46,27 @@ export class Character {
     return skills
   }
 
-  reset (): void {
+  public reset (): void {
     this._features = [...defaultFeatures]
   }
 
-  toJSON (): object {
-    let jsonObject = {
+  public toJSON (): CharacterJsonDataInterface {
+    let jsonObject: CharacterJsonDataInterface = {
       name: this.name ?? '',
-      features: [{}],
+      features: [],
     }
     this.features.forEach((feature: Feature) => {
       jsonObject.features.push(feature.toJSON())
     })
     return jsonObject
+  }
+
+  public loadFromJson (data: CharacterJsonDataInterface) {
+    if (data.name) {
+      this.name = data.name
+    }
+    if (data.features && data.features.length > 0) {
+
+    }
   }
 }

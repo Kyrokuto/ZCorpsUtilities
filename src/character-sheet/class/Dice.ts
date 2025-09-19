@@ -1,3 +1,5 @@
+import { DiceJsonDataInterface } from '../interface/DiceJsonDataInterface'
+
 export class Dice {
   private static readonly DICE_MAX_BONUS: number = 3
   private static readonly DICE_MIN_BONUS: number = 0
@@ -34,11 +36,11 @@ export class Dice {
     this.postValidateBonus()
   }
 
-  public toJSON () {
+  public toJSON (): DiceJsonDataInterface {
     return {
       numberOf: this.numberOf,
       bonus: this.bonus,
-    }
+    } as DiceJsonDataInterface
   }
 
   private validateNumberOf (value: number): void | never {
