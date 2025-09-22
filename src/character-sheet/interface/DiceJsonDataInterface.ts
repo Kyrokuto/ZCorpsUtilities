@@ -1,4 +1,4 @@
 export interface DiceJsonDataInterface {
-  numberOf: number,
-  bonus: number,
+    numberOf: number,
+    bonus: number,
 }

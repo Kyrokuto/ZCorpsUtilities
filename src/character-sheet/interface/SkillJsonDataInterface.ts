@@ -1,8 +1,8 @@
-import { DiceJsonDataInterface } from './DiceJsonDataInterface'
+import {DiceJsonDataInterface} from './DiceJsonDataInterface'
 
 export interface SkillJsonDataInterface {
-  id: string
-  name: string
-  is_visible: boolean
-  dice: DiceJsonDataInterface
+    id: string
+    name: string
+    is_visible: boolean
+    dice: DiceJsonDataInterface
 }
