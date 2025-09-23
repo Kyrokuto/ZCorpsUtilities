@@ -110,29 +110,15 @@ export class AppEvent {
                     'Please fill in all fields of the form', ToastType.warning)
                 return
             }
+            elementData.classList.remove('is-invalid')
             if (!JSON.parse(elementData.value)) {
                 return
             }
             this.app.currentCharacter.loadFromJson(JSON.parse(elementData.value))
+            this.app.modal.close()
         } catch (e) {
             this.app.toast.showError(e as Error)
         }
-        // const elementInputCharacterData = document.querySelector(
-        //   '#' + GlobalVariables.INPUT_ID_CHARACTER_DATA)
-        // if (elementInputCharacterData.value === '' ||
-        //   elementInputCharacterData.value === '{}') {
-        //   elementInputCharacterData.classList.add('is-invalid')
-        //   toastClass.showMessageWhitType('Please fill in all fields of the form',
-        //     'warning')
-        //   return
-        // }
-        // elementInputCharacterData.classList.remove('is-invalid')
-        // try {
-        //   currentCharacterSheet.loadFromJson(elementInputCharacterData.value)
-        // } catch (e) {
-        //   toastClass.showError(e)
-        // }
-        // modalClass.close()
     }
 
     public copyToClipboard(text: string): void {

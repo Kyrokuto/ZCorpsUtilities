@@ -3,6 +3,7 @@ import {defaultFeatures} from '../config/DefaultFeatures'
 import {App} from './App'
 import {Skill} from './Skill'
 import {CharacterJsonDataInterface,} from '../interface/CharacterJsonDataInterface'
+import {Utilities} from "./Utilities";
 
 export class Character {
     private readonly _app: App
@@ -48,6 +49,23 @@ export class Character {
         this._features = [...defaultFeatures]
     }
 
+    public findFeatureById(featureId: string): Feature | null {
+        if (!this.hasFeatureById(featureId)) {
+            return null
+        }
+        const feature = this.features.find(feature => {
+            return feature.id === featureId
+        })
+        if (feature === undefined) {
+            return null
+        }
+        return feature
+    }
+
+    public hasFeatureById(featureId: string): boolean {
+        return this.features.some(feature => feature.id === featureId);
+    }
+
     public toJSON(): CharacterJsonDataInterface {
         const jsonObject: CharacterJsonDataInterface = {
             name: this.name ?? '',
@@ -60,8 +78,28 @@ export class Character {
     }
 
     public loadFromJson(data: CharacterJsonDataInterface) {
+        Utilities.isValidCharacterJSON(data);
         if (data.name) {
             this.name = data.name
         }
+        data.features.forEach(jsonFeature => {
+            const feature = this.findFeatureById(jsonFeature.id);
+            if (!feature) {
+                throw new Error('Could not find feature with id ' + jsonFeature.id + '.')
+            }
+            feature.name = jsonFeature.name
+            feature.dice.bonus = jsonFeature.dice.bonus
+            feature.dice.numberOf = jsonFeature.dice.numberOf
+            jsonFeature.skills.forEach(jsonSkill => {
+                const skill = feature.findSkillById(jsonSkill.id);
+                if (!skill) {
+                    throw new Error('Could not find skill with id ' + jsonSkill.id + ' in feature ' + feature.name + '.')
+                }
+                skill.name = jsonSkill.name
+                skill.dice.bonus = jsonSkill.dice.bonus
+                skill.dice.numberOf = jsonSkill.dice.numberOf
+                skill.isVisible = jsonSkill.is_visible
+            });
+        })
     }
 }
