@@ -70,6 +70,11 @@ export class AppEvent {
     }
 
     public onClickButtonResetData(): void {
+        try {
+            this.app.currentCharacter.reset()
+        } catch (e) {
+            this.app.toast.showError(e as Error)
+        }
     }
 
     public onClickButtonFindSkillFeature(): void {

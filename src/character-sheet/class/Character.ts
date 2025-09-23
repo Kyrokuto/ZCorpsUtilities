@@ -1,5 +1,4 @@
 import {Feature} from './Feature'
-import {defaultFeatures} from '../config/DefaultFeatures'
 import {App} from './App'
 import {Skill} from './Skill'
 import {CharacterJsonDataInterface,} from '../interface/CharacterJsonDataInterface'
@@ -10,7 +9,7 @@ export class Character {
 
     public constructor(app: App) {
         this._name = null
-        this._features = [...defaultFeatures]
+        this._features = Utilities.getDefaultFeatures()
         this._app = app
         this.addCharacterOnFeature();
     }
@@ -46,10 +45,6 @@ export class Character {
         return skills
     }
 
-    public reset(): void {
-        this._features = [...defaultFeatures]
-    }
-
     public findFeatureById(featureId: string): Feature | null {
         if (!this.hasFeatureById(featureId)) {
             return null
@@ -78,7 +73,7 @@ export class Character {
         return jsonObject
     }
 
-    public loadFromJson(data: CharacterJsonDataInterface) {
+    public loadFromJson(data: CharacterJsonDataInterface): void | never {
         Utilities.isValidCharacterJSON(data);
         if (data.name) {
             this.name = data.name
@@ -100,6 +95,29 @@ export class Character {
                 skill.dice.numberOf = jsonSkill.dice.numberOf
                 skill.dice.bonus = jsonSkill.dice.bonus
                 skill.isVisible = jsonSkill.is_visible
+            });
+        })
+    }
+
+    public reset(): void | never {
+        this.name = null
+        Utilities.getDefaultFeatures().forEach(defaultFeature => {
+            const feature = this.findFeatureById(defaultFeature.id);
+            if (!feature) {
+                throw new Error('Could not find feature with id ' + defaultFeature.id + '.')
+            }
+            feature.name = defaultFeature.name
+            feature.dice.numberOf = defaultFeature.dice.numberOf
+            feature.dice.bonus = defaultFeature.dice.bonus
+            defaultFeature.skills.forEach(defaultSkill => {
+                const skill = feature.findSkillById(defaultSkill.id);
+                if (!skill) {
+                    throw new Error('Could not find skill with id ' + defaultSkill.id + ' in feature ' + feature.name + '.')
+                }
+                skill.name = defaultSkill.name
+                skill.dice.numberOf = defaultSkill.dice.numberOf
+                skill.dice.bonus = defaultSkill.dice.bonus
+                skill.isVisible = defaultSkill.isVisible
             });
         })
     }
