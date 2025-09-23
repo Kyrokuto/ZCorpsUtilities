@@ -11,7 +11,7 @@ export class Feature {
         this._id = id
         this._name = name
         this._skills = []
-        this._dice = new Dice(1)
+        this._dice = new Dice(1, 0, this)
     }
 
     private _character: Character | null = null;
@@ -39,7 +39,10 @@ export class Feature {
     }
 
     public set name(value: string) {
-        this._name = value
+        if (this._name !== value) {
+            this._name = value
+            this.character?.app.event.updateFeatureName(this);
+        }
     }
 
     private _skills: Skill[]

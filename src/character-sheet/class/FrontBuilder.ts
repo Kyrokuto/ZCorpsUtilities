@@ -7,6 +7,7 @@ import {App} from './App'
 export class FrontBuilder {
     public static readonly rowStringId = 'row'
     public static readonly cardStringId = 'card'
+    public static readonly titleStringId = 'title'
 
     public static buildRowId(object: Feature | Skill): string {
         return object.id + GlobalVariables.DEFAULT_SEPARATOR_ID +
@@ -16,6 +17,13 @@ export class FrontBuilder {
     public static buildCardFeatureId(feature: Feature): string {
         return feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID +
             FrontBuilder.cardStringId
+    }
+
+    public static buildCardFeatureTitleId(feature: Feature): string {
+        return feature.id + GlobalVariables.DEFAULT_SEPARATOR_ID
+            + FrontBuilder.cardStringId
+            + GlobalVariables.DEFAULT_SEPARATOR_ID
+            + FrontBuilder.titleStringId;
     }
 
     public static buildInputDiceCodeId(object: Feature | Skill): string {
@@ -75,6 +83,7 @@ export class FrontBuilder {
             collapse.classList.add('collapse')
             cardBody.classList.add('card-body')
             featureName.innerText = featureClass.name
+            featureName.id = FrontBuilder.buildCardFeatureTitleId(featureClass)
             colFeature.appendChild(featureName)
             rowFeature.appendChild(colFeature)
             this.createAllInputs(featureClass, null, rowFeature)

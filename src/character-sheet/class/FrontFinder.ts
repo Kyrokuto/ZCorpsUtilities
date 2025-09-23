@@ -145,4 +145,12 @@ export class FrontFinder {
         }
         return element as HTMLElement
     }
+
+    public static findFeatureCardTitle(feature: Feature): HTMLElement | never {
+        const element = document.querySelector('#' + FrontBuilder.buildCardFeatureTitleId(feature));
+        if (!element) {
+            throw new Error('Unable to find the feature card title.')
+        }
+        return element as HTMLElement
+    }
 }

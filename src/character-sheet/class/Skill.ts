@@ -10,10 +10,10 @@ export class Skill {
         id: string, name: string, feature: Feature | null = null) {
         this._id = id
         this._name = name
+        this._dice = new Dice(0, 0, null, this)
         if (feature !== null) {
             this._feature = feature
         }
-        this._dice = new Dice()
     }
 
     public get dice(): Dice {

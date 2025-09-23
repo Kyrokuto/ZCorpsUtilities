@@ -89,16 +89,16 @@ export class Character {
                 throw new Error('Could not find feature with id ' + jsonFeature.id + '.')
             }
             feature.name = jsonFeature.name
-            feature.dice.bonus = jsonFeature.dice.bonus
             feature.dice.numberOf = jsonFeature.dice.numberOf
+            feature.dice.bonus = jsonFeature.dice.bonus
             jsonFeature.skills.forEach(jsonSkill => {
                 const skill = feature.findSkillById(jsonSkill.id);
                 if (!skill) {
                     throw new Error('Could not find skill with id ' + jsonSkill.id + ' in feature ' + feature.name + '.')
                 }
                 skill.name = jsonSkill.name
-                skill.dice.bonus = jsonSkill.dice.bonus
                 skill.dice.numberOf = jsonSkill.dice.numberOf
+                skill.dice.bonus = jsonSkill.dice.bonus
                 skill.isVisible = jsonSkill.is_visible
             });
         })

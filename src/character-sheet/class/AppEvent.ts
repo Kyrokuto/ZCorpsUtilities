@@ -127,7 +127,7 @@ export class AppEvent {
         })
     }
 
-    public updateCharacterName(): void {
+    public updateCharacterName(): void | never {
         try {
             const element = FrontFinder.findCharacterSheetName()
             if (this.app.currentCharacter.name) {
@@ -143,4 +143,45 @@ export class AppEvent {
             this.app.toast.showError(e as Error)
         }
     }
+
+    public updateFeatureName(feature: Feature): void | never {
+        try {
+            const element = FrontFinder.findFeatureCardTitle(feature);
+            element.innerText = feature.name
+        } catch (e) {
+            this.app.toast.showError(e as Error)
+        }
+    }
+
+    public updateDiceBonusElement(object: Feature | Skill): void | never {
+        try {
+            const elementOne = FrontFinder.findSkillOrFeaturePlusOneInput(object),
+                elementTwo = FrontFinder.findSkillOrFeaturePlusTwoInput(object);
+            if (object.dice.bonus === 0) {
+                elementOne.checked = false
+                elementTwo.checked = false
+                return;
+            }
+            if (object.dice.bonus === 1) {
+                elementOne.checked = true
+                elementTwo.checked = false
+                return;
+            }
+            elementOne.checked = false
+            elementTwo.checked = true
+        } catch (e) {
+            this.app.toast.showError(e as Error)
+        }
+    }
+
+    public updateDiceCodeElement(object: Feature | Skill): void | never {
+        try {
+            const element = FrontFinder.findSkillOrFeatureDiceCodeInput(object)
+            element.value = object.dice.numberOf.toString();
+        } catch (e) {
+            this.app.toast.showError(e as Error)
+        }
+    }
+
+
 }
