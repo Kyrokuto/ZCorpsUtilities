@@ -1,6 +1,7 @@
 import {Skill} from './Skill'
 import {Dice} from './Dice'
 import {FeatureJsonDataInterface} from '../interface/FeatureJsonDataInterface'
+import {Character} from "./Character";
 
 export class Feature {
     private readonly _id: string
@@ -11,6 +12,16 @@ export class Feature {
         this._name = name
         this._skills = []
         this._dice = new Dice(1)
+    }
+
+    private _character: Character | null = null;
+
+    get character(): Character | null {
+        return this._character;
+    }
+
+    set character(value: Character | null) {
+        this._character = value;
     }
 
     public get dice(): Dice {

@@ -12,6 +12,7 @@ export class Character {
         this._name = null
         this._features = [...defaultFeatures]
         this._app = app
+        this.addCharacterOnFeature();
     }
 
     private _features: Feature[]
@@ -101,5 +102,11 @@ export class Character {
                 skill.isVisible = jsonSkill.is_visible
             });
         })
+    }
+
+    private addCharacterOnFeature(): void {
+        this.features.map((feature: Feature) => {
+            feature.character = this
+        });
     }
 }
