@@ -1,3 +1,11 @@
 ###> JetBrains ###
 /.idea
 ###< JetBrains ###
+
+###> Node ###
+/node_modules
+###< Node ###
+
+###> WebPack ###
+/dist
+###< WebPack ###
