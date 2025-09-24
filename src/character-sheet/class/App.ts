@@ -4,9 +4,8 @@ import {AppToast} from './AppToast'
 import {FrontBuilder} from './FrontBuilder'
 import {AppEvent} from './AppEvent'
 import {EventBuilder} from './EventBuilder'
-import {Feature} from './Feature'
-import {Skill} from './Skill'
 import {DiceRoller} from './DiceRoller'
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
 export class App {
     private readonly _currentCharacter: Character
@@ -61,7 +60,7 @@ export class App {
         }
     }
 
-    public showModalRollDice(object: Feature | Skill): void {
+    public showModalRollDice(object: CharacterStatistics): void {
         try {
             const diceRoller = new DiceRoller(object)
             this.modal.resetModal()

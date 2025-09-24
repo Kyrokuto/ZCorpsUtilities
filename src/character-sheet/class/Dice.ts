@@ -1,31 +1,24 @@
 import {DiceJsonDataInterface} from '../interface/DiceJsonDataInterface'
-import {Feature} from "./Feature";
-import {Skill} from "./Skill";
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
 export class Dice {
     private static readonly DICE_MAX_BONUS: number = 3
     private static readonly DICE_MIN_BONUS: number = 0
     private static readonly DICE_MIN_NUMBER: number = 0
     private static readonly DICE_MAX_NUMBER: number = 10
-    private readonly _feature: Feature | null = null;
-    private readonly _skill: Skill | null = null;
+    private readonly _linkedObject: CharacterStatistics | null = null;
 
-    public constructor(numberOf: number = 0, bonus: number = 0, feature: Feature | null = null, skill: Skill | null = null) {
+    public constructor(numberOf: number = 0, bonus: number = 0, linkedObject: CharacterStatistics | null = null) {
         this.validateNumberOf(numberOf)
         this._numberOf = numberOf
         this.validateBonus(bonus)
         this._bonus = bonus
         this.postValidateBonus()
-        this._skill = skill;
-        this._feature = feature;
+        this._linkedObject = linkedObject;
     }
 
-    get feature(): Feature | null {
-        return this._feature;
-    }
-
-    get skill(): Skill | null {
-        return this._skill;
+    get linkedObject(): CharacterStatistics | null {
+        return this._linkedObject;
     }
 
     private _numberOf: number
@@ -99,20 +92,10 @@ export class Dice {
     }
 
     private runEventDiceCode(): void {
-        if (this.feature) {
-            this.feature.character?.app.event.updateDiceCodeElement(this.feature);
-        }
-        if (this.skill) {
-            this.skill.feature?.character?.app.event.updateDiceCodeElement(this.skill);
-        }
+        this.linkedObject?.currentCharacter.app.event.updateDiceCodeElement(this.linkedObject);
     }
 
     private runEventDiceBonus(): void {
-        if (this.feature) {
-            this.feature.character?.app.event.updateDiceBonusElement(this.feature);
-        }
-        if (this.skill) {
-            this.skill.feature?.character?.app.event.updateDiceBonusElement(this.skill);
-        }
+        this.linkedObject?.currentCharacter.app.event.updateDiceBonusElement(this.linkedObject);
     }
 }

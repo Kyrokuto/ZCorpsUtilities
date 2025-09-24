@@ -1,19 +1,42 @@
 import {Feature} from './Feature'
 import {Dice} from './Dice'
 import {SkillJsonDataInterface} from '../interface/SkillJsonDataInterface'
+import {SubSkill} from "./SubSkill";
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {Character} from "./Character";
 
-export class Skill {
+export class Skill implements CharacterStatistics {
     private readonly _id: string
-    private readonly _dice: Dice
+    private readonly _dice: Dice;
+    private readonly _isAllowSubSkill: boolean = false;
 
-    public constructor(
-        id: string, name: string, feature: Feature | null = null) {
+    public constructor(id: string, name: string, feature: Feature | null = null, isAllowSubSkill: boolean = false) {
         this._id = id
         this._name = name
-        this._dice = new Dice(0, 0, null, this)
-        if (feature !== null) {
-            this._feature = feature
+        if (!feature) {
+            feature = new Feature('', '')
         }
+        this._feature = feature
+        this._dice = new Dice(0, 0, this)
+        this._isAllowSubSkill = isAllowSubSkill
+    }
+
+    get currentCharacter(): Character {
+        if (!this.feature.character) {
+            throw new Error('Unable to find the character from the "' + this.name + '" skill.');
+        }
+        return this.feature.character;
+    }
+
+    private _subSkills: SubSkill[] = [];
+
+    get subSkills(): SubSkill[] {
+        return this._subSkills;
+    }
+
+    set subSkills(value: SubSkill[]) {
+        this._subSkills = []
+        value.forEach(subSkill => this.addSubSkill(subSkill))
     }
 
     public get dice(): Dice {
@@ -30,15 +53,15 @@ export class Skill {
         this._name = value
     }
 
-    private _feature: Feature | null = null
+    private _feature: Feature;
 
-    public get feature(): Feature | null {
+    public get feature(): Feature {
         return this._feature
     }
 
-    public set feature(value: Feature | null) {
+    public set feature(value: Feature) {
         this._feature = value
-        if (this.feature !== null && !this.feature.hasSkill(this)) {
+        if (!this.feature.hasSkill(this)) {
             this.feature.addSkill(this)
         }
     }
@@ -57,6 +80,14 @@ export class Skill {
         return this._id
     }
 
+    get isAllowSubSkill(): boolean {
+        return this._isAllowSubSkill;
+    }
+
+    addSubSkill(subSkill: SubSkill) {
+        this._subSkills.push(subSkill)
+    }
+
     public toJSON(): SkillJsonDataInterface {
         return {
             id: this._id,
@@ -64,5 +95,12 @@ export class Skill {
             is_visible: this.isVisible,
             dice: this.dice.toJSON(),
         }
+    }
+
+    public hasSubSkills(): boolean {
+        if (!this.isAllowSubSkill) {
+            return false;
+        }
+        return this.subSkills.length > 0;
     }
 }

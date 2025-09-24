@@ -2,10 +2,10 @@ import {App} from './App'
 import {Collapse} from 'bootstrap'
 import {Feature} from './Feature'
 import {FrontFinder} from './FrontFinder'
-import {Skill} from './Skill'
 import {ToastType} from '../enum/ToastType'
 import {GlobalVariables} from '../config/GlobalVariables'
 import {Utilities} from "./Utilities";
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
 export class AppEvent {
     private readonly _app: App
@@ -27,7 +27,7 @@ export class AppEvent {
         }
     }
 
-    public onChangeInputDiceCode(object: Feature | Skill): void {
+    public onChangeInputDiceCode(object: CharacterStatistics): void {
         try {
             object.dice.numberOf = parseInt(
                 FrontFinder.findSkillOrFeatureDiceCodeInput(object).value)
@@ -37,7 +37,7 @@ export class AppEvent {
     }
 
     public onChangeInputCheckPlus(
-        object: Feature | Skill, isOne: boolean = true): void {
+        object: CharacterStatistics, isOne: boolean = true): void {
         try {
             const currentInput = isOne ? FrontFinder.findSkillOrFeaturePlusOneInput(
                     object) : FrontFinder.findSkillOrFeaturePlusTwoInput(object),
@@ -58,7 +58,7 @@ export class AppEvent {
         }
     }
 
-    public onClickButtonRollDice(object: Feature | Skill): void {
+    public onClickButtonRollDice(object: CharacterStatistics): void {
         this.app.showModalRollDice(object)
     }
 
@@ -159,7 +159,7 @@ export class AppEvent {
         }
     }
 
-    public updateDiceBonusElement(object: Feature | Skill): void | never {
+    public updateDiceBonusElement(object: CharacterStatistics): void | never {
         try {
             const elementOne = FrontFinder.findSkillOrFeaturePlusOneInput(object),
                 elementTwo = FrontFinder.findSkillOrFeaturePlusTwoInput(object);
@@ -180,7 +180,7 @@ export class AppEvent {
         }
     }
 
-    public updateDiceCodeElement(object: Feature | Skill): void | never {
+    public updateDiceCodeElement(object: CharacterStatistics): void | never {
         try {
             const element = FrontFinder.findSkillOrFeatureDiceCodeInput(object)
             element.value = object.dice.numberOf.toString();

@@ -1,6 +1,7 @@
 import {Dice} from './Dice'
 import {Feature} from './Feature'
 import {Skill} from './Skill'
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
 export class DiceRoller {
     private static readonly DICE_CODE: string = 'd6'
@@ -10,20 +11,20 @@ export class DiceRoller {
     private readonly _skill: Skill | null = null
     private readonly _dice: Dice
 
-    constructor(object: Feature | Skill) {
+    constructor(object: CharacterStatistics) {
         this._dice = new Dice()
         if (object instanceof Feature) {
             this._feature = object
             this.buildRollDice()
             return
         }
-        if (!object.feature) {
-            throw Error('Unable to build the dice for skill ' + object.name +
-                ' because it has no features.')
+        if (object instanceof Skill) {
+            this._feature = object.feature
+            this._skill = object
+            this.buildRollDice()
+            return
         }
-        this._feature = object.feature
-        this._skill = object
-        this.buildRollDice()
+        throw new Error('Unable to roll the dice.');
     }
 
     get feature(): Feature {

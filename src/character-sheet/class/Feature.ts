@@ -2,8 +2,9 @@ import {Skill} from './Skill'
 import {Dice} from './Dice'
 import {FeatureJsonDataInterface} from '../interface/FeatureJsonDataInterface'
 import {Character} from "./Character";
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
-export class Feature {
+export class Feature implements CharacterStatistics {
     private readonly _id: string
     private readonly _dice: Dice
 
@@ -12,6 +13,13 @@ export class Feature {
         this._name = name
         this._skills = []
         this._dice = new Dice(1, 0, this)
+    }
+
+    get currentCharacter(): Character | never {
+        if (!this.character) {
+            throw new Error('Unable to find the character from the "' + this.name + '" feature.');
+        }
+        return this.character;
     }
 
     private _character: Character | null = null;
@@ -57,7 +65,7 @@ export class Feature {
     }
 
     public addSkill(skill: Skill): void {
-        if (skill.feature === null || skill.feature.id != this.id) {
+        if (skill.feature.id != this.id) {
             skill.feature = this
         }
         if (!this.hasSkill(skill)) {
@@ -69,7 +77,7 @@ export class Feature {
         if (!this.hasSkill(skill)) {
             return
         }
-        skill.feature = null
+        skill.feature = new Feature('', '')
         this.skills.splice(this.skills.indexOf(skill), 1)
     }
 

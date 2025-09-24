@@ -1,6 +1,7 @@
 import {Skill} from './Skill'
 import {Feature} from './Feature'
 import {CharacterJsonDataInterface} from "../interface/CharacterJsonDataInterface";
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
 export class Utilities {
     public static isFeatureClass(object: unknown): boolean {
@@ -17,15 +18,19 @@ export class Utilities {
         return object instanceof Skill
     }
 
-    public static findFeatureWhitObject(object: Feature | Skill): Feature | never {
+    public static castHasSkillClass(object: unknown): Skill {
+        if (!Utilities.isSkillClass(object)) {
+            throw new Error('object is not supported.')
+        }
+        return object as Skill
+    }
+
+    public static findFeatureWhitObject(object: CharacterStatistics): Feature | never {
         if (Utilities.isFeatureClass(object)) {
             return object as Feature
         }
         if (Utilities.isSkillClass(object)) {
-            object = object as Skill
-            if (object.feature) {
-                return object.feature
-            }
+            return Utilities.castHasSkillClass(object).feature
         }
         throw new Error(
             'The feature could not be found to construct the input field ID for the number of dice for the skill or feature "' +
@@ -118,7 +123,7 @@ export class Utilities {
             new Skill('electronic', 'Électronique'),
             new Skill('erudition', 'Érudition'),
             new Skill('computing', 'Informatique'),
-            new Skill('languages', 'Langues'),
+            new Skill('languages', 'Langues', null, true),
             new Skill('medical', 'Médecine'),
             new Skill('shipping', 'Navigation'),
             new Skill('security', 'Sécurité'),
@@ -130,8 +135,8 @@ export class Utilities {
             new Skill('hook', 'Crochetage'),
             new Skill('dexterity', 'Dextérité'),
             new Skill('throw', 'Lancer'),
-            new Skill('control', 'Pilotage'),
-            new Skill('repair', 'Réparer'),
+            new Skill('control', 'Pilotage', null, true),
+            new Skill('repair', 'Réparer', null, true),
         ]
         perception.skills = [
             new Skill('artist', 'Artiste'),

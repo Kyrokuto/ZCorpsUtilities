@@ -1,8 +1,8 @@
 import {Feature} from './Feature'
 import {FrontBuilder} from './FrontBuilder'
-import {Skill} from './Skill'
 import {Utilities} from './Utilities'
 import {GlobalVariables} from '../config/GlobalVariables'
+import {CharacterStatistics} from "../interface/CharacterContentInterface";
 
 export class FrontFinder {
     /**
@@ -30,7 +30,7 @@ export class FrontFinder {
         return element as HTMLElement
     }
 
-    public static findSkillOrFeatureDiceCodeInput(object: Feature | Skill): HTMLInputElement | never {
+    public static findSkillOrFeatureDiceCodeInput(object: CharacterStatistics): HTMLInputElement | never {
         const element = document.querySelector(
             '#' + FrontBuilder.buildInputDiceCodeId(object))
         if (!element) {
@@ -45,7 +45,7 @@ export class FrontFinder {
         return element as HTMLInputElement
     }
 
-    public static findSkillOrFeaturePlusOneInput(object: Feature | Skill): HTMLInputElement | never {
+    public static findSkillOrFeaturePlusOneInput(object: CharacterStatistics): HTMLInputElement | never {
         const element = document.querySelector(
             '#' + FrontBuilder.buildInputPlusOneId(object))
         if (!element) {
@@ -60,7 +60,7 @@ export class FrontFinder {
         return element as HTMLInputElement
     }
 
-    public static findSkillOrFeaturePlusTwoInput(object: Feature | Skill): HTMLInputElement | never {
+    public static findSkillOrFeaturePlusTwoInput(object: CharacterStatistics): HTMLInputElement | never {
         const element = document.querySelector(
             '#' + FrontBuilder.buildInputPlusTwoId(object))
         if (!element) {
@@ -75,7 +75,7 @@ export class FrontFinder {
         return element as HTMLInputElement
     }
 
-    public static findSkillOrFeatureRollDiceButton(object: Feature | Skill): HTMLButtonElement | never {
+    public static findSkillOrFeatureRollDiceButton(object: CharacterStatistics): HTMLButtonElement | never {
         const element = document.querySelector(
             '#' + FrontBuilder.buildIdButtonRollDice(object))
         if (!element) {
