@@ -55,6 +55,7 @@ export class App {
             eventBuilder.addEventsOnFeatures()
             eventBuilder.addEventsOnSkills()
             eventBuilder.addEventsOnButtons()
+            eventBuilder.addOtherEvents()
         } catch (e) {
             this.toast.showError(e as Error)
         }
@@ -107,6 +108,18 @@ export class App {
             button.innerText = 'Load data'
             EventBuilder.addClickButtonLoadCharacterSheetData(button, this)
             this.modal.addButtonFooter(button)
+            this.modal.show()
+        } catch (e) {
+            this.toast.showError(e as Error)
+        }
+    }
+
+
+    public showModalFindSkillFeature() {
+        try {
+            this.modal.resetModal()
+            this.modal.setModalTitle('Find skill/feature')
+            FrontBuilder.createFormFindSkillFeature(this)
             this.modal.show()
         } catch (e) {
             this.toast.showError(e as Error)

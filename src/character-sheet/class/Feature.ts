@@ -119,12 +119,12 @@ export class Feature {
 
     private checkSkillOrFail(skill: Skill): void | never {
         if (this.skills.length === 0) {
-            throw new Error('Feature ' + this.name + ' has no skills')
+            throw new Error('Feature "' + this.name + '" has no skills')
         }
         if (!this.hasSkill(skill)) {
             throw new Error(
-                'The feature ' + this.name + ' does not have the ' + skill.name +
-                ' skill.')
+                'The feature "' + this.name + '" does not have the "' + skill.name +
+                '" skill.')
         }
     }
 }

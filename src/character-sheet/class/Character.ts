@@ -81,7 +81,7 @@ export class Character {
         data.features.forEach(jsonFeature => {
             const feature = this.findFeatureById(jsonFeature.id);
             if (!feature) {
-                throw new Error('Could not find feature with id ' + jsonFeature.id + '.')
+                throw new Error('Could not find feature with id "' + jsonFeature.id + '".')
             }
             feature.name = jsonFeature.name
             feature.dice.numberOf = jsonFeature.dice.numberOf
@@ -89,7 +89,7 @@ export class Character {
             jsonFeature.skills.forEach(jsonSkill => {
                 const skill = feature.findSkillById(jsonSkill.id);
                 if (!skill) {
-                    throw new Error('Could not find skill with id ' + jsonSkill.id + ' in feature ' + feature.name + '.')
+                    throw new Error('Could not find skill with id "' + jsonSkill.id + '" in feature "' + feature.name + '".')
                 }
                 skill.name = jsonSkill.name
                 skill.dice.numberOf = jsonSkill.dice.numberOf
@@ -104,7 +104,7 @@ export class Character {
         Utilities.getDefaultFeatures().forEach(defaultFeature => {
             const feature = this.findFeatureById(defaultFeature.id);
             if (!feature) {
-                throw new Error('Could not find feature with id ' + defaultFeature.id + '.')
+                throw new Error('Could not find feature with id "' + defaultFeature.id + '".')
             }
             feature.name = defaultFeature.name
             feature.dice.numberOf = defaultFeature.dice.numberOf
@@ -112,7 +112,7 @@ export class Character {
             defaultFeature.skills.forEach(defaultSkill => {
                 const skill = feature.findSkillById(defaultSkill.id);
                 if (!skill) {
-                    throw new Error('Could not find skill with id ' + defaultSkill.id + ' in feature ' + feature.name + '.')
+                    throw new Error('Could not find skill with id "' + defaultSkill.id + '" in feature "' + feature.name + '".')
                 }
                 skill.name = defaultSkill.name
                 skill.dice.numberOf = defaultSkill.dice.numberOf
@@ -120,6 +120,31 @@ export class Character {
                 skill.isVisible = defaultSkill.isVisible
             });
         })
+    }
+
+    public getAllFeaturesAndSkills(): Array<Feature | Skill> {
+        let myArray = this.features;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        myArray = myArray.concat(this.getAllSkills());
+        return myArray
+    }
+
+    public hasFeatureOrSkillId(id: string): boolean {
+        return this.getAllFeaturesAndSkills().some(object => object.id === id)
+    }
+
+    public findFeatureOrSkillById(id: string): Skill | Feature | null {
+        if (!this.hasFeatureOrSkillId(id)) {
+            return null;
+        }
+        const object = this.getAllFeaturesAndSkills().find(object => {
+            return object.id === id
+        })
+        if (!object) {
+            return null
+        }
+        return object
     }
 
     private addCharacterOnFeature(): void {

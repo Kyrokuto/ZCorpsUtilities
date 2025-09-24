@@ -3,6 +3,7 @@ import {GlobalVariables} from '../config/GlobalVariables'
 import {Skill} from './Skill'
 import {Utilities} from './Utilities'
 import {App} from './App'
+import {EventBuilder} from "./EventBuilder";
 
 export class FrontBuilder {
     public static readonly rowStringId = 'row'
@@ -265,5 +266,41 @@ export class FrontBuilder {
         divCharacterData.appendChild(inputCharacterData)
         form.appendChild(divCharacterData)
         app.modal.appendChildToBody(form)
+    }
+
+    public static createFormFindSkillFeature(app: App): void {
+        const inputSelect = document.createElement('select'),
+            labelSelect = document.createElement('label')
+        labelSelect.classList.add('form-label')
+        labelSelect.innerText = 'Choice skill/feature'
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        labelSelect.for = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+        inputSelect.id = GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE
+        EventBuilder.addChangeSelectFindSkillFeature(inputSelect, app)
+        inputSelect.classList.add('form-select')
+        const selectOption: { value: string; text: string }[] = []
+        app.currentCharacter.getAllFeaturesAndSkills().forEach(object => {
+            selectOption.push({
+                value: object.id,
+                text: object.name,
+            })
+        })
+        selectOption.sort((a, b) => {
+            return a.text.localeCompare(b.text)
+        })
+        inputSelect.innerHTML = ''
+        const option = document.createElement('option')
+        option.value = ''
+        option.innerText = ''
+        inputSelect.appendChild(option)
+        selectOption.forEach(({value, text}) => {
+            const option = document.createElement('option')
+            option.value = value
+            option.innerText = text
+            inputSelect.appendChild(option)
+        })
+        app.modal.appendChildToBody(labelSelect)
+        app.modal.appendChildToBody(inputSelect)
     }
 }

@@ -5,6 +5,7 @@ import {FrontFinder} from './FrontFinder'
 import {Skill} from './Skill'
 import {ToastType} from '../enum/ToastType'
 import {GlobalVariables} from '../config/GlobalVariables'
+import {Utilities} from "./Utilities";
 
 export class AppEvent {
     private readonly _app: App
@@ -78,7 +79,7 @@ export class AppEvent {
     }
 
     public onClickButtonFindSkillFeature(): void {
-
+        this.app.showModalFindSkillFeature()
     }
 
     public onClickButtonCopyCharacterSheetData(): void {
@@ -188,5 +189,34 @@ export class AppEvent {
         }
     }
 
+    public onChangeSelectFindSkillFeature(): void {
+        try {
+            const element = FrontFinder.findSkillOrFeatureFindSelectInput(),
+                object = this.app.currentCharacter.findFeatureOrSkillById(element.value);
+            if (!object) {
+                this.app.toast.showError(new Error('Unable to find the feature or skill with ID "' + element.value + '".'));
+                return;
+            }
+            const elementObject = FrontFinder.findSkillOrFeatureDiceCodeInput(object)
+            let timeout = 100
+            if (!elementObject.checkVisibility()) {
+                this.onRightClickFeatureCard(Utilities.findFeatureWhitObject(object))
+                timeout = 250;
+            }
+            this.app.modal.close()
+            setTimeout(() => {
+                elementObject.focus()
+                elementObject.scrollIntoView({behavior: 'smooth'})
+            }, timeout)
+        } catch (e) {
+            this.app.toast.showError(e as Error)
+        }
+    }
 
+    public onKeyDownDocument(event: KeyboardEvent): void {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+            event.preventDefault()
+            this.app.showModalFindSkillFeature()
+        }
+    }
 }

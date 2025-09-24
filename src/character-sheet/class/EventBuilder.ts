@@ -28,6 +28,12 @@ export class EventBuilder {
         })
     }
 
+    public static addChangeSelectFindSkillFeature(element: HTMLSelectElement, app: App): void {
+        element.addEventListener('change', () => {
+            app.event.onChangeSelectFindSkillFeature();
+        })
+    }
+
     addEventsOnFeatures(): void {
         this.app.currentCharacter.features.forEach((feature: Feature) => {
             this.addContextMenuOnFeature(feature)
@@ -50,6 +56,11 @@ export class EventBuilder {
         this.addClickButtonSaveData()
         this.addClickButtonResetData()
         this.addClickButtonFindSkillFeature()
+    }
+
+
+    addOtherEvents(): void {
+        this.addKeyDownDocument();
     }
 
     private addContextMenuOnFeature(feature: Feature): void {
@@ -101,6 +112,12 @@ export class EventBuilder {
     private addClickButtonFindSkillFeature(): void {
         FrontFinder.findFindSkillFeatureButton().addEventListener('click', () => {
             this.app.event.onClickButtonFindSkillFeature()
+        })
+    }
+
+    private addKeyDownDocument(): void {
+        document.addEventListener('keydown', (event) => {
+            this.app.event.onKeyDownDocument(event)
         })
     }
 }

@@ -14,7 +14,7 @@ export class FrontFinder {
             '#' + FrontBuilder.buildCardFeatureId(feature))
         if (!element) {
             throw new Error(
-                'Unable to find the "card" element for feature ' + feature.name + '.')
+                'Unable to find the "card" element for feature "' + feature.name + '".')
         }
         return element as HTMLElement
     }
@@ -24,8 +24,8 @@ export class FrontFinder {
             element = card.querySelector('.collapse')
         if (!element) {
             throw new Error(
-                'Unable to find the "collapse" element for feature ' + feature.name +
-                '.')
+                'Unable to find the "collapse" element for feature "' + feature.name +
+                '".')
         }
         return element as HTMLElement
     }
@@ -40,7 +40,7 @@ export class FrontFinder {
             } else {
                 errorMessage += 'skill'
             }
-            throw new Error(errorMessage + ' ' + object.name + '.')
+            throw new Error(errorMessage + ' "' + object.name + '".')
         }
         return element as HTMLInputElement
     }
@@ -55,7 +55,7 @@ export class FrontFinder {
             } else {
                 errorMessage += 'skill'
             }
-            throw new Error(errorMessage + ' ' + object.name + '.')
+            throw new Error(errorMessage + ' "' + object.name + '".')
         }
         return element as HTMLInputElement
     }
@@ -70,7 +70,7 @@ export class FrontFinder {
             } else {
                 errorMessage += 'skill'
             }
-            throw new Error(errorMessage + ' ' + object.name + '.')
+            throw new Error(errorMessage + ' "' + object.name + '".')
         }
         return element as HTMLInputElement
     }
@@ -85,7 +85,7 @@ export class FrontFinder {
             } else {
                 errorMessage += 'skill'
             }
-            throw new Error(errorMessage + ' ' + object.name + '.')
+            throw new Error(errorMessage + ' "' + object.name + '".')
         }
         return element as HTMLButtonElement
     }
@@ -113,7 +113,7 @@ export class FrontFinder {
     public static findButtonWhitId(id: string): HTMLButtonElement | never {
         const element = document.querySelector('#' + id)
         if (!element) {
-            throw new Error('Unable to find the button with ID ' + id + '.')
+            throw new Error('Unable to find the button with ID "' + id + '".')
         }
         return element as HTMLButtonElement
     }
@@ -152,5 +152,13 @@ export class FrontFinder {
             throw new Error('Unable to find the feature card title.')
         }
         return element as HTMLElement
+    }
+
+    public static findSkillOrFeatureFindSelectInput(): HTMLSelectElement | never {
+        const element = document.querySelector('#' + GlobalVariables.INPUT_SELECT_FIND_SKILL_FEATURE);
+        if (!element) {
+            throw new Error('Unable to locate the features/skills selector.')
+        }
+        return element as HTMLSelectElement
     }
 }

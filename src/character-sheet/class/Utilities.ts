@@ -28,8 +28,8 @@ export class Utilities {
             }
         }
         throw new Error(
-            'The feature could not be found to construct the input field ID for the number of dice for the skill or feature ' +
-            object.name + '.')
+            'The feature could not be found to construct the input field ID for the number of dice for the skill or feature "' +
+            object.name + '".')
     }
 
     public static isValidCharacterJSON(data: CharacterJsonDataInterface): void | never {
