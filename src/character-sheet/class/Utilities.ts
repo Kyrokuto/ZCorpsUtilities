@@ -1,7 +1,7 @@
 import {Skill} from './Skill'
 import {Feature} from './Feature'
 import {CharacterJsonDataInterface} from "../interface/CharacterJsonDataInterface";
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class Utilities {
     public static isFeatureClass(object: unknown): boolean {
@@ -25,7 +25,7 @@ export class Utilities {
         return object as Skill
     }
 
-    public static findFeatureWhitObject(object: CharacterStatistics): Feature | never {
+    public static findFeatureWhitObject(object: CharacterStatisticsInterface): Feature | never {
         if (Utilities.isFeatureClass(object)) {
             return object as Feature
         }

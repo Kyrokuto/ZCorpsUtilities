@@ -1,8 +1,8 @@
-import {DiceJsonDataInterface} from './DiceJsonDataInterface'
+import {CharacterStatisticsJsonInterface} from "./CharacterStatisticsJsonInterface";
+import {SubSkillJsonDataInterface} from "./SubSkillJsonDataInterface";
 
-export interface SkillJsonDataInterface {
-    id: string
-    name: string
+export interface SkillJsonDataInterface extends CharacterStatisticsJsonInterface {
     is_visible: boolean
-    dice: DiceJsonDataInterface
+    is_allow_sub_skill: boolean
+    sub_skills: SubSkillJsonDataInterface[]
 }

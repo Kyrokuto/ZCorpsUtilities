@@ -1,7 +1,7 @@
 import {Dice} from './Dice'
 import {Feature} from './Feature'
 import {Skill} from './Skill'
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class DiceRoller {
     private static readonly DICE_CODE: string = 'd6'
@@ -11,7 +11,7 @@ export class DiceRoller {
     private readonly _skill: Skill | null = null
     private readonly _dice: Dice
 
-    constructor(object: CharacterStatistics) {
+    constructor(object: CharacterStatisticsInterface) {
         this._dice = new Dice()
         if (object instanceof Feature) {
             this._feature = object

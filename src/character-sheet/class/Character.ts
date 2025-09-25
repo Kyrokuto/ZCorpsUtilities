@@ -3,7 +3,7 @@ import {App} from './App'
 import {Skill} from './Skill'
 import {CharacterJsonDataInterface,} from '../interface/CharacterJsonDataInterface'
 import {Utilities} from "./Utilities";
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class Character {
     private readonly _app: App
@@ -123,7 +123,7 @@ export class Character {
         })
     }
 
-    public getAllFeaturesAndSkills(): Array<CharacterStatistics> {
+    public getAllFeaturesAndSkills(): Array<CharacterStatisticsInterface> {
         let myArray = this.features;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -135,7 +135,7 @@ export class Character {
         return this.getAllFeaturesAndSkills().some(object => object.id === id)
     }
 
-    public findFeatureOrSkillById(id: string): CharacterStatistics | null {
+    public findFeatureOrSkillById(id: string): CharacterStatisticsInterface | null {
         if (!this.hasFeatureOrSkillId(id)) {
             return null;
         }

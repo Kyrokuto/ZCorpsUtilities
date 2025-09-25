@@ -1,14 +1,14 @@
 import {DiceJsonDataInterface} from '../interface/DiceJsonDataInterface'
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class Dice {
     private static readonly DICE_MAX_BONUS: number = 3
     private static readonly DICE_MIN_BONUS: number = 0
     private static readonly DICE_MIN_NUMBER: number = 0
     private static readonly DICE_MAX_NUMBER: number = 10
-    private readonly _linkedObject: CharacterStatistics | null = null;
+    private readonly _linkedObject: CharacterStatisticsInterface | null = null;
 
-    public constructor(numberOf: number = 0, bonus: number = 0, linkedObject: CharacterStatistics | null = null) {
+    public constructor(numberOf: number = 0, bonus: number = 0, linkedObject: CharacterStatisticsInterface | null = null) {
         this.validateNumberOf(numberOf)
         this._numberOf = numberOf
         this.validateBonus(bonus)
@@ -17,7 +17,7 @@ export class Dice {
         this._linkedObject = linkedObject;
     }
 
-    get linkedObject(): CharacterStatistics | null {
+    get linkedObject(): CharacterStatisticsInterface | null {
         return this._linkedObject;
     }
 

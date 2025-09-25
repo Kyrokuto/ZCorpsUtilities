@@ -2,7 +2,7 @@ import {App} from './App'
 import {Feature} from './Feature'
 import {FrontFinder} from './FrontFinder'
 import {Skill} from './Skill'
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class EventBuilder {
     private readonly _app: App
@@ -71,13 +71,13 @@ export class EventBuilder {
         })
     }
 
-    private addChangeInputDiceCode(object: CharacterStatistics): void {
+    private addChangeInputDiceCode(object: CharacterStatisticsInterface): void {
         FrontFinder.findSkillOrFeatureDiceCodeInput(object).addEventListener('change', () => {
             this.app.event.onChangeInputDiceCode(object)
         })
     }
 
-    private addChangeInputCheckPlus(object: CharacterStatistics): void {
+    private addChangeInputCheckPlus(object: CharacterStatisticsInterface): void {
         FrontFinder.findSkillOrFeaturePlusOneInput(object).addEventListener('change', () => {
             this.app.event.onChangeInputCheckPlus(object)
         })
@@ -86,7 +86,7 @@ export class EventBuilder {
         })
     }
 
-    private addClickButtonRollDice(object: CharacterStatistics): void {
+    private addClickButtonRollDice(object: CharacterStatisticsInterface): void {
         FrontFinder.findSkillOrFeatureRollDiceButton(object).addEventListener('click', () => {
             this.app.event.onClickButtonRollDice(object)
         })

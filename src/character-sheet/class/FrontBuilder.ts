@@ -4,14 +4,14 @@ import {Skill} from './Skill'
 import {Utilities} from './Utilities'
 import {App} from './App'
 import {EventBuilder} from "./EventBuilder";
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class FrontBuilder {
     public static readonly rowStringId = 'row'
     public static readonly cardStringId = 'card'
     public static readonly titleStringId = 'title'
 
-    public static buildRowId(object: CharacterStatistics): string {
+    public static buildRowId(object: CharacterStatisticsInterface): string {
         return object.id + GlobalVariables.DEFAULT_SEPARATOR_ID +
             FrontBuilder.rowStringId
     }
@@ -28,17 +28,17 @@ export class FrontBuilder {
             + FrontBuilder.titleStringId;
     }
 
-    public static buildInputDiceCodeId(object: CharacterStatistics): string {
+    public static buildInputDiceCodeId(object: CharacterStatisticsInterface): string {
         return FrontBuilder.buildFullPrefixId(object)
             + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX
     }
 
-    public static buildSpanDiceCodeId(object: CharacterStatistics): string {
+    public static buildSpanDiceCodeId(object: CharacterStatisticsInterface): string {
         return FrontBuilder.buildFullPrefixId(object)
             + GlobalVariables.SPAN_NUMBER_DICE_CODE_SUFFIX
     }
 
-    public static buildFullPrefixId(object: CharacterStatistics): string {
+    public static buildFullPrefixId(object: CharacterStatisticsInterface): string {
         return FrontBuilder.buildCardFeatureId(
                 Utilities.findFeatureWhitObject(object))
             + GlobalVariables.DEFAULT_SEPARATOR_ID
@@ -46,17 +46,17 @@ export class FrontBuilder {
             + GlobalVariables.DEFAULT_SEPARATOR_ID
     }
 
-    public static buildInputPlusTwoId(object: CharacterStatistics): string {
+    public static buildInputPlusTwoId(object: CharacterStatisticsInterface): string {
         return FrontBuilder.buildFullPrefixId(object)
             + GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX
     }
 
-    public static buildInputPlusOneId(object: CharacterStatistics): string {
+    public static buildInputPlusOneId(object: CharacterStatisticsInterface): string {
         return FrontBuilder.buildFullPrefixId(object)
             + GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX
     }
 
-    public static buildIdButtonRollDice(object: CharacterStatistics): string {
+    public static buildIdButtonRollDice(object: CharacterStatisticsInterface): string {
         return FrontBuilder.buildFullPrefixId(object)
             + GlobalVariables.BUTTON_ROLL_DICE_ID_SUFFIX
     }

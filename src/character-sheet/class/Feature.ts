@@ -2,9 +2,9 @@ import {Skill} from './Skill'
 import {Dice} from './Dice'
 import {FeatureJsonDataInterface} from '../interface/FeatureJsonDataInterface'
 import {Character} from "./Character";
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
-export class Feature implements CharacterStatistics {
+export class Feature implements CharacterStatisticsInterface {
     private readonly _id: string
     private readonly _dice: Dice
 

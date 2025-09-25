@@ -1,9 +1,10 @@
 import {Dice} from "./Dice";
 import {Skill} from "./Skill";
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 import {Character} from "./Character";
+import {SubSkillJsonDataInterface} from "../interface/SubSkillJsonDataInterface";
 
-export class SubSkill implements CharacterStatistics {
+export class SubSkill implements CharacterStatisticsInterface {
     private readonly _dice: Dice;
 
     constructor(id: string, name: string, skill: Skill | null) {
@@ -54,6 +55,19 @@ export class SubSkill implements CharacterStatistics {
     }
 
     set skill(value: Skill) {
-        this._skill = value;
+        if (this._skill.id !== value.id) {
+            if (!value.isAllowSubSkill) {
+                throw new Error('You cannot add sub-skills to skill "' + value.name + '" because it does not allow sub-skills.');
+            }
+            this._skill = value;
+        }
+    }
+
+    toJSON(): SubSkillJsonDataInterface {
+        return {
+            id: this.id,
+            name: this.name,
+            dice: this.dice.toJSON(),
+        } as SubSkillJsonDataInterface
     }
 }

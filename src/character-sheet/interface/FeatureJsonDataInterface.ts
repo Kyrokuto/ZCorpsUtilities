@@ -1,9 +1,6 @@
 import {SkillJsonDataInterface} from './SkillJsonDataInterface'
-import {DiceJsonDataInterface} from './DiceJsonDataInterface'
+import {CharacterStatisticsJsonInterface} from "./CharacterStatisticsJsonInterface";
 
-export interface FeatureJsonDataInterface {
-    id: string
-    name: string
-    dice: DiceJsonDataInterface
+export interface FeatureJsonDataInterface extends CharacterStatisticsJsonInterface {
     skills: SkillJsonDataInterface[]
 }

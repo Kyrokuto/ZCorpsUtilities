@@ -2,10 +2,10 @@ import {Feature} from './Feature'
 import {Dice} from './Dice'
 import {SkillJsonDataInterface} from '../interface/SkillJsonDataInterface'
 import {SubSkill} from "./SubSkill";
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 import {Character} from "./Character";
 
-export class Skill implements CharacterStatistics {
+export class Skill implements CharacterStatisticsInterface {
     private readonly _id: string
     private readonly _dice: Dice;
     private readonly _isAllowSubSkill: boolean = false;
@@ -89,12 +89,20 @@ export class Skill implements CharacterStatistics {
     }
 
     public toJSON(): SkillJsonDataInterface {
-        return {
+        const jsonObject: SkillJsonDataInterface = {
             id: this._id,
             name: this.name,
-            is_visible: this.isVisible,
             dice: this.dice.toJSON(),
+            is_visible: this.isVisible,
+            is_allow_sub_skill: this.isAllowSubSkill,
+            sub_skills: [],
         }
+        if (this.hasSubSkills()) {
+            this.subSkills.forEach((subSkill: SubSkill) => {
+                jsonObject.sub_skills.push(subSkill.toJSON())
+            })
+        }
+        return jsonObject
     }
 
     public hasSubSkills(): boolean {

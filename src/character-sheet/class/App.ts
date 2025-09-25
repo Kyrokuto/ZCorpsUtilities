@@ -5,7 +5,7 @@ import {FrontBuilder} from './FrontBuilder'
 import {AppEvent} from './AppEvent'
 import {EventBuilder} from './EventBuilder'
 import {DiceRoller} from './DiceRoller'
-import {CharacterStatistics} from "../interface/CharacterContentInterface";
+import {CharacterStatisticsInterface} from "../interface/CharacterStatisticsInterface";
 
 export class App {
     private readonly _currentCharacter: Character
@@ -60,7 +60,7 @@ export class App {
         }
     }
 
-    public showModalRollDice(object: CharacterStatistics): void {
+    public showModalRollDice(object: CharacterStatisticsInterface): void {
         try {
             const diceRoller = new DiceRoller(object)
             this.modal.resetModal()
