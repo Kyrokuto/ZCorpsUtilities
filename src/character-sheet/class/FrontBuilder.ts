@@ -1,6 +1,5 @@
 import {Feature} from './Feature'
 import {GlobalVariables} from '../config/GlobalVariables'
-import {Skill} from './Skill'
 import {Utilities} from './Utilities'
 import {App} from './App'
 import {EventBuilder} from "./EventBuilder";
@@ -11,8 +10,8 @@ export class FrontBuilder {
     public static readonly cardStringId = 'card'
     public static readonly titleStringId = 'title'
 
-    public static buildRowId(object: CharacterStatisticsInterface): string {
-        return object.id + GlobalVariables.DEFAULT_SEPARATOR_ID +
+    public static buildRowId(characterStatistics: CharacterStatisticsInterface): string {
+        return characterStatistics.id + GlobalVariables.DEFAULT_SEPARATOR_ID +
             FrontBuilder.rowStringId
     }
 
@@ -28,36 +27,36 @@ export class FrontBuilder {
             + FrontBuilder.titleStringId;
     }
 
-    public static buildInputDiceCodeId(object: CharacterStatisticsInterface): string {
-        return FrontBuilder.buildFullPrefixId(object)
+    public static buildInputDiceCodeId(characterStatistics: CharacterStatisticsInterface): string {
+        return FrontBuilder.buildFullPrefixId(characterStatistics)
             + GlobalVariables.INPUT_NUMBER_DICE_CODE_SUFFIX
     }
 
-    public static buildSpanDiceCodeId(object: CharacterStatisticsInterface): string {
-        return FrontBuilder.buildFullPrefixId(object)
+    public static buildSpanDiceCodeId(characterStatistics: CharacterStatisticsInterface): string {
+        return FrontBuilder.buildFullPrefixId(characterStatistics)
             + GlobalVariables.SPAN_NUMBER_DICE_CODE_SUFFIX
     }
 
-    public static buildFullPrefixId(object: CharacterStatisticsInterface): string {
+    public static buildFullPrefixId(characterStatistics: CharacterStatisticsInterface): string {
         return FrontBuilder.buildCardFeatureId(
-                Utilities.findFeatureWhitObject(object))
+                Utilities.findFeatureWhitCharacterStatistics(characterStatistics))
             + GlobalVariables.DEFAULT_SEPARATOR_ID
-            + FrontBuilder.buildRowId(object)
+            + FrontBuilder.buildRowId(characterStatistics)
             + GlobalVariables.DEFAULT_SEPARATOR_ID
     }
 
-    public static buildInputPlusTwoId(object: CharacterStatisticsInterface): string {
-        return FrontBuilder.buildFullPrefixId(object)
+    public static buildInputPlusTwoId(characterStatistics: CharacterStatisticsInterface): string {
+        return FrontBuilder.buildFullPrefixId(characterStatistics)
             + GlobalVariables.INPUT_CHECK_ID_PLUS_TWO_SUFFIX
     }
 
-    public static buildInputPlusOneId(object: CharacterStatisticsInterface): string {
-        return FrontBuilder.buildFullPrefixId(object)
+    public static buildInputPlusOneId(characterStatistics: CharacterStatisticsInterface): string {
+        return FrontBuilder.buildFullPrefixId(characterStatistics)
             + GlobalVariables.INPUT_CHECK_ID_PLUS_ONE_SUFFIX
     }
 
-    public static buildIdButtonRollDice(object: CharacterStatisticsInterface): string {
-        return FrontBuilder.buildFullPrefixId(object)
+    public static buildIdButtonRollDice(characterStatistics: CharacterStatisticsInterface): string {
+        return FrontBuilder.buildFullPrefixId(characterStatistics)
             + GlobalVariables.BUTTON_ROLL_DICE_ID_SUFFIX
     }
 
@@ -88,7 +87,7 @@ export class FrontBuilder {
             featureName.id = FrontBuilder.buildCardFeatureTitleId(featureClass)
             colFeature.appendChild(featureName)
             rowFeature.appendChild(colFeature)
-            this.createAllInputs(featureClass, null, rowFeature)
+            this.createAllInputs(featureClass, rowFeature)
             cardHeader.appendChild(rowFeature)
             card.appendChild(cardHeader)
             featureClass.skills.forEach(skill => {
@@ -104,7 +103,7 @@ export class FrontBuilder {
                     'mx-5')
                 colSkill.appendChild(skillName)
                 rowSkill.appendChild(colSkill)
-                this.createAllInputs(featureClass, skill, rowSkill)
+                this.createAllInputs(skill, rowSkill)
                 cardBody.appendChild(rowSkill)
                 if (!featureClass.isLastSkill(skill)) {
                     cardBody.appendChild(skillSeparator)
@@ -118,9 +117,8 @@ export class FrontBuilder {
         })
     }
 
-    public static createAllInputs(
-        feature: Feature, skill: Skill | null, element: HTMLElement) {
-        const isHeader = !skill,
+    public static createAllInputs(characterStatistics: CharacterStatisticsInterface, element: HTMLElement) {
+        const isHeader = Utilities.isFeatureClass(characterStatistics),
             divCol3 = document.createElement('div'),
             divCol1 = document.createElement('div'),
             divRow = document.createElement('div'),
@@ -139,7 +137,7 @@ export class FrontBuilder {
             iconButtonRollDice = document.createElement('i')
         spanDiceCode.classList.add('input-group-text')
         spanDiceCode.innerText = 'D'
-        spanDiceCode.id = FrontBuilder.buildSpanDiceCodeId(skill ? skill : feature)
+        spanDiceCode.id = FrontBuilder.buildSpanDiceCodeId(characterStatistics)
         inputDiceCode.classList.add('form-control')
         inputDiceCode.type = 'number'
         if (isHeader) {
@@ -150,8 +148,7 @@ export class FrontBuilder {
         inputDiceCode.value = inputDiceCode.min
         inputDiceCode.max = '10'
         inputDiceCode.step = '1'
-        inputDiceCode.id = FrontBuilder.buildInputDiceCodeId(
-            skill ? skill : feature)
+        inputDiceCode.id = FrontBuilder.buildInputDiceCodeId(characterStatistics)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         inputDiceCode.ariaDescribedBy = spanDiceCode.id
@@ -163,26 +160,25 @@ export class FrontBuilder {
         labelPlusOne.innerText = '+1'
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        labelPlusTwo.for = FrontBuilder.buildInputPlusTwoId(skill ? skill : feature)
+        labelPlusTwo.for = FrontBuilder.buildInputPlusTwoId(characterStatistics)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        labelPlusOne.for = FrontBuilder.buildInputPlusOneId(skill ? skill : feature)
+        labelPlusOne.for = FrontBuilder.buildInputPlusOneId(characterStatistics)
         inputPlusTwo.classList.add('form-check-input')
         inputPlusOne.classList.add('form-check-input')
         inputPlusTwo.type = 'checkbox'
         inputPlusOne.type = 'checkbox'
         inputPlusTwo.value = '2'
         inputPlusOne.value = '1'
-        inputPlusTwo.id = FrontBuilder.buildInputPlusTwoId(skill ? skill : feature)
-        inputPlusOne.id = FrontBuilder.buildInputPlusOneId(skill ? skill : feature)
+        inputPlusTwo.id = FrontBuilder.buildInputPlusTwoId(characterStatistics)
+        inputPlusOne.id = FrontBuilder.buildInputPlusOneId(characterStatistics)
         inputPlusTwo.dataset.linkedInputId = inputPlusOne.id
         inputPlusOne.dataset.linkedInputId = inputPlusTwo.id
         divPlusTwo.classList.add('form-check')
         divPlusOne.classList.add('form-check')
         iconButtonRollDice.classList.add('bi', 'bi-rocket-takeoff')
         buttonRollDice.classList.add('btn', 'btn-outline-success', 'btn-lg')
-        buttonRollDice.id = FrontBuilder.buildIdButtonRollDice(
-            skill ? skill : feature)
+        buttonRollDice.id = FrontBuilder.buildIdButtonRollDice(characterStatistics)
         divCol3.classList.add('col-3')
         divCol1.classList.add('col-1', 'd-grid', 'gap-2')
         divRow.classList.add('row')
@@ -281,10 +277,10 @@ export class FrontBuilder {
         EventBuilder.addChangeSelectFindSkillFeature(inputSelect, app)
         inputSelect.classList.add('form-select')
         const selectOption: { value: string; text: string }[] = []
-        app.currentCharacter.getAllFeaturesAndSkills().forEach(object => {
+        app.currentCharacter.getAllFeaturesAndSkills().forEach(characterStatistics => {
             selectOption.push({
-                value: object.id,
-                text: object.name,
+                value: characterStatistics.id,
+                text: characterStatistics.name,
             })
         })
         selectOption.sort((a, b) => {

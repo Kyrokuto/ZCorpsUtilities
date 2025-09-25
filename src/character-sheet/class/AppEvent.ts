@@ -27,28 +27,28 @@ export class AppEvent {
         }
     }
 
-    public onChangeInputDiceCode(object: CharacterStatisticsInterface): void {
+    public onChangeInputDiceCode(characterStatistics: CharacterStatisticsInterface): void {
         try {
-            object.dice.numberOf = parseInt(
-                FrontFinder.findSkillOrFeatureDiceCodeInput(object).value)
+            characterStatistics.dice.numberOf = parseInt(
+                FrontFinder.findSkillOrFeatureDiceCodeInput(characterStatistics).value)
         } catch (e) {
             this.app.toast.showError(e as Error)
         }
     }
 
     public onChangeInputCheckPlus(
-        object: CharacterStatisticsInterface, isOne: boolean = true): void {
+        characterStatistics: CharacterStatisticsInterface, isOne: boolean = true): void {
         try {
             const currentInput = isOne ? FrontFinder.findSkillOrFeaturePlusOneInput(
-                    object) : FrontFinder.findSkillOrFeaturePlusTwoInput(object),
+                    characterStatistics) : FrontFinder.findSkillOrFeaturePlusTwoInput(characterStatistics),
                 linkedInput = isOne
-                    ? FrontFinder.findSkillOrFeaturePlusTwoInput(object)
-                    : FrontFinder.findSkillOrFeaturePlusOneInput(object)
+                    ? FrontFinder.findSkillOrFeaturePlusTwoInput(characterStatistics)
+                    : FrontFinder.findSkillOrFeaturePlusOneInput(characterStatistics)
             if (!currentInput.checked) {
-                object.dice.bonus = 0
+                characterStatistics.dice.bonus = 0
                 return
             }
-            object.dice.bonus = isOne ? 1 : 2
+            characterStatistics.dice.bonus = isOne ? 1 : 2
             if (!linkedInput.checked) {
                 return
             }
@@ -58,8 +58,8 @@ export class AppEvent {
         }
     }
 
-    public onClickButtonRollDice(object: CharacterStatisticsInterface): void {
-        this.app.showModalRollDice(object)
+    public onClickButtonRollDice(characterStatistics: CharacterStatisticsInterface): void {
+        this.app.showModalRollDice(characterStatistics)
     }
 
     public onClickButtonLoadData(): void {
@@ -159,16 +159,16 @@ export class AppEvent {
         }
     }
 
-    public updateDiceBonusElement(object: CharacterStatisticsInterface): void | never {
+    public updateDiceBonusElement(characterStatistics: CharacterStatisticsInterface): void | never {
         try {
-            const elementOne = FrontFinder.findSkillOrFeaturePlusOneInput(object),
-                elementTwo = FrontFinder.findSkillOrFeaturePlusTwoInput(object);
-            if (object.dice.bonus === 0) {
+            const elementOne = FrontFinder.findSkillOrFeaturePlusOneInput(characterStatistics),
+                elementTwo = FrontFinder.findSkillOrFeaturePlusTwoInput(characterStatistics);
+            if (characterStatistics.dice.bonus === 0) {
                 elementOne.checked = false
                 elementTwo.checked = false
                 return;
             }
-            if (object.dice.bonus === 1) {
+            if (characterStatistics.dice.bonus === 1) {
                 elementOne.checked = true
                 elementTwo.checked = false
                 return;
@@ -180,10 +180,10 @@ export class AppEvent {
         }
     }
 
-    public updateDiceCodeElement(object: CharacterStatisticsInterface): void | never {
+    public updateDiceCodeElement(characterStatistics: CharacterStatisticsInterface): void | never {
         try {
-            const element = FrontFinder.findSkillOrFeatureDiceCodeInput(object)
-            element.value = object.dice.numberOf.toString();
+            const element = FrontFinder.findSkillOrFeatureDiceCodeInput(characterStatistics)
+            element.value = characterStatistics.dice.numberOf.toString();
         } catch (e) {
             this.app.toast.showError(e as Error)
         }
@@ -192,15 +192,15 @@ export class AppEvent {
     public onChangeSelectFindSkillFeature(): void {
         try {
             const element = FrontFinder.findSkillOrFeatureFindSelectInput(),
-                object = this.app.currentCharacter.findFeatureOrSkillById(element.value);
-            if (!object) {
+                characterStatistics = this.app.currentCharacter.findFeatureOrSkillById(element.value);
+            if (!characterStatistics) {
                 this.app.toast.showError(new Error('Unable to find the feature or skill with ID "' + element.value + '".'));
                 return;
             }
-            const elementObject = FrontFinder.findSkillOrFeatureDiceCodeInput(object)
+            const elementObject = FrontFinder.findSkillOrFeatureDiceCodeInput(characterStatistics)
             let timeout = 100
             if (!elementObject.checkVisibility()) {
-                this.onRightClickFeatureCard(Utilities.findFeatureWhitObject(object))
+                this.onRightClickFeatureCard(Utilities.findFeatureWhitCharacterStatistics(characterStatistics))
                 timeout = 250;
             }
             this.app.modal.close()

@@ -25,16 +25,16 @@ export class Utilities {
         return object as Skill
     }
 
-    public static findFeatureWhitObject(object: CharacterStatisticsInterface): Feature | never {
-        if (Utilities.isFeatureClass(object)) {
-            return object as Feature
+    public static findFeatureWhitCharacterStatistics(characterStatistics: CharacterStatisticsInterface): Feature | never {
+        if (Utilities.isFeatureClass(characterStatistics)) {
+            return characterStatistics as Feature
         }
-        if (Utilities.isSkillClass(object)) {
-            return Utilities.castHasSkillClass(object).feature
+        if (Utilities.isSkillClass(characterStatistics)) {
+            return Utilities.castHasSkillClass(characterStatistics).feature
         }
         throw new Error(
             'The feature could not be found to construct the input field ID for the number of dice for the skill or feature "' +
-            object.name + '".')
+            characterStatistics.name + '".')
     }
 
     public static isValidCharacterJSON(data: CharacterJsonDataInterface): void | never {
